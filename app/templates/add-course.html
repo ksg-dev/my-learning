@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% from 'bootstrap5/form.html' import render_form %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Add a Course</title>
+</head>
+<body>
+<div>
+	<h1>Add a Course</h1>
+</div>
+<hr>
+<div>
+	{{ render_form(form, novalidate=True }}
+</div>
+
+</body>
+</html>
