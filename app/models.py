@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Text, ForeignKey, Boolean
+from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float
 from app import app, db
 
 
@@ -11,6 +11,8 @@ class Course(db.Model):
     title: Mapped[str] = mapped_column(String(100), unique=True)
     platform: Mapped[str] = mapped_column(String(100))
     instructor: Mapped[str] = mapped_column(String(100))
+    start: Mapped[str] = mapped_column(String(25), nullable=True)
+    content_hours: Mapped[float] = mapped_column(nullable=True)
     has_cert: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
 
