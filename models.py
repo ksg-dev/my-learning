@@ -3,7 +3,7 @@ from sqlalchemy import Integer, String, Text, ForeignKey, Boolean
 from main import app, db
 
 # Create Course table for all completed courses
-class Course(db.model):
+class Course(db.Model):
     __tablename__ = "courses"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -14,7 +14,7 @@ class Course(db.model):
 
 
 # Create Projects table for individual projects
-class Project(db.model):
+class Project(db.Model):
     __tablename__ = "projects"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -27,7 +27,7 @@ class Project(db.model):
 
 
 # Create Concepts table for tracking key terms and concepts
-class Concept(db.model):
+class Concept(db.Model):
     __tablename__ = "concepts"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -35,6 +35,9 @@ class Concept(db.model):
     category: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(Text, nullable=False)
 
-# Create ...
+
+# Create table schema in db w app context
+with app.app_context():
+    db.create_all()
 
 

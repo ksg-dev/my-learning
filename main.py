@@ -8,6 +8,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
 from flask_ckeditor.utils import cleanify
+
 from datetime import date
 import os
 from dotenv import load_dotenv
@@ -19,17 +20,20 @@ app.config['SECRET_KEY'] = os.environ["SECRET_KEY"]
 Bootstrap5(app)
 ckeditor = CKEditor(app)
 
+
 # Create Database
 class Base(DeclarativeBase):
     pass
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DB_URI"]
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
+
 @app.route('/')
 def home():
-    return "Hello!"
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5003)
