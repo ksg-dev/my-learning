@@ -1,18 +1,15 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {% from 'bootstrap5/form.html' import render_form %}
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Add a Course</title>
-</head>
-<body>
-<div>
-	<h1>Add a Course</h1>
+
+{% block title %}Add a Course{% endblock %}
+
+{% block content %}
+<div class="content">
+	<h1 class="heading">Add a Course</h1>
 </div>
-<hr>
-<div>
+
+<div class="content">
 	{{ render_form(form, novalidate=True }}
 </div>
 
-</body>
-</html>
+{% endblock %}
