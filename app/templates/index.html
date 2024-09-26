@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Home</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
 	<h1>Ready to crush it?</h1>
 	<div class="previews">
 			<div class="all-course-preview">
@@ -31,5 +29,4 @@
 			</div>
 	</div>
 
-</body>
-</html>
+{% endblock %}
