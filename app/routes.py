@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap5
+from datetime import date
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
@@ -11,6 +12,7 @@ from flask_ckeditor.utils import cleanify
 
 from app import app, db
 from app.models import Course, Project, Concept
+from app.forms import NewCourseForm
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -86,5 +88,24 @@ def home():
 # with app.app_context():
 #     db.session.add_all([course1, course2, proj1, proj2, concept1, concept2, concept3])
 #     db.session.commit()
+
+@app.route('/add-course', methods=["GET", "POST"])
+def add_new_course():
+    form = NewCourseForm()
+    if form.validate_on_submit():
+        new_course = Course(
+            title=form.title.data,
+            platform=form.platform.data,
+            instructor=form.instructor.data,
+            start=form.start_date.data,
+            content_hours=form.content_hours.data,
+            has_cert=form.has_cert.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_course)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template("add-course.html", form=form)
 
 
