@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Text, ForeignKey
+from sqlalchemy import Integer, String, Text, ForeignKey, Boolean
 from main import app, db
 
 # Create Course table for all completed courses
@@ -10,9 +10,20 @@ class Course(db.model):
     title: Mapped[str] = mapped_column(String(100), unique=True)
     platform: Mapped[str] = mapped_column(String(100))
     instructor: Mapped[str] = mapped_column(String(100))
+    has_cert: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
 
 # Create Projects table for individual projects
+class Project(db.model):
+    __tablename__ = "projects"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    project_title: Mapped[str] = mapped_column(String(100), nullable=False)
+    project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
+    concept: Mapped[str] = mapped_column(String(50), nullable=False)
+    course: Mapped[str] = mapped_column(String(100))
+    section: Mapped[str] = mapped_column(String(100))
+    lecture: Mapped[str] = mapped_column(String(100))
 
 
 # Create Terms/Concepts table for tracking key terms and concepts
