@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, Text, ForeignKey, Boolean
-from main import app, db
+from app import app, db
+
 
 # Create Course table for all completed courses
 class Course(db.Model):

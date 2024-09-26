@@ -6,7 +6,27 @@
 </head>
 <body>
 	<h1>Ready to crush it?</h1>
-
+	<div class="previews">
+			<div class="all-course-preview">
+				<h2>Courses</h2>
+				{% for course in all_courses %}
+				<div class="course-preview">
+					<a href="">
+						<h3 class="course-title">{{{ course.title }}</h3>
+						<p class="course-platform">on {{ course.platform }}</p>
+					</a>
+				</div>
+			</div>
+			<div class="all-projects-preview">
+				<h2>Projects</h2>
+				{% for project in all_projects %}
+				<div class="project-preview">
+					<a href="">
+						<h3 class="project-title">{{{ project.project_title }}</h3>
+						<p class="project-concept">{{ project.concept }}</p>
+					</a>
+				</div>
+			</div>
 	</div>
 
 </body>

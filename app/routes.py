@@ -16,6 +16,9 @@ bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
 
 
+
+
 @app.route('/')
 def home():
-    return render_template("index.html")
+    # Query db for all courses. Convert to python list
+    return render_template('index.html')

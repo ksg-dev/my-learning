@@ -10,3 +10,5 @@ app.app_context().push()
 db = SQLAlchemy(model_class=Base)
 # initialize the app with the extension
 db.init_app(app)
+
+from app import routes, models
