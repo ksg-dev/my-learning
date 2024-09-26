@@ -69,9 +69,18 @@ concept3 = Concept(
 @app.route('/')
 def home():
     # Query db for all courses. Convert to python list
-    get_courses = db.session.execute(db.select(db.select(Course)).scalars().all())
+    get_courses = db.session.execute(db.select(Course)).scalars().all()
+    courses = [course for course in get_courses]
 
-    return render_template('index.html')
+    # Query db for all projects. Convert to python list
+    get_projects = db.session.execute(db.select(Project)).scalars().all()
+    projects = [project for project in get_projects]
+
+    # Query db for all concepts. Convert to python list
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    concepts = [concept for concept in get_concepts]
+
+    return render_template('index.html', all_courses=courses, all_projects=projects)
 
 # # test create items in db
 # with app.app_context():
