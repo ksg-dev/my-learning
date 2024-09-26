@@ -106,6 +106,6 @@ def add_new_course():
         db.session.add(new_course)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("add-course.html", form=form)
+    return render_template('add-course.html', form=form)
 
 
