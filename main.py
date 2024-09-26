@@ -20,12 +20,12 @@ Bootstrap5(app)
 ckeditor = CKEditor(app)
 
 # Create Database
-# class Base(DeclarativeBase):
-#     pass
-#
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DB_URI"]
-# db = SQLAlchemy(model_class=Base)
-# db.init_app(app)
+class Base(DeclarativeBase):
+    pass
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DB_URI"]
+db = SQLAlchemy(model_class=Base)
+db.init_app(app)
 
 @app.route('/')
 def home():
