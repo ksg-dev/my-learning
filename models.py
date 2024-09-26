@@ -26,8 +26,14 @@ class Project(db.model):
     lecture: Mapped[str] = mapped_column(String(100))
 
 
-# Create Terms/Concepts table for tracking key terms and concepts
+# Create Concepts table for tracking key terms and concepts
+class Concept(db.model):
+    __tablename__ = "concepts"
 
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    concept_term: Mapped[str] = mapped_column(String(50))
+    category: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str] = mapped_column(Text, nullable=False)
 
 # Create ...
 
