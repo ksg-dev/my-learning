@@ -4,7 +4,7 @@ from app import app, db
 import datetime
 
 
-# Create Course table for all completed courses
+# Create Course table for all planned or completed courses
 class Course(db.Model):
     __tablename__ = "courses"
 

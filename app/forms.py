@@ -5,6 +5,8 @@ from app import db
 from app.models import Course, Project, Concept
 
 
+# CREATE FORMS
+
 class NewCourseForm(FlaskForm):
     title = StringField("Course Title", validators=[InputRequired()])
     platform = StringField("Platform")
@@ -28,4 +30,20 @@ class NewConceptForm(FlaskForm):
     concept = StringField("Concept or Term", validators=[InputRequired()])
     category = StringField("Category")
     description = TextAreaField("Description", validators=[InputRequired()])
+
+
+# UPDATE FORMS
+
+class UpdateCourseForm(FlaskForm):
+    pass
+
+
+class UpdateProjectForm(FlaskForm):
+    pass
+
+
+class UpdateConceptForm(FlaskForm):
+    pass
+
+
 
