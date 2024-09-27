@@ -14,3 +14,12 @@ class NewCourseForm(FlaskForm):
     has_cert = BooleanField("Certificate Upon Completion?", validators=[InputRequired()])
     submit = SubmitField("Add Course")
 
+
+class NewProjectForm(FlaskForm):
+    project_title = StringField("Project Title", validators=[InputRequired()])
+    repo = StringField("Project Repository", validators=[InputRequired()])
+    concept = StringField("Concepts", validators=[InputRequired()])
+    course = StringField("Course")
+    section = StringField("Course Section")
+    lecture = StringField("Course Lecture or Lesson")
+
