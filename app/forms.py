@@ -13,7 +13,7 @@ class NewCourseForm(FlaskForm):
     instructor = StringField("Instructor")
     start_date = DateField("Start Date")
     content_hours = DecimalField("Content Hours")
-    has_cert = BooleanField("Certificate Upon Completion?", validators=[InputRequired()])
+    has_cert = BooleanField("Certificate Upon Completion?")
     submit = SubmitField("Add Course")
 
 

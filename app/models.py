@@ -14,7 +14,7 @@ class Course(db.Model):
     instructor: Mapped[str] = mapped_column(String(100))
     start: Mapped[str] = mapped_column(String(25), nullable=True)
     content_hours: Mapped[float] = mapped_column(nullable=True)
-    has_cert: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    has_cert: Mapped[bool] = mapped_column(Boolean)
     date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
 
