@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Add a Course{% endblock %}
+{% block title %}Add a {{ object }}{% endblock %}
 
 {% block content %}
 <div class="container">
-	<h1 class="heading">Add a Course</h1>
+	<h1 class="heading">Add a {{ object }}</h1>
 </div>
 
 <div class="container">

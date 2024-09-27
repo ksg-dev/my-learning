@@ -29,6 +29,7 @@ class Project(db.Model):
     course: Mapped[str] = mapped_column(String(100))
     section: Mapped[str] = mapped_column(String(100))
     lecture: Mapped[str] = mapped_column(String(100))
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
 
 # Create Concepts table for tracking key terms and concepts

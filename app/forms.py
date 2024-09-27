@@ -24,12 +24,15 @@ class NewProjectForm(FlaskForm):
     course = StringField("Course")
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
+    submit = SubmitField("Add Project")
 
 
 class NewConceptForm(FlaskForm):
     concept = StringField("Concept or Term", validators=[InputRequired()])
     category = StringField("Category")
     description = TextAreaField("Description", validators=[InputRequired()])
+    submit = SubmitField("Add Concept")
+
 
 
 # UPDATE FORMS
