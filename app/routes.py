@@ -69,6 +69,7 @@ concept3 = Concept(
 
 
 @app.route('/')
+@app.route('/index')
 def home():
     # Query db for all courses. Convert to python list
     get_courses = db.session.execute(db.select(Course)).scalars().all()
@@ -129,3 +130,21 @@ def add_new_project():
     return render_template('add.html', form=form, object="Project")
 
 
+@app.route('/concepts')
+def concepts():
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        new_proj = Project(
+            project_title=form.project_title.data,
+            project_repo=form.repo.data,
+            concept=form.concept.data,
+            course=form.course.data,
+            section=form.section.data,
+            lecture=form.lecture.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_proj)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template('concepts.html', form=form)
