@@ -79,9 +79,9 @@ def home():
     get_projects = db.session.execute(db.select(Project)).scalars().all()
     projects = [project for project in get_projects]
 
-    # Query db for all concepts. Convert to python list
-    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
-    concepts = [concept for concept in get_concepts]
+    # # Query db for all concepts. Convert to python list
+    # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    # concepts = [concept for concept in get_concepts]
 
     return render_template('index.html', all_courses=courses, all_projects=projects)
 
@@ -89,6 +89,16 @@ def home():
 # with app.app_context():
 #     db.session.add_all([course1, course2, proj1, proj2, concept1, concept2, concept3])
 #     db.session.commit()
+
+
+@app.route('/concepts')
+def concepts_page():
+    # Get concepts
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    concepts = [concept for concept in get_concepts]
+
+    return render_template('concepts.html', concepts=concepts)
+
 
 @app.route('/add-course', methods=["GET", "POST"])
 def add_new_course():
@@ -130,21 +140,3 @@ def add_new_project():
     return render_template('add.html', form=form, object="Project")
 
 
-@app.route('/concepts')
-def concepts():
-    form = NewProjectForm()
-    if form.validate_on_submit():
-        new_proj = Project(
-            project_title=form.project_title.data,
-            project_repo=form.repo.data,
-            concept=form.concept.data,
-            course=form.course.data,
-            section=form.section.data,
-            lecture=form.lecture.data,
-            date_added=date.today()
-        )
-
-        db.session.add(new_proj)
-        db.session.commit()
-        return redirect(url_for("home"))
-    return render_template('concepts.html', form=form)

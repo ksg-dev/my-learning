@@ -17,22 +17,23 @@
       </nav>
     </div><!-- End Page Title -->
 
+<!--	List Group-->
+	<div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Flagged Concepts</h5>
+
+		  <!-- List group With Icons -->
+		  <ul class="list-group">
+			  {% for concept in concepts %}
+				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{ concept.concept_term }}</li>
+			  {% endfor %}
+		  </ul><!-- End List group With Icons -->
+
+		</div>
+	  </div>
+
     <section class="section">
-      <div class="row">
         <div class="col-lg-6">
-
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Add Concept</h5>
-              {{ render_form(form, novalidate=True) }}
-            </div>
-          </div>
-
-        </div>
-
-
-        <div class="col-lg-6">
-
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Example Card</h5>
@@ -41,7 +42,6 @@
           </div>
 
         </div>
-      </div>
     </section>
 
   </main><!-- End #main -->
