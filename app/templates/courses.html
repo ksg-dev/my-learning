@@ -1,37 +1,55 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Concepts{% endblock %}
+{% block title %}Courses{% endblock %}
 
 {% block content %}
 	<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Concepts</h1>
+      <h1>Courses</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item active">Concepts</li>
+          <li class="breadcrumb-item active">Courses</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-<!--	Flagged Concepts List Group-->
-	<div class="card">
+<!--	All Courses Table-->
+
+	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Flagged Concepts</h5>
+		  <h5 class="card-title">My Courses</h5>
 
-		  <!-- List group With Icons -->
-		  <ul class="list-group">
-			  {% for concept in concepts %}
-				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{ concept.concept_term }}</li>
-			  {% endfor %}
-		  </ul><!-- End List group With Icons -->
-
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">Title</th>
+				<th scope="col">Platform</th>
+				<th scope="col">Content Hours</th>
+				<th scope="col">Cert?</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for course in courses %}
+			  <tr>
+				<th scope="row">{{ course.id }}</th>
+				<td>{{ course.title }}</td>
+				<td>{{ course.platform }}</td>
+				<td>{{ course.content_hours }}</td>
+				<td>{{ course.has_cert }}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
 		</div>
-	  </div>
-<!--		End Flagged Concepts-->
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
 
     <section class="section">
         <div class="col-lg-6">
@@ -41,14 +59,11 @@
               <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
             </div>
           </div>
-
         </div>
     </section>
-
-  </main><!-- End #main -->
+	</main> <!-- End #main -->
 {% endblock %}
 
 
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-

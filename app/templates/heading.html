@@ -235,13 +235,11 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " href="{{ url_for('home') }}">
           <i class="bi bi-grid"></i>
-          {{ render_nav_item('home', 'Dashboard') }}
+          <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
-
-<!--	Test Nav Bootstrap-Flask-->
 
  		<!-- My Learning Nav -->
 		<li class="nav-item">
@@ -251,21 +249,18 @@
 			</a>
 			<ul id="learn-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
 			  <li>
-				  {{ render_nav_item('concepts_page', "Concepts") }}
-			  </li>
-			  <li>
-				<a href="forms-layouts.html">
-				  <i class="bi bi-circle"></i><span>Projects</span>
-				</a>
-			  </li>
-			  <li>
-				<a href="forms-editors.html">
+				<a href="{{ url_for('courses_page') }}">
 				  <i class="bi bi-circle"></i><span>Courses</span>
 				</a>
 			  </li>
 			  <li>
-				<a href="forms-validation.html">
-				  <i class="bi bi-circle"></i><span>Form Validation</span>
+				<a href="{{ url_for('concepts_page') }}">
+				  <i class="bi bi-circle"></i><span>Concepts</span>
+				</a>
+			  </li>
+				<li>
+				<a href="{{ url_for('projects_page') }}">
+				  <i class="bi bi-circle"></i><span>Projects</span>
 				</a>
 			  </li>
 			</ul>

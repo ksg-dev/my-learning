@@ -1,31 +1,31 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Concepts{% endblock %}
+{% block title %}Projects{% endblock %}
 
 {% block content %}
 	<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Concepts</h1>
+      <h1>Projects</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item active">Concepts</li>
+          <li class="breadcrumb-item active">Projects</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-<!--	Flagged Concepts List Group-->
+<!--	Flagged Concepts List Group -->
 	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Flagged Concepts</h5>
+		  <h5 class="card-title">Projects</h5>
 
 		  <!-- List group With Icons -->
 		  <ul class="list-group">
-			  {% for concept in concepts %}
-				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{ concept.concept_term }}</li>
+			  {% for project in projects %}
+				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{ project.date_added }}   {{ project.project_title }}</li>
 			  {% endfor %}
 		  </ul><!-- End List group With Icons -->
 

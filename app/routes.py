@@ -99,6 +99,23 @@ def concepts_page():
 
     return render_template('concepts.html', concepts=concepts)
 
+@app.route('/courses')
+def courses_page():
+    # Get courses
+    get_courses = db.session.execute(db.select(Course)).scalars().all()
+    courses = [course for course in get_courses]
+
+    return render_template('courses.html', courses=courses)
+
+
+@app.route('/projects')
+def projects_page():
+    # Get projects
+    get_projects = db.session.execute(db.select(Project)).scalars().all()
+    projects = [project for project in get_projects]
+
+    return render_template('projects.html', projects=projects)
+
 
 @app.route('/add-course', methods=["GET", "POST"])
 def add_new_course():
