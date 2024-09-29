@@ -41,7 +41,7 @@ class Project(db.Model):
     project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
 
     # Many-to-many relationship to concepts
-    concepts: Mapped["Concept"] = relationship('Concept', secondary=project_concept, backref='projects')
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=project_concept, backref='projects')
 
     section: Mapped[str] = mapped_column(String(100))
     lecture: Mapped[str] = mapped_column(String(100))
