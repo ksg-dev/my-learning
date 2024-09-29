@@ -3,6 +3,7 @@ from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date
 from app import app, db
 import datetime
 from typing import List
+import sqlalchemy as sa
 
 
 # Create Course table for all planned or completed courses
@@ -51,6 +52,14 @@ class Concept(db.Model):
     concept_term: Mapped[str] = mapped_column(String(50), nullable=False)
     category: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+project_concept_m2m = db.Table(
+    "project_concept",
+    sa.Column("project_id", sa.ForeignKey(Project.id), primary_key=True),
+    sa.Column("concept_id", sa.ForeignKey(Concept.id), primary_key=True)
+)
+
 
 
 # Create table schema in db w app context
