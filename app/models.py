@@ -24,6 +24,14 @@ class Course(db.Model):
     projects: Mapped[List["Project"]] = relationship(back_populates="course")
 
 
+# Join table for projects and concepts
+project_concept = db.Table(
+    "project_concept",
+    db.Column("project_id", db.Integer, db.ForeignKey("project.id")),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concept.id"))
+)
+
+
 # Create Projects table for individual projects
 class Project(db.Model):
     __tablename__ = "projects"
@@ -31,7 +39,9 @@ class Project(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_title: Mapped[str] = mapped_column(String(100), nullable=False)
     project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
-    concept: Mapped[str] = mapped_column(String(50), nullable=False)
+
+    # Many-to-many relationship to concepts
+    concepts: Mapped["Concept"] = relationship('Concept', secondary=project_concept, backref='projects')
 
     section: Mapped[str] = mapped_column(String(100))
     lecture: Mapped[str] = mapped_column(String(100))
@@ -41,7 +51,6 @@ class Project(db.Model):
     course_id: Mapped[int] = mapped_column(Integer, ForeignKey(Course.id), index=True)
     # Create reference to Course object. The "projects" refers to the projects property in the Course class.
     course: Mapped["Course"] = relationship(back_populates="projects")
-
 
 
 # Create Concepts table for tracking key terms and concepts
@@ -54,11 +63,7 @@ class Concept(db.Model):
     description: Mapped[str] = mapped_column(Text, nullable=False)
 
 
-project_concept_m2m = db.Table(
-    "project_concept",
-    sa.Column("project_id", sa.ForeignKey(Project.id), primary_key=True),
-    sa.Column("concept_id", sa.ForeignKey(Concept.id), primary_key=True)
-)
+
 
 
 
