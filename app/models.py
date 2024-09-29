@@ -27,8 +27,8 @@ class Course(db.Model):
 # Join table for projects and concepts
 project_concept = db.Table(
     "project_concept",
-    db.Column("project_id", db.Integer, db.ForeignKey("project.id")),
-    db.Column("concept_id", db.Integer, db.ForeignKey("concept.id"))
+    db.Column("project_id", db.Integer, db.ForeignKey("projects.id")),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"))
 )
 
 
