@@ -2,6 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date
 from app import app, db
 import datetime
+from typing import List
 
 
 # Create Course table for all planned or completed courses
@@ -17,6 +18,10 @@ class Course(db.Model):
     has_cert: Mapped[bool] = mapped_column(Boolean)
     date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
+    # This will act like a list of Project objects attached to each course
+    # The 'course' refers to the course property in the Property class
+    projects: Mapped[List["Project"]] = relationship(back_populates="course")
+
 
 # Create Projects table for individual projects
 class Project(db.Model):
@@ -26,10 +31,16 @@ class Project(db.Model):
     project_title: Mapped[str] = mapped_column(String(100), nullable=False)
     project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
     concept: Mapped[str] = mapped_column(String(50), nullable=False)
-    course: Mapped[str] = mapped_column(String(100))
+
     section: Mapped[str] = mapped_column(String(100))
     lecture: Mapped[str] = mapped_column(String(100))
     date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+
+    # Create Foreign Key, 'courses.id' where courses refers to table name of Courses.
+    course_id: Mapped[int] = mapped_column(Integer, ForeignKey(Course.id), index=True)
+    # Create reference to Course object. The "projects" refers to the projects property in the Course class.
+    course: Mapped["Course"] = relationship(back_populates="projects")
+
 
 
 # Create Concepts table for tracking key terms and concepts

@@ -13,6 +13,6 @@ db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
 # db migration engine object
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, render_as_batch=True)
 
 from app import routes, models
