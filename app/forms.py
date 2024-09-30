@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField
+from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, FieldList
 from wtforms.validators import InputRequired
 from app import db
 from app.models import Course, Project, Concept
@@ -20,7 +20,7 @@ class NewCourseForm(FlaskForm):
 class NewProjectForm(FlaskForm):
     project_title = StringField("Project Title", validators=[InputRequired()])
     repo = StringField("Project Repository", validators=[InputRequired()])
-    concept = StringField("Concepts", validators=[InputRequired()])
+    concepts = StringField("Concepts Separated by Comma", validators=[InputRequired()])
     course = StringField("Course")
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
@@ -30,7 +30,7 @@ class NewProjectForm(FlaskForm):
 class NewConceptForm(FlaskForm):
     concept = StringField("Concept or Term", validators=[InputRequired()])
     category = StringField("Category")
-    description = TextAreaField("Description", validators=[InputRequired()])
+    description = TextAreaField("Description")
     submit = SubmitField("Add Concept")
 
 

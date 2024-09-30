@@ -1,31 +1,59 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Add New {{ object }}{% endblock %}
+{% block title %}{{ course.title }}{% endblock %}
 
 {% block content %}
 	<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Add New {{ object }}</h1>
+      <h1>Course Detail</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item active">Add New {{ object }}</li>
+          <li class="breadcrumb-item">Courses</li>
+		  <li class="breadcrumb-item active">{{ course.title }}</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-<!--	Create Form -->
+<!--	All Projects for Course Table-->
 
 	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Create {{ object }}</h5>
+		  <h5 class="card-title">{{ course.title }} Projects</h5>
 
 		  <!-- Table with hoverable rows -->
-			{{ render_form(form, novalidate=True) }}
-
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">Title</th>
+				<th scope="col">Platform</th>
+				<th scope="col">Content Hours</th>
+				<th scope="col">Cert?</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for course in courses %}
+			  <tr>
+				<th scope="row">{{ course.id }}</th>
+				<td>{{ course.title }}</td>
+				<td>{{ course.platform }}</td>
+				<td>{{ course.content_hours }}</td>
+				  {% if course.has_cert %}
+				<td><i class="bi bi-award"></i></td>
+				  {% else %}
+				  <td></td>
+				  {% endif %}
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+			<a href="{{ url_for('add_new_course') }}">
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Course</button>
+			</a>
 		</div>
 	 </div>
 		  <!-- End Table with hoverable rows -->

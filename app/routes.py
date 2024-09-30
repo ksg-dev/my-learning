@@ -89,7 +89,7 @@ def add_new_project():
         new_proj = Project(
             project_title=form.project_title.data,
             project_repo=form.repo.data,
-            concept=form.concept.data,
+            concepts=form.concept.data,
             course=form.course.data,
             section=form.section.data,
             lecture=form.lecture.data,
@@ -102,3 +102,8 @@ def add_new_project():
     return render_template('add.html', form=form, object="Project")
 
 
+@app.route('/courses/<int:num>')
+def course_detail(num):
+    target_course = db.session.execute(db.select(Course).filter_by(id=num)).scalars().first()
+    print(target_course)
+    return render_template('course-detail.html', course=target_course)
