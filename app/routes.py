@@ -121,8 +121,5 @@ def course_detail(num):
     # Sort descending
     sorted_concepts = dict(
         sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
-    print(target_course)
-    print(all_projects)
-    print(sorted_concepts)
 
     return render_template('course-detail.html', course=target_course, all_projects=all_projects, top_concepts=sorted_concepts)
