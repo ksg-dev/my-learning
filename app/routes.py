@@ -83,23 +83,39 @@ def add_new_course():
     return render_template('add.html', form=form, object="Course")
 
 
-@app.route('/add-project', methods=["GET", "POST"])
-def add_new_project():
-    form = NewProjectForm()
-    if form.validate_on_submit():
-        new_proj = Project(
-            project_title=form.project_title.data,
-            project_repo=form.repo.data,
-            concepts=form.concepts.data,
-            course=form.course.data,
-            section=form.section.data,
-            lecture=form.lecture.data,
-            date_added=date.today()
-        )
+@app.route('/add-project/<int:course_id>', methods=["GET", "POST"])
+def add_new_project(course_id):
+    target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
+    form = NewProjectForm(obj=target_course)
 
-        db.session.add(new_proj)
-        db.session.commit()
-        return redirect(url_for("home"))
+    if request.method == "GET":
+        form.course.data = target_course.title
+
+    elif request.method == "POST":
+
+        if form.validate_on_submit():
+            concepts = form.concepts.data.split(',')
+
+            # print(f"title: {form.project_title.data}")
+            # print(f"repo: {form.repo.data}")
+            # print(f"concepts: {[concept.strip() for concept in concepts]}")
+            # print(f"course: {form.course.data}")
+            # print(f"section: {form.section.data}")
+            # print(f"lecture: {form.lecture.data}")
+
+            new_proj = Project(
+                project_title=form.project_title.data,
+                project_repo=form.repo.data,
+                concepts=[concept.strip() for concept in concepts],
+                course=form.course.data,
+                section=form.section.data,
+                lecture=form.lecture.data,
+                date_added=date.today()
+            )
+
+            db.session.add(new_proj)
+            db.session.commit()
+            return redirect(url_for("home"))
     return render_template('add.html', form=form, object="Project")
 
 

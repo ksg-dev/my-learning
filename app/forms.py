@@ -20,7 +20,7 @@ class NewCourseForm(FlaskForm):
 class NewProjectForm(FlaskForm):
     project_title = StringField("Project Title", validators=[InputRequired()])
     repo = StringField("Project Repository", validators=[InputRequired()])
-    concepts = StringField("Concepts Separated by Comma", validators=[InputRequired()])
+    concepts = StringField("Concepts Separated by Comma")
     course = StringField("Course")
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
