@@ -109,5 +109,7 @@ def course_detail(num):
     all_projects = db.session.execute(db.select(Project).filter_by(course_id=num)).scalars().all()
     print(target_course)
     print(all_projects)
-
+    for proj in all_projects:
+        for concept in proj.concepts:
+            print(concept)
     return render_template('course-detail.html', course=target_course, all_projects=all_projects)
