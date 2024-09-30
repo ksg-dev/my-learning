@@ -55,7 +55,7 @@
 				<th scope="row">{{ project.id }}</th>
 				<td>{{ project.project_title }}</td>
 				<td>{{ project.project_repo }}</td>
-				<td>{% for concept in project.concepts %}{{ concept.concept_term }}{% endfor %}</td>
+				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
 			  </tr>
 			{% endfor %}
 			</tbody>
