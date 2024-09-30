@@ -101,3 +101,4 @@ def add_new_project():
         return redirect(url_for("home"))
     return render_template('add.html', form=form, object="Project")
 
+

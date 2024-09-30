@@ -41,7 +41,11 @@
 				<td>{{ course.title }}</td>
 				<td>{{ course.platform }}</td>
 				<td>{{ course.content_hours }}</td>
-				<td>{{ course.has_cert }}</td>
+				  {% if course.has_cert %}
+				<td><i class="bi bi-award"></i></td>
+				  {% else %}
+				  <td></td>
+				  {% endif %}
 			  </tr>
 			{% endfor %}
 			</tbody>
