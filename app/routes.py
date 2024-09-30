@@ -44,6 +44,7 @@ def concepts_page():
 
     return render_template('concepts.html', concepts=concepts)
 
+
 @app.route('/courses')
 def courses_page():
     # Get courses
@@ -89,7 +90,7 @@ def add_new_project():
         new_proj = Project(
             project_title=form.project_title.data,
             project_repo=form.repo.data,
-            concepts=form.concept.data,
+            concepts=form.concepts.data,
             course=form.course.data,
             section=form.section.data,
             lecture=form.lecture.data,
@@ -104,6 +105,9 @@ def add_new_project():
 
 @app.route('/courses/<int:num>')
 def course_detail(num):
-    target_course = db.session.execute(db.select(Course).filter_by(id=num)).scalars().first()
+    target_course = db.get_or_404(Course, num)
+    all_projects = db.session.execute(db.select(Project).filter_by(course_id=num)).scalars().all()
     print(target_course)
-    return render_template('course-detail.html', course=target_course)
+    print(all_projects)
+
+    return render_template('course-detail.html', course=target_course, all_projects=all_projects)

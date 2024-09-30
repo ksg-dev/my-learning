@@ -20,6 +20,21 @@
 
 <!--	All Projects for Course Table-->
 
+	<div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Top Concepts</h5>
+
+              <!-- List group With Icons -->
+              <ul class="list-group">
+                <li class="list-group-item"><i class="bi bi-star me-1 text-success"></i> An item <span class="badge bg-primary rounded-pill">14</span></li>
+                <li class="list-group-item"><i class="bi bi-collection me-1 text-primary"></i> A second item</li>
+                <li class="list-group-item"><i class="bi bi-check-circle me-1 text-danger"></i> A third item</li>
+                <li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i> A fourth item</li>
+              </ul><!-- End List group With Icons -->
+
+            </div>
+          </div>
+
 	 <div class="card">
 		<div class="card-body">
 		  <h5 class="card-title">{{ course.title }} Projects</h5>
@@ -29,30 +44,24 @@
 			<thead>
 			  <tr>
 			    <th scope="col">#</th>
-				<th scope="col">Title</th>
-				<th scope="col">Platform</th>
-				<th scope="col">Content Hours</th>
-				<th scope="col">Cert?</th>
+				<th scope="col">Project Title</th>
+				<th scope="col">Repo</th>
+				<th scope="col">Concepts</th>
 			  </tr>
 			</thead>
 			<tbody>
-			{% for course in courses %}
+			{% for project in all_projects %}
 			  <tr>
-				<th scope="row">{{ course.id }}</th>
-				<td>{{ course.title }}</td>
-				<td>{{ course.platform }}</td>
-				<td>{{ course.content_hours }}</td>
-				  {% if course.has_cert %}
-				<td><i class="bi bi-award"></i></td>
-				  {% else %}
-				  <td></td>
-				  {% endif %}
+				<th scope="row">{{ project.id }}</th>
+				<td>{{ project.project_title }}</td>
+				<td>{{ project.project_repo }}</td>
+				<td>{{ project.concepts }}</td>
 			  </tr>
 			{% endfor %}
 			</tbody>
 		  </table>
-			<a href="{{ url_for('add_new_course') }}">
-		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Course</button>
+			<a href="{{ url_for('add_new_project') }}">
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Project</button>
 			</a>
 		</div>
 	 </div>
