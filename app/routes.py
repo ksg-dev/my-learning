@@ -107,9 +107,22 @@ def add_new_project():
 def course_detail(num):
     target_course = db.get_or_404(Course, num)
     all_projects = db.session.execute(db.select(Project).filter_by(course_id=num)).scalars().all()
-    print(target_course)
-    print(all_projects)
+
+    course_concepts = {}
+
+    # Add all concepts to dict as key, and count of occurrence as value
     for proj in all_projects:
         for concept in proj.concepts:
-            print(concept)
-    return render_template('course-detail.html', course=target_course, all_projects=all_projects)
+            if concept.concept_term in course_concepts:
+                course_concepts[concept.concept_term] += 1
+            else:
+                course_concepts[concept.concept_term] = 1
+
+    # Sort descending
+    sorted_concepts = dict(
+        sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
+    print(target_course)
+    print(all_projects)
+    print(sorted_concepts)
+
+    return render_template('course-detail.html', course=target_course, all_projects=all_projects, top_concepts=sorted_concepts)
