@@ -87,35 +87,41 @@ def add_new_course():
 def add_new_project(course_id):
     target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
     form = NewProjectForm(obj=target_course)
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    concepts_list = [concept.concept_term for concept in get_concepts]
+    print(f"concepts_list: {concepts_list}")
 
-    if request.method == "GET":
-        form.course.data = target_course.title
+    if form.validate_on_submit():
+        new_proj = Project(
+            project_title=form.project_title.data,
+            project_repo=form.repo.data,
+            course=target_course,
+            section=form.section.data,
+            lecture=form.lecture.data,
+            date_added=date.today()
+        )
+        # form_concepts = form.concepts.data
+        # print(f"form concepts: {form_concepts}")
+        for concept in form.concepts.data:
+            new_proj.concepts.append(Concept(concept_term=concept))
 
-    elif request.method == "POST":
 
-        if form.validate_on_submit():
-            concepts = form.concepts.data.split(',')
 
-            # print(f"title: {form.project_title.data}")
-            # print(f"repo: {form.repo.data}")
-            # print(f"concepts: {[concept.strip() for concept in concepts]}")
-            # print(f"course: {form.course.data}")
-            # print(f"section: {form.section.data}")
-            # print(f"lecture: {form.lecture.data}")
 
-            new_proj = Project(
-                project_title=form.project_title.data,
-                project_repo=form.repo.data,
-                concepts=[concept.strip() for concept in concepts],
-                course=form.course.data,
-                section=form.section.data,
-                lecture=form.lecture.data,
-                date_added=date.today()
-            )
+        print(f"title: {new_proj.project_title}")
+        print(f"repo: {new_proj.project_repo}")
+        print(f"concepts: {new_proj.concepts}")
+        print(f"course: {new_proj.course}")
+        print(f"section: {new_proj.section}")
+        print(f"lecture: {new_proj.lecture}")
 
-            db.session.add(new_proj)
-            db.session.commit()
-            return redirect(url_for("home"))
+
+
+        # print(new_proj)
+
+        db.session.add(new_proj)
+        db.session.commit()
+        return redirect(url_for("home"))
     return render_template('add.html', form=form, object="Project")
 
 

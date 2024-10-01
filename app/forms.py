@@ -1,8 +1,27 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, FieldList
+from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, Field
 from wtforms.validators import InputRequired
+from wtforms.widgets import TextInput
 from app import db
 from app.models import Course, Project, Concept
+
+
+# Create Custom "Tag" Field for Concepts
+class ConceptListField(Field):
+    widget = TextInput()
+
+    def _value(self):
+        if self.data:
+            return ', '.join(self.data)
+        else:
+            return ''
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = [x.strip() for x in valuelist[0].split(',')]
+        else:
+            self.data = []
+
 
 
 # CREATE FORMS
@@ -20,8 +39,7 @@ class NewCourseForm(FlaskForm):
 class NewProjectForm(FlaskForm):
     project_title = StringField("Project Title", validators=[InputRequired()])
     repo = StringField("Project Repository", validators=[InputRequired()])
-    concepts = StringField("Concepts Separated by Comma")
-    course = StringField("Course")
+    concepts = ConceptListField('Concepts')
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
     submit = SubmitField("Add Project")
@@ -32,6 +50,8 @@ class NewConceptForm(FlaskForm):
     category = StringField("Category")
     description = TextAreaField("Description")
     submit = SubmitField("Add Concept")
+
+
 
 
 
