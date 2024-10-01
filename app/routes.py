@@ -86,10 +86,10 @@ def add_new_course():
 @app.route('/add-project/<int:course_id>', methods=["GET", "POST"])
 def add_new_project(course_id):
     target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
-    form = NewProjectForm(obj=target_course)
+    form = NewProjectForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
-    concepts_list = [concept.concept_term for concept in get_concepts]
-    print(f"concepts_list: {concepts_list}")
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
 
     if form.validate_on_submit():
         new_proj = Project(
@@ -100,12 +100,20 @@ def add_new_project(course_id):
             lecture=form.lecture.data,
             date_added=date.today()
         )
-        # form_concepts = form.concepts.data
-        # print(f"form concepts: {form_concepts}")
-        for concept in form.concepts.data:
-            new_proj.concepts.append(Concept(concept_term=concept))
 
+        db.session.add(new_proj)
 
+        if form.concepts.data:
+            for concept_name in form.concepts.data:
+                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                if not concept:
+                    concept = Concept(
+                        concept_term=concept_name
+                    )
+
+                    db.session.add(concept)
+
+                new_proj.concepts.append(concept)
 
 
         print(f"title: {new_proj.project_title}")
