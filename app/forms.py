@@ -31,6 +31,7 @@ class NewCourseForm(FlaskForm):
     platform = StringField("Platform")
     instructor = StringField("Instructor")
     start_date = DateField("Start Date")
+    complete_date = DateField("Complete Date")
     content_hours = DecimalField("Content Hours")
     has_cert = BooleanField("Certificate Upon Completion?")
     submit = SubmitField("Add Course")

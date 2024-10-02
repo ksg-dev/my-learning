@@ -35,7 +35,7 @@ def home():
 
     return render_template('index.html', all_courses=courses, all_projects=projects)
 
-
+##################################### LANDING PAGES ########################################
 @app.route('/concepts')
 def concepts_page():
     # Get concepts
@@ -88,6 +88,9 @@ def resources_page():
     resources = [resource for resource in get_resources]
 
     return render_template('resources.html', resources=resources)
+
+
+##################################### CREATE PAGES ########################################
 
 
 @app.route('/add-course', methods=["GET", "POST"])
@@ -158,6 +161,9 @@ def add_new_project(course_id):
         db.session.commit()
         return redirect(url_for("home"))
     return render_template('add.html', form=form, object="Project")
+
+
+##################################### READ PAGES ########################################
 
 
 @app.route('/courses/<int:num>')
