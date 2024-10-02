@@ -102,7 +102,7 @@ class Library(db.Model):
 
 
 # Create Tools / Utilities model for various tools and their use
-class Tools(db.Model):
+class Tool(db.Model):
     __tablename__ = "tools"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -116,7 +116,7 @@ class Tools(db.Model):
 
 
 # Create Resources model to track cheatsheets, diagrams, reference pages - anything not tied to specific project/course
-class Resources(db.Model):
+class Resource(db.Model):
     __tablename__ = "resources"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

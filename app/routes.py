@@ -11,7 +11,7 @@ from flask_ckeditor import CKEditor, CKEditorField
 from flask_ckeditor.utils import cleanify
 
 from app import app, db
-from app.models import Course, Project, Concept
+from app.models import Course, Project, Concept, Library, Tool, Resource
 from app.forms import NewCourseForm, NewProjectForm, NewConceptForm
 
 bootstrap = Bootstrap5(app)
@@ -52,6 +52,33 @@ def courses_page():
     courses = [course for course in get_courses]
 
     return render_template('courses.html', courses=courses)
+
+
+@app.route('/projects')
+def projects_page():
+    # Get projects
+    get_projects = db.session.execute(db.select(Project)).scalars().all()
+    projects = [project for project in get_projects]
+
+    return render_template('projects.html', projects=projects)
+
+
+@app.route('/libraries')
+def libraries_page():
+    # Get libraries
+    get_libraries = db.session.execute(db.select(Library)).scalars().all()
+    libraries = [library for library in get_libraries]
+
+    return render_template('libraries.html', libraries=libraries)
+
+
+@app.route('/tools')
+def tools_page():
+    # Get tools
+    get_tools = db.session.execute(db.select(Tool)).scalars().all()
+    tools = [tool for tool in get_tools]
+
+    return render_template('tools.html', tools=tools)
 
 
 @app.route('/projects')
