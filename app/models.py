@@ -6,7 +6,7 @@ from typing import List
 import sqlalchemy as sa
 
 
-# Create Course table for all planned or completed courses
+# Create Course model for all planned or completed courses
 class Course(db.Model):
     __tablename__ = "courses"
 
@@ -14,7 +14,8 @@ class Course(db.Model):
     title: Mapped[str] = mapped_column(String(100), unique=True)
     platform: Mapped[str] = mapped_column(String(100))
     instructor: Mapped[str] = mapped_column(String(100))
-    start: Mapped[str] = mapped_column(String(25), nullable=True)
+    start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
     content_hours: Mapped[float] = mapped_column(nullable=True)
     has_cert: Mapped[bool] = mapped_column(Boolean)
     date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
@@ -27,18 +28,42 @@ class Course(db.Model):
 # Join table for projects and concepts
 project_concept = db.Table(
     "project_concept",
-    db.Column("project_id", db.Integer, db.ForeignKey("projects.id")),
-    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"))
+    db.Column("project_id", db.Integer, db.ForeignKey("projects.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
+)
+
+# Join table for libraries and concepts
+library_concept = db.Table(
+    "library_concept",
+    db.Column("library_id", db.Integer, db.ForeignKey("libraries.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
+)
+
+# Join table for tools and concepts
+tool_concept = db.Table(
+    "tool_concept",
+    db.Column("tool_id", db.Integer, db.ForeignKey("tools.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
+)
+
+# Join table for resources and concepts
+resource_concept = db.Table(
+    "resource_concept",
+    db.Column("resource_id", db.Integer, db.ForeignKey("resources.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
 )
 
 
-# Create Projects table for individual projects
+# Create Projects model for individual projects
 class Project(db.Model):
     __tablename__ = "projects"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_title: Mapped[str] = mapped_column(String(100), nullable=False)
     project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
+    start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=project_concept, backref='projects')
@@ -53,7 +78,7 @@ class Project(db.Model):
     course: Mapped["Course"] = relationship(back_populates="projects")
 
 
-# Create Concepts table for tracking key terms and concepts
+# Create Concepts model for tracking key terms and concepts
 class Concept(db.Model):
     __tablename__ = "concepts"
 
@@ -63,9 +88,44 @@ class Concept(db.Model):
     description: Mapped[str] = mapped_column(Text, nullable=True)
 
 
+# Create Packages & Libraries model for python libraries/packages
+class Library(db.Model):
+    __tablename__ = "libraries"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    doc_link: Mapped[str] = mapped_column(String(250), nullable=True)
+
+    # Many-to-many relationship to concepts
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=library_concept, backref='libraries')
 
 
+# Create Tools / Utilities model for various tools and their use
+class Tools(db.Model):
+    __tablename__ = "tools"
 
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    url: Mapped[str] = mapped_column(String(250), nullable=True)
+    doc_link: Mapped[str] = mapped_column(String(250), nullable=True)
+
+    # Many-to-many relationship to concepts
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=tool_concept, backref='tools')
+
+
+# Create Resources model to track cheatsheets, diagrams, reference pages - anything not tied to specific project/course
+class Resources(db.Model):
+    __tablename__ = "resources"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(250), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    resource_url: Mapped[str] = mapped_column(String(250), nullable=True)
+
+    # Many-to-many relationship to concepts
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=resource_concept, backref='resources')
 
 # Create table schema in db w app context
 with app.app_context():
