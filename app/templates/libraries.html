@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Libraries{% endblock %}
+
+{% block content %}
+	<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Libraries</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Knowledge Center</li>
+          <li class="breadcrumb-item active">Libraries</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+<!--		Page Description Card-->
+	  <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Never Forget a Library</h5>
+		  <p>Track useful libraries and their documentation for easy access to Libraries you love.</p>
+		</div>
+	  </div>
+
+<!--		End Page Description Card-->
+
+<!--	All Courses Table-->
+
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">My Libraries</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+				<th scope="col">Name</th>
+				<th scope="col">Description</th>
+				<th scope="col">Check the Docs</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for library in libraries %}
+			  <tr>
+			  	<td>{{ library.name }}</td>
+				<td>{{ library.description }}</td>
+				<td><a href="{{ library.doc_link }}"><i class="bi bi-file-earmark-text"></i></a></td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+			<a href="{{ url_for('add_new_library') }}">
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Library</button>
+			</a>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+
+    <section class="section">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Example Card</h5>
+              <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
+            </div>
+          </div>
+        </div>
+    </section>
+	</main> <!-- End #main -->
+{% endblock %}
+
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

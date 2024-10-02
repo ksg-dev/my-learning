@@ -127,6 +127,9 @@ class Resources(db.Model):
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=resource_concept, backref='resources')
 
+
+
+
 # Create table schema in db w app context
 with app.app_context():
     db.create_all()
