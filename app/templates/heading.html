@@ -270,9 +270,9 @@
 
 <li class="nav-heading">Knowledge Center</li>
 
-<!--		Packages Page Nav-->
+<!--		Libraries Page Nav-->
 	  <li class="nav-item">
-        <a class="nav-link collapsed" href="">
+        <a class="nav-link collapsed" href="{{ url_for('libraries_page') }}">
           <i class="bi bi-box"></i>
           <span>Libraries</span>
         </a>
@@ -288,7 +288,7 @@
 
 <!--		Tools / Utilities Page Nav-->
 	  <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ url_for('concepts_page') }}">
+        <a class="nav-link collapsed" href="{{ url_for('tools_page') }}">
           <i class="bi bi-tools"></i>
           <span>Tools & Utilities</span>
         </a>
@@ -296,7 +296,7 @@
 
 <!--		Resource Library Page Nav-->
 	  <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ url_for('concepts_page') }}">
+        <a class="nav-link collapsed" href="{{ url_for('resources_page') }}">
           <i class="bi bi-bookshelf"></i>
           <span>Resource Library</span>
         </a>

@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Courses{% endblock %}
+{% block title %}Tools{% endblock %}
 
 {% block content %}
 	<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Courses</h1>
+      <h1>Tools & Utilities</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item active">Courses</li>
+          <li class="breadcrumb-item">Knowledge Center</li>
+          <li class="breadcrumb-item active">Tools & Utilities</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -20,9 +20,8 @@
 <!--		Page Description Card-->
 	  <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Structure Your Learning with Courses</h5>
-		  <p>Track Courses you've taken, are taking, or plan to take.</p>
-		  <p>Use start and end dates for Courses to see your Learning timeline on your Dashboard, or use content hours to plan your Learning Journey.</p>
+		  <h5 class="card-title">Tools at Your Fingertips</h5>
+		  <p>Track and organize various Tools & Utilities and their function, so your bookmark bar can take a back seat.</p>
 		</div>
 	  </div>
 
@@ -32,37 +31,31 @@
 
 	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">My Courses</h5>
+		  <h5 class="card-title">My Tools</h5>
 
 		  <!-- Table with hoverable rows -->
 		  <table class="table table-hover">
 			<thead>
 			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Title</th>
-				<th scope="col">Platform</th>
-				<th scope="col">Content Hours</th>
-				<th scope="col">Cert?</th>
+				<th scope="col">Tool</th>
+				<th scope="col">Description</th>
+				<th scope="col">Take Me There</th>
+				<th scope="col">Check the Docs</th>
 			  </tr>
 			</thead>
 			<tbody>
-			{% for course in courses %}
+			{% for tool in tools %}
 			  <tr>
-				<th scope="row">{{ course.id }}</th>
-			  	<td><a href="{{ url_for('course_detail', num=course.id ) }}">{{ course.title }}</a></td>
-				<td>{{ course.platform }}</td>
-				<td>{{ course.content_hours }}</td>
-				  {% if course.has_cert %}
-				<td><i class="bi bi-award"></i></td>
-				  {% else %}
-				  <td></td>
-				  {% endif %}
+			  	<td>{{ tool.name }}</td>
+				<td>{{ tool.description }}</td>
+				<td><a href="{{ tool.url }}"><i class="bi bi-link45-deg"></i></a></td>
+			    <td><a href="{{ tool.doc_link }}"><i class="bi bi-file-earmark-text"></i></a></td>
 			  </tr>
 			{% endfor %}
 			</tbody>
 		  </table>
 			<a href="{{ url_for('add_new_course') }}">
-		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Course</button>
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Tool</button>
 			</a>
 		</div>
 	 </div>
