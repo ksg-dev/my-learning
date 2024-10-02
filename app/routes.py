@@ -81,13 +81,13 @@ def tools_page():
     return render_template('tools.html', tools=tools)
 
 
-@app.route('/projects')
-def projects_page():
-    # Get projects
-    get_projects = db.session.execute(db.select(Project)).scalars().all()
-    projects = [project for project in get_projects]
+@app.route('/resources')
+def resources_page():
+    # Get resources
+    get_resources = db.session.execute(db.select(Resource)).scalars().all()
+    resources = [resource for resource in get_resources]
 
-    return render_template('projects.html', projects=projects)
+    return render_template('resources.html', resources=resources)
 
 
 @app.route('/add-course', methods=["GET", "POST"])
