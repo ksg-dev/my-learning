@@ -69,6 +69,8 @@ class Project(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_title: Mapped[str] = mapped_column(String(100), nullable=False)
     project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    assignment_link: Mapped[str] = mapped_column(String(250), nullable=True)
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
     complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
 

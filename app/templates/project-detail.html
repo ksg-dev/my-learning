@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Project Detail{% endblock %}
+
+{% block content %}
+	<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>{{ project.title }}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">My Learning</li>
+          <li class="breadcrumb-item">Projects</li>
+		  <li class="breadcrumb-item active">{{ project.project_title }}</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+		<div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Project Details</h5>
+					<p>Project Repo: {{ project.project_repo }}</p>
+					<p>Section: {{ project.section }}</p>
+					<p>Lecture: {{ project.lecture }}</p>
+					<p>Link: <a href="{{ project.assignment_link }}" target="_blank">Go to Assignment</a> </p>
+					<p>Start: {{ project.start }}</p>
+					<p>Complete: {{ project.complete }}</p>
+					<p>Description/Parameters: {{ project.description }}</p>
+					<p>Date Added: {{ project.date_added }}</p>
+              </div>
+		  </div><!-- End Project Details -->
+
+
+	<div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Top Concepts</h5>
+
+              <!-- Top Concepts List group With Badges -->
+              <ul class="list-group">
+				  {% for concept in concepts %}
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+					  {{ concept }}
+                </li>
+				  {% endfor %}
+              </ul><!-- End Top Concepts List Group -->
+
+            </div>
+          </div>
+
+<!--	All Projects for Course Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">{{ project.project_title }} Files</h5>
+
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+
+    <section class="section">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Example Card</h5>
+              <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
+            </div>
+          </div>
+        </div>
+    </section>
+	</main> <!-- End #main -->
+{% endblock %}
+
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

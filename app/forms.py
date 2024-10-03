@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, Field, SelectField
-from wtforms.validators import InputRequired, URL
+from wtforms.validators import InputRequired, URL, Optional
 from wtforms.widgets import TextInput
 from app import db
 from app.models import Course, Project, Concept
@@ -29,11 +29,11 @@ class ConceptListField(Field):
 class NewCourseForm(FlaskForm):
     title = StringField("Course Title", validators=[InputRequired()])
     platform = StringField("Platform")
-    url = StringField("Course URL", validators=[URL()])
+    url = StringField("Course URL", validators=[Optional(), URL()])
     instructor = StringField("Instructor")
-    start_date = DateField("Start Date")
-    complete_date = DateField("Complete Date")
-    content_hours = DecimalField("Content Hours")
+    start_date = DateField("Start Date", validators=[Optional()])
+    complete_date = DateField("Complete Date", validators=[Optional()])
+    content_hours = DecimalField("Content Hours", validators=[Optional()])
     has_cert = BooleanField("Certificate Upon Completion?")
     submit = SubmitField("Add Course")
 
@@ -41,8 +41,10 @@ class NewCourseForm(FlaskForm):
 class NewProjectForm(FlaskForm):
     project_title = StringField("Project Title", validators=[InputRequired()])
     repo = StringField("Project Repository", validators=[InputRequired()])
-    start_date = DateField("Start Date")
-    complete_date = DateField("Complete Date")
+    description = TextAreaField("Project Description/Parameters", validators=[Optional()])
+    assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
+    start_date = DateField("Start Date", validators=[Optional()])
+    complete_date = DateField("Complete Date", validators=[Optional()])
     concepts = ConceptListField('Concepts')
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
@@ -59,7 +61,7 @@ class NewConceptForm(FlaskForm):
 class NewLibraryForm(FlaskForm):
     name = StringField("Library Name", validators=[InputRequired()])
     description = TextAreaField("Description")
-    doc_link = StringField("Docs URL", validators=[URL()])
+    doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
     submit = SubmitField("Add Library")
 
@@ -67,8 +69,8 @@ class NewLibraryForm(FlaskForm):
 class NewAPIForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])
     description = TextAreaField("Description")
-    url = StringField("API URL", validators=[URL()])
-    doc_link = StringField("Docs URL", validators=[URL()])
+    url = StringField("API URL", validators=[Optional(), URL()])
+    doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     requires_login = BooleanField("Requires Login?")
     concepts = ConceptListField('Concepts')
     submit = SubmitField("Add Tool")
@@ -77,8 +79,8 @@ class NewAPIForm(FlaskForm):
 class NewToolForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])
     description = TextAreaField("Description")
-    url = StringField("Tool URL", validators=[URL()])
-    doc_link = StringField("Docs URL", validators=[URL()])
+    url = StringField("Tool URL", validators=[Optional(), URL()])
+    doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
     submit = SubmitField("Add Tool")
 
@@ -88,13 +90,13 @@ class NewResourceForm(FlaskForm):
     description = TextAreaField("Description")
     type = SelectField("Resource Type",
                        choices=[
+                           ('other', 'Other'),
                            ('cheatsheet', 'Cheatsheet'),
                            ('diagram', 'Diagram'),
                            ('quickref', 'Quick Reference'),
-                           ('template', 'Template'),
-                           ('other', 'Other')
+                           ('template', 'Template')
                        ])
-    resource_url = StringField("Resource URL", validators=[URL()])
+    resource_url = StringField("Resource URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
     submit = SubmitField("Add Resource")
 

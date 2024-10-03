@@ -17,6 +17,7 @@ from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm,
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
 
+# To show categories across pages
 categories = {
     'cheatsheet': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
     'diagram': ['Diagram', 'bg-primary', 'bi-diagram-2'],
@@ -68,7 +69,21 @@ def projects_page():
     get_projects = db.session.execute(db.select(Project)).scalars().all()
     projects = [project for project in get_projects]
 
-    return render_template('projects.html', projects=projects)
+    top_concepts = {}
+
+    # Add all concepts to dict as key, and count of occurrence as value
+    for proj in get_projects:
+        for concept in proj.concepts:
+            if concept.concept_term in top_concepts:
+                top_concepts[concept.concept_term] += 1
+            else:
+                top_concepts[concept.concept_term] = 1
+
+    # Sort descending
+    sorted_concepts = dict(
+        sorted(top_concepts.items(), key=lambda item: item[1], reverse=True))
+
+    return render_template('projects.html', projects=projects, top_concepts=top_concepts)
 
 
 @app.route('/libraries')
@@ -143,6 +158,8 @@ def add_new_project(course_id):
         new_proj = Project(
             project_title=form.project_title.data,
             project_repo=form.repo.data,
+            description=form.description.data,
+            assignment_link=form.assignment_link.data,
             course=target_course,
             start=form.start_date.data,
             complete=form.complete_date.data,
@@ -371,3 +388,18 @@ def course_detail(num):
         sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
 
     return render_template('course-detail.html', course=target_course, all_projects=all_projects, top_concepts=sorted_concepts)
+
+
+@app.route('/projects/<int:num>')
+def project_detail(num):
+    target_project = db.get_or_404(Project, num)
+    proj_concepts = []
+
+    for concept in target_project.concepts:
+        proj_concepts.append(concept.concept_term)
+
+    # # Sort descending
+    # sorted_concepts = dict(
+    #     sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
+
+    return render_template('project-detail.html', project=target_project, concepts=proj_concepts)
