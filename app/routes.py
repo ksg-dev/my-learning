@@ -12,7 +12,7 @@ from flask_ckeditor.utils import cleanify
 
 from app import app, db
 from app.models import Course, Project, Concept, Library, Tool, Resource
-from app.forms import NewCourseForm, NewProjectForm, NewConceptForm
+from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewLibraryForm, NewToolForm, NewResourceForm
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -110,7 +110,7 @@ def add_new_course():
 
         db.session.add(new_course)
         db.session.commit()
-        return redirect(url_for("home"))
+        return redirect(url_for("courses_page"))
     return render_template('add.html', form=form, object="Course")
 
 
@@ -120,7 +120,6 @@ def add_new_project(course_id):
     form = NewProjectForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
-
 
     if form.validate_on_submit():
         new_proj = Project(
@@ -150,8 +149,114 @@ def add_new_project(course_id):
 
         db.session.add(new_proj)
         db.session.commit()
-        return redirect(url_for("home"))
+        return redirect(url_for("projects_page"))
     return render_template('add.html', form=form, object="Project")
+
+
+@app.route('/add-library', methods=["GET", "POST"])
+def add_new_library():
+    form = NewLibraryForm()
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    if form.validate_on_submit():
+        new_lib = Library(
+            name=form.name.data,
+            description=form.description.data,
+            doc_link=form.doc_link.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_lib)
+
+        if form.concepts.data:
+            for concept_name in form.concepts.data:
+                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                if not concept:
+                    concept = Concept(
+                        concept_term=concept_name,
+                        category='library'
+                    )
+
+                    db.session.add(concept)
+
+                new_lib.concepts.append(concept)
+
+        db.session.add(new_lib)
+        db.session.commit()
+        return redirect(url_for("libraries_page"))
+    return render_template('add.html', form=form, object="Library")
+
+
+@app.route('/add-tool', methods=["GET", "POST"])
+def add_new_tool():
+    form = NewToolForm()
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    if form.validate_on_submit():
+        new_tool = Tool(
+            name=form.name.data,
+            description=form.description.data,
+            url=form.url.data,
+            doc_link=form.doc_link.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_tool)
+
+        if form.concepts.data:
+            for concept_name in form.concepts.data:
+                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                if not concept:
+                    concept = Concept(
+                        concept_term=concept_name,
+                        category='tool'
+                    )
+
+                    db.session.add(concept)
+
+                new_tool.concepts.append(concept)
+
+        db.session.add(new_tool)
+        db.session.commit()
+        return redirect(url_for("tools_page"))
+    return render_template('add.html', form=form, object="Tool")
+
+
+@app.route('/add-resource', methods=["GET", "POST"])
+def add_new_resource():
+    form = NewLibraryForm()
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    if form.validate_on_submit():
+        new_lib = Library(
+            name=form.name.data,
+            description=form.description.data,
+            doc_link=form.doc_link.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_lib)
+
+        if form.concepts.data:
+            for concept_name in form.concepts.data:
+                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                if not concept:
+                    concept = Concept(
+                        concept_term=concept_name,
+                        category='library'
+                    )
+
+                    db.session.add(concept)
+
+                new_lib.concepts.append(concept)
+
+        db.session.add(new_lib)
+        db.session.commit()
+        return redirect(url_for("libraries_page"))
+    return render_template('add.html', form=form, object="Library")
 
 
 ##################################### READ PAGES ########################################

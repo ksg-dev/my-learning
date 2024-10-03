@@ -96,6 +96,7 @@ class Library(db.Model):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=True)
     doc_link: Mapped[str] = mapped_column(String(250), nullable=True)
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=library_concept, backref='libraries')
@@ -110,6 +111,7 @@ class Tool(db.Model):
     description: Mapped[str] = mapped_column(Text, nullable=True)
     url: Mapped[str] = mapped_column(String(250), nullable=True)
     doc_link: Mapped[str] = mapped_column(String(250), nullable=True)
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=tool_concept, backref='tools')
@@ -124,6 +126,7 @@ class Resource(db.Model):
     description: Mapped[str] = mapped_column(Text, nullable=True)
     type: Mapped[str] = mapped_column(String(100), nullable=True)
     resource_url: Mapped[str] = mapped_column(String(250), nullable=True)
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=resource_concept, backref='resources')
