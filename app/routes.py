@@ -102,6 +102,7 @@ def add_new_course():
             platform=form.platform.data,
             instructor=form.instructor.data,
             start=form.start_date.data,
+            complete=form.complete_date.data,
             content_hours=form.content_hours.data,
             has_cert=form.has_cert.data,
             date_added=date.today()
@@ -126,6 +127,8 @@ def add_new_project(course_id):
             project_title=form.project_title.data,
             project_repo=form.repo.data,
             course=target_course,
+            start=form.start_date.data,
+            complete=form.complete_date.data,
             section=form.section.data,
             lecture=form.lecture.data,
             date_added=date.today()
@@ -144,18 +147,6 @@ def add_new_project(course_id):
                     db.session.add(concept)
 
                 new_proj.concepts.append(concept)
-
-
-        print(f"title: {new_proj.project_title}")
-        print(f"repo: {new_proj.project_repo}")
-        print(f"concepts: {new_proj.concepts}")
-        print(f"course: {new_proj.course}")
-        print(f"section: {new_proj.section}")
-        print(f"lecture: {new_proj.lecture}")
-
-
-
-        # print(new_proj)
 
         db.session.add(new_proj)
         db.session.commit()
