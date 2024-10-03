@@ -29,6 +29,7 @@ class ConceptListField(Field):
 class NewCourseForm(FlaskForm):
     title = StringField("Course Title", validators=[InputRequired()])
     platform = StringField("Platform")
+    url = StringField("Course URL", validators=[URL()])
     instructor = StringField("Instructor")
     start_date = DateField("Start Date")
     complete_date = DateField("Complete Date")

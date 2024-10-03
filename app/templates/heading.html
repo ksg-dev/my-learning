@@ -1,4 +1,5 @@
 {% from 'bootstrap5/nav.html' import render_nav_item %}
+{% from 'bootstrap5/form.html' import render_form %}
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -228,6 +229,16 @@
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+
+<!-- Use Message Flashing to display feedback to the user with a <p> -->
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+              {% for message in messages %}
+                <p class="flash">{{ message }}</p>
+              {% endfor %}
+          {% endif %}
+       {% endwith %}
+<!-- End Flashed Messages -->
 
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">

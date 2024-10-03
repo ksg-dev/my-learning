@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap5
 from datetime import date
 from flask_sqlalchemy import SQLAlchemy
@@ -109,6 +109,7 @@ def add_new_course():
         new_course = Course(
             title=form.title.data,
             platform=form.platform.data,
+            url=form.url.data,
             instructor=form.instructor.data,
             start=form.start_date.data,
             complete=form.complete_date.data,

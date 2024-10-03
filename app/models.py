@@ -13,6 +13,7 @@ class Course(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(100), unique=True)
     platform: Mapped[str] = mapped_column(String(100))
+    url: Mapped[str] = mapped_column(String(250), nullable=True)
     instructor: Mapped[str] = mapped_column(String(100))
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
     complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
