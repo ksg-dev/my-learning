@@ -162,6 +162,23 @@ def add_new_project(course_id):
     return render_template('add.html', form=form, object="Project")
 
 
+@app.route('/add-concept', methods=["GET", "POST"])
+def add_new_concept():
+    form = NewConceptForm()
+    if form.validate_on_submit():
+        new_concept = Concept(
+            concept_term=form.concept.data,
+            category=form.category.data,
+            description=form.description.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_concept)
+        db.session.commit()
+        return redirect(url_for("concepts_page"))
+    return render_template('add.html', form=form, object="Concept")
+
+
 @app.route('/add-library', methods=["GET", "POST"])
 def add_new_library():
     form = NewLibraryForm()
@@ -178,13 +195,17 @@ def add_new_library():
 
         db.session.add(new_lib)
 
-        if form.concepts.data:
-            for concept_name in form.concepts.data:
+        form_concepts = form.concepts.data
+        form_concepts.append(form.name.data)
+
+        if len(form_concepts) > 0:
+            for concept_name in form_concepts:
                 concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='library'
+                        category='library',
+                        date_added=date.today()
                     )
 
                     db.session.add(concept)
@@ -195,6 +216,47 @@ def add_new_library():
         db.session.commit()
         return redirect(url_for("libraries_page"))
     return render_template('add.html', form=form, object="Library")
+
+
+@app.route('/add-api', methods=["GET", "POST"])
+def add_new_api():
+    form = NewAPIForm()
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    if form.validate_on_submit():
+        new_api = API(
+            name=form.name.data,
+            description=form.description.data,
+            url=form.url.data,
+            doc_link=form.doc_link.data,
+            requires_login=form.requires_login.data,
+            date_added=date.today()
+        )
+
+        db.session.add(new_api)
+
+        form_concepts = form.concepts.data
+        form_concepts.append(form.name.data)
+
+        if len(form_concepts) > 0:
+            for concept_name in form_concepts:
+                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                if not concept:
+                    concept = Concept(
+                        concept_term=concept_name,
+                        category='api',
+                        date_added=date.today()
+                    )
+
+                    db.session.add(concept)
+
+                new_api.concepts.append(concept)
+
+        db.session.add(new_api)
+        db.session.commit()
+        return redirect(url_for("apis_page"))
+    return render_template('add.html', form=form, object="API")
 
 
 @app.route('/add-tool', methods=["GET", "POST"])
@@ -214,13 +276,17 @@ def add_new_tool():
 
         db.session.add(new_tool)
 
-        if form.concepts.data:
-            for concept_name in form.concepts.data:
+        form_concepts = form.concepts.data
+        form_concepts.append(form.name.data)
+
+        if len(form_concepts) > 0:
+            for concept_name in form_concepts:
                 concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='tool'
+                        category='tool',
+                        date_added=date.today()
                     )
 
                     db.session.add(concept)
@@ -250,13 +316,17 @@ def add_new_resource():
 
         db.session.add(new_resource)
 
-        if form.concepts.data:
-            for concept_name in form.concepts.data:
+        form_concepts = form.concepts.data
+        form_concepts.append(form.name.data)
+
+        if len(form_concepts) > 0:
+            for concept_name in form_concepts:
                 concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='resource'
+                        category='resource',
+                        date_added=date.today()
                     )
 
                     db.session.add(concept)

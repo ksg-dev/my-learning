@@ -42,7 +42,7 @@ library_concept = db.Table(
 # Join table for apis and concepts
 api_concept = db.Table(
     "api_concept",
-    db.Column("api_id", db.Integer, db.ForeignKey("api.id"), primary_key=True),
+    db.Column("api_id", db.Integer, db.ForeignKey("apis.id"), primary_key=True),
     db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
 )
 
@@ -93,6 +93,7 @@ class Concept(db.Model):
     concept_term: Mapped[str] = mapped_column(String(50), nullable=False)
     category: Mapped[str] = mapped_column(String(100), nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=True)
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
 
 # Create Packages & Libraries model for python libraries/packages
