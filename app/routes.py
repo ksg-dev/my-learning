@@ -17,6 +17,14 @@ from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm,
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
 
+categories = {
+    'cheatsheet': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
+    'diagram': ['Diagram', 'bg-primary', 'bi-diagram-2'],
+    'quickref': ['Quick Reference', 'bg-info text-dark', 'bi-info-circle'],
+    'template': ['Template', 'bg-success', 'bi-file-ruled'],
+    'other': ['Other', 'bg-secondary', 'bi-collection']
+}
+
 
 @app.route('/')
 @app.route('/index')
@@ -96,7 +104,7 @@ def resources_page():
     get_resources = db.session.execute(db.select(Resource)).scalars().all()
     resources = [resource for resource in get_resources]
 
-    return render_template('resources.html', resources=resources)
+    return render_template('resources.html', resources=resources, badge=categories)
 
 
 ##################################### CREATE PAGES ########################################
