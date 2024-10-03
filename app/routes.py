@@ -11,8 +11,8 @@ from flask_ckeditor import CKEditor, CKEditorField
 from flask_ckeditor.utils import cleanify
 
 from app import app, db
-from app.models import Course, Project, Concept, Library, Tool, Resource
-from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewLibraryForm, NewToolForm, NewResourceForm
+from app.models import Course, Project, Concept, Library, API, Tool, Resource
+from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -70,6 +70,15 @@ def libraries_page():
     libraries = [library for library in get_libraries]
 
     return render_template('libraries.html', libraries=libraries)
+
+
+@app.route('/apis')
+def apis_page():
+    # Get apis
+    get_apis = db.session.execute(db.select(API)).scalars().all()
+    apis = [api for api in get_apis]
+
+    return render_template('apis.html', apis=apis)
 
 
 @app.route('/tools')
@@ -226,19 +235,20 @@ def add_new_tool():
 
 @app.route('/add-resource', methods=["GET", "POST"])
 def add_new_resource():
-    form = NewLibraryForm()
+    form = NewResourceForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
     if form.validate_on_submit():
-        new_lib = Library(
+        new_resource = Resource(
             name=form.name.data,
             description=form.description.data,
-            doc_link=form.doc_link.data,
+            type=form.type.data,
+            resource_url=form.resource_url.data,
             date_added=date.today()
         )
 
-        db.session.add(new_lib)
+        db.session.add(new_resource)
 
         if form.concepts.data:
             for concept_name in form.concepts.data:
@@ -246,17 +256,17 @@ def add_new_resource():
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='library'
+                        category='resource'
                     )
 
                     db.session.add(concept)
 
-                new_lib.concepts.append(concept)
+                new_resource.concepts.append(concept)
 
-        db.session.add(new_lib)
+        db.session.add(new_resource)
         db.session.commit()
-        return redirect(url_for("libraries_page"))
-    return render_template('add.html', form=form, object="Library")
+        return redirect(url_for("resources_page"))
+    return render_template('add.html', form=form, object="Resource")
 
 
 ##################################### READ PAGES ########################################

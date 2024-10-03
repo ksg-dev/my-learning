@@ -63,6 +63,16 @@ class NewLibraryForm(FlaskForm):
     submit = SubmitField("Add Library")
 
 
+class NewAPIForm(FlaskForm):
+    name = StringField("Name", validators=[InputRequired()])
+    description = TextAreaField("Description")
+    url = StringField("API URL", validators=[URL()])
+    doc_link = StringField("Docs URL", validators=[URL()])
+    requires_login = BooleanField("Requires Login?")
+    concepts = ConceptListField('Concepts')
+    submit = SubmitField("Add Tool")
+
+
 class NewToolForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])
     description = TextAreaField("Description")

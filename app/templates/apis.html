@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Courses{% endblock %}
+{% block title %}APIs{% endblock %}
 
 {% block content %}
 	<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Courses</h1>
+      <h1>APIs</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item active">Courses</li>
+          <li class="breadcrumb-item">Knowledge Center</li>
+          <li class="breadcrumb-item active">APIs</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -20,40 +20,41 @@
 <!--		Page Description Card-->
 	  <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Structure Your Learning with Courses</h5>
-		  <p>Track Courses you've taken, are taking, or plan to take.</p>
-		  <p>Use start and end dates for Courses to see your Learning timeline on your Dashboard, or use content hours to plan your Learning Journey.</p>
+		  <h5 class="card-title">Keep Track of APIs</h5>
+		  <p>Track APIs you've used or that you've come across that you might want to use later.</p>
 		</div>
 	  </div>
 
 <!--		End Page Description Card-->
 
-<!--	All Courses Table-->
+<!--	All APIs Table-->
 
 	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">My Courses</h5>
+		  <h5 class="card-title">My APIs</h5>
 
 		  <!-- Table with hoverable rows -->
 		  <table class="table table-hover">
 			<thead>
 			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Title</th>
-				<th scope="col">Platform</th>
-				<th scope="col">Content Hours</th>
-				<th scope="col">Cert?</th>
+				<th scope="col">API</th>
+				<th scope="col">Description</th>
+				<th scope="col">Take Me There</th>
+				<th scope="col">Check the Docs</th>
+			    <th scope="col">Requires Login?</th>
 			  </tr>
 			</thead>
 			<tbody>
-			{% for course in courses %}
+			{% for api in apis %}
 			  <tr>
-				<th scope="row">{{ course.id }}</th>
-			  	<td><a href="{{ url_for('course_detail', num=course.id ) }}">{{ course.title }}</a></td>
-				<td>{{ course.platform }}</td>
-				<td>{{ course.content_hours }}</td>
-				  {% if course.has_cert %}
-				<td><i class="bi bi-award"></i></td>
+				<td>{{ api.name }}</td>
+			    <td>{{ api.description }}</td>
+			    <td><a href="{{ api.url }}"><i class="bi bi-link45-deg"></i></a></td>
+			    <td><a href="{{ api.doc_link }}"><i class="bi bi-file-earmark-text"></i></a></td>
+
+				<td>{{ api.requires_login }}</td>
+				  {% if api.requires_login %}
+				<td><i class="bi bi-person-bounding-box"></i></td>
 				  {% else %}
 				  <td></td>
 				  {% endif %}
@@ -61,8 +62,8 @@
 			{% endfor %}
 			</tbody>
 		  </table>
-			<a href="{{ url_for('add_new_course') }}">
-		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Course</button>
+			<a href="{{ url_for('add_new_api') }}">
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add API</button>
 			</a>
 		</div>
 	 </div>

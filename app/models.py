@@ -39,6 +39,13 @@ library_concept = db.Table(
     db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
 )
 
+# Join table for apis and concepts
+api_concept = db.Table(
+    "api_concept",
+    db.Column("api_id", db.Integer, db.ForeignKey("api.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
+)
+
 # Join table for tools and concepts
 tool_concept = db.Table(
     "tool_concept",
@@ -100,6 +107,23 @@ class Library(db.Model):
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=library_concept, backref='libraries')
+
+
+# Create API model for tracking APIs you've used or have already gotten access to
+class API(db.Model):
+    __tablename__ = "apis"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    url: Mapped[str] = mapped_column(String(250), nullable=True)
+    doc_link: Mapped[str] = mapped_column(String(250), nullable=True)
+    requires_login: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+
+    # Many-to-many relationship to concepts
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=api_concept, backref='apis')
+
 
 
 # Create Tools / Utilities model for various tools and their use
