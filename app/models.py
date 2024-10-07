@@ -159,19 +159,20 @@ class Resource(db.Model):
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=resource_concept, backref='resources')
 
-
+"""
 # Create GitHub Events model for api events data
-class Events(db.Model):
-    __tablename__ = "events"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    type: Mapped[str] = mapped_column(String(250))
-    actor: Mapped[str] = mapped_column(String(250))
-    ref: Mapped[str] = mapped_column(String(250))
-    ref_type: Mapped[str] = mapped_column(String(250))
-    description: Mapped[str] = mapped_column(Text, nullable=True)
-    timestamp: Mapped[datetime.datetime] = mapped_column(DateTime)
-
+# class Events(db.Model):
+#     __tablename__ = "events"
+# 
+#     # NOTE TO SELF: tweak data model here is for create event, need to structure to handle create or push
+#     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+#     type: Mapped[str] = mapped_column(String(250))
+#     actor: Mapped[str] = mapped_column(String(250))
+#     ref: Mapped[str] = mapped_column(String(250), nullable=True)
+#     ref_type: Mapped[str] = mapped_column(String(250))
+#     description: Mapped[str] = mapped_column(Text, nullable=True)
+#     timestamp: Mapped[datetime.datetime] = mapped_column(DateTime)
+"""
 
 # Create table schema in db w app context
 with app.app_context():
