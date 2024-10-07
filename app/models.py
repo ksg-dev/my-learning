@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date
+from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date, DateTime
 from app import app, db
 import datetime
 from typing import List
@@ -160,6 +160,17 @@ class Resource(db.Model):
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=resource_concept, backref='resources')
 
 
+# Create GitHub Events model for api events data
+class Events(db.Model):
+    __tablename__ = "events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    type: Mapped[str] = mapped_column(String(250))
+    actor: Mapped[str] = mapped_column(String(250))
+    ref: Mapped[str] = mapped_column(String(250))
+    ref_type: Mapped[str] = mapped_column(String(250))
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    timestamp: Mapped[datetime.datetime] = mapped_column(DateTime)
 
 
 # Create table schema in db w app context
