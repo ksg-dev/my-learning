@@ -80,7 +80,7 @@ def home():
     refresh_events(GH_USERNAME)
     now = datetime.now()
 
-    recent = db.session.execute(db.select(Event).order_by(Event.timestamp)).scalars().yield_per(10)
+    recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
     return render_template('index.html', all_events=recent_events, now=now)
