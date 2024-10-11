@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import requests
 import datetime
+from pprint import pprint
 
 load_dotenv()
 
@@ -12,10 +13,10 @@ GH_USERNAME = os.environ["GITHUB_USERNAME"]
 GH_API_URL = "https://api.github.com/"
 
 class GetEvents:
-    def __init__(self):
-        self.user = GH_USERNAME
+    def __init__(self, user):
+        self.user = user
         self.token = GH_TOKEN
-        self.events = self.get_events(GH_USERNAME)
+        self.events = self.get_events(user)
 
     def get_events(self, user):
         headers = {
@@ -30,5 +31,29 @@ class GetEvents:
         response.raise_for_status()
         events = response.json()
 
-        return events
+        all_events = []
+
+        for i in events:
+            if i['type'] == "PushEvent":
+                new_event = {
+                    "id": i["id"],
+                    "type": i["type"],
+                    "repo": i["repo"]["name"].split("/")[1],
+                    "commits": i["payload"]["size"],
+                    "timestamp": i["created_at"]
+                }
+
+            else:
+                new_event = {
+                    "id": i["id"],
+                    "type": i["type"],
+                    "repo": i["repo"]["name"].split("/")[1],
+                    "create_type": i["payload"]["ref_type"],
+                    "timestamp": i["created_at"]
+                }
+
+            all_events.append(new_event)
+
+        return all_events
+
 

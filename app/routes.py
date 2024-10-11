@@ -9,13 +9,20 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
 from flask_ckeditor.utils import cleanify
+from dotenv import load_dotenv
+import os
 
 from app import app, db
-from app.models import Course, Project, Concept, Library, API, Tool, Resource
+from app.models import Course, Project, Concept, Library, API, Tool, Resource, Event
 from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
+from events import GetEvents
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
+
+load_dotenv()
+
+GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
 # To show categories across pages
 categories = {
@@ -25,6 +32,15 @@ categories = {
     'template': ['Template', 'bg-success', 'bi-file-ruled'],
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
+
+def get_events(user):
+    my_events = GetEvents(user)
+
+
+
+    current = db.session.execute(db.select(Event))
+
+
 
 
 @app.route('/')
@@ -403,3 +419,4 @@ def project_detail(num):
     #     sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
 
     return render_template('project-detail.html', project=target_project, concepts=proj_concepts)
+
