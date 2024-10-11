@@ -2,6 +2,7 @@
 import os
 from dotenv import load_dotenv
 import requests
+from app import app, db
 import datetime
 from pprint import pprint
 
@@ -40,6 +41,7 @@ class GetEvents:
                     "type": i["type"],
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": i["payload"]["size"],
+                    "create_type": None,
                     "timestamp": i["created_at"]
                 }
 
@@ -48,6 +50,7 @@ class GetEvents:
                     "id": i["id"],
                     "type": i["type"],
                     "repo": i["repo"]["name"].split("/")[1],
+                    "commits": None,
                     "create_type": i["payload"]["ref_type"],
                     "timestamp": i["created_at"]
                 }
@@ -57,3 +60,6 @@ class GetEvents:
         return all_events
 
 
+def validate_id(event_id):
+    check = db.session.execute(db.select(Event).filter_by(id=event_id)).first()
+    return check

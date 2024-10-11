@@ -15,7 +15,7 @@ import os
 from app import app, db
 from app.models import Course, Project, Concept, Library, API, Tool, Resource, Event
 from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
-from events import GetEvents
+from events import GetEvents, validate_id
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -33,13 +33,27 @@ categories = {
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
 
-def get_events(user):
-    my_events = GetEvents(user)
+def refresh_events(user):
+    get_my_events = GetEvents(user)
+    my_events = get_my_events.events
 
+    for event in my_events:
+        validate = validate_id(event.id)
 
+        if validate is None:
+            new_event = Event(
+                id=event.id,
+                type=event.type,
+                repo=event.repo,
+                commits=event.commits,
+                create_type=event.create_type,
+                timestamp=event.timestamp
+            )
 
-    current = db.session.execute(db.select(Event))
+            db.session.add(new_event)
+            db.session.commit()
 
+    flash("Events Refreshed")
 
 
 
@@ -58,7 +72,13 @@ def home():
     # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     # concepts = [concept for concept in get_concepts]
 
-    return render_template('index.html', all_courses=courses, all_projects=projects)
+    # Refresh events and get most recent
+    refresh_events(GH_USERNAME)
+
+    recent = db.session.execute(db.select(Event).order_by(Event.timestamp)).scalars().yield_per(10)
+    recent_events = [event for event in recent]
+
+    return render_template('index.html', all_events=recent_events)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
