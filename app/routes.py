@@ -44,12 +44,12 @@ def refresh_events(user):
 
         if validate is None:
             new_event = Event(
-                id=event.id,
-                type=event.type,
-                repo=event.repo,
-                commits=event.commits,
-                create_type=event.create_type,
-                timestamp=event.timestamp
+                id=event["id"],
+                type=event["type"],
+                repo=event["repo"],
+                commits=event["commits"],
+                create_type=event["create_type"],
+                timestamp=event["timestamp"]
             )
 
             db.session.add(new_event)

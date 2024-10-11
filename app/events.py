@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 import requests
 from app import app, db
-import datetime
+from app.models import Event
+from datetime import datetime
 from pprint import pprint
 
 load_dotenv()
@@ -42,7 +43,7 @@ class GetEvents:
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": i["payload"]["size"],
                     "create_type": None,
-                    "timestamp": i["created_at"]
+                    "timestamp": datetime.fromisoformat(i["created_at"])
                 }
 
             elif i["type"] == "CreateEvent":
@@ -52,7 +53,7 @@ class GetEvents:
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": None,
                     "create_type": i["payload"]["ref_type"],
-                    "timestamp": i["created_at"]
+                    "timestamp": datetime.fromisoformat(i["created_at"])
                 }
 
             all_events.append(new_event)
