@@ -43,7 +43,7 @@ class GetEvents:
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": i["payload"]["size"],
                     "create_type": None,
-                    "timestamp": datetime.fromisoformat(i["created_at"])
+                    "timestamp": i["created_at"]
                 }
 
             elif i["type"] == "CreateEvent":
@@ -53,7 +53,7 @@ class GetEvents:
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": None,
                     "create_type": i["payload"]["ref_type"],
-                    "timestamp": datetime.fromisoformat(i["created_at"])
+                    "timestamp": i["created_at"]
                 }
 
             all_events.append(new_event)

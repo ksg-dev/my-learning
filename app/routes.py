@@ -2,7 +2,7 @@ import datetime
 
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap5
-from datetime import date
+from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
@@ -49,7 +49,7 @@ def refresh_events(user):
                 repo=event["repo"],
                 commits=event["commits"],
                 create_type=event["create_type"],
-                timestamp=event["timestamp"]
+                timestamp=datetime.fromisoformat(event["timestamp"])
             )
 
             db.session.add(new_event)
