@@ -43,7 +43,7 @@ class GetEvents:
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": i["payload"]["size"],
                     "create_type": None,
-                    "timestamp": i["created_at"]
+                    "timestamp": i["created_at"].strip("Z")
                 }
 
             elif i["type"] == "CreateEvent":
@@ -53,7 +53,7 @@ class GetEvents:
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": None,
                     "create_type": i["payload"]["ref_type"],
-                    "timestamp": i["created_at"]
+                    "timestamp": i["created_at"].strip("Z")
                 }
 
             all_events.append(new_event)

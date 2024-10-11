@@ -52,6 +52,8 @@ def refresh_events(user):
                 timestamp=datetime.fromisoformat(event["timestamp"])
             )
 
+            print(type(new_event.timestamp))
+
             db.session.add(new_event)
             db.session.commit()
 
@@ -76,7 +78,7 @@ def home():
 
     # Refresh events and get most recent
     refresh_events(GH_USERNAME)
-    now = datetime.datetime.now()
+    now = datetime.now()
 
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp)).scalars().yield_per(10)
     recent_events = [event for event in recent]

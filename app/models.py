@@ -169,7 +169,7 @@ class Event(db.Model):
     repo: Mapped[str] = mapped_column(String(250))
     commits: Mapped[int] = mapped_column(Integer, nullable=True)
     create_type: Mapped[str] = mapped_column(String(250), nullable=True)
-    timestamp: Mapped[datetime.datetime] = mapped_column(DateTime)
+    timestamp: Mapped[datetime.datetime] = mapped_column(DateTime())
 
 
 # Create table schema in db w app context
