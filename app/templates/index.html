@@ -371,16 +371,20 @@
             </div>
 
             <div class="card-body">
-              <h5 class="card-title">Recent Activity <span>| Today {{ now }}</span></h5>
+              <h5 class="card-title">Recent Activity <span>| {{ now }}</span></h5>
 
               <div class="activity">
 
 			  {% for event in all_events %}
                 <div class="activity-item d-flex">
-                  <div class="activite-label">{{ event.timestamp }}</div>
+					{% if now.day == event.timestamp.day %}
+                  <div class="activite-label">{{ (now - event.timestamp).seconds }} ago</div>
+					{% else %}
+				  <div class="activite-label">{{ (now - event.timestamp).days + 1 }} days ago</div>
+					{% endif %}
                   <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                   <div class="activity-content">
-                    {{ event.type }} in <a href="#" class="fw-bold text-dark">{{ event.repo }}</a>
+                    {{ event.timestamp }}  {{ event.type }} in <a href="#" class="fw-bold text-dark">{{ event.repo }}</a>
 					  commits: {{ event.commits }} created: {{ event.create_type }}
 					  timediff: {{ event.timestamp - now }}
                   </div>
