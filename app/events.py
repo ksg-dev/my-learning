@@ -38,17 +38,17 @@ class GetEvents:
             if i['type'] == "PushEvent":
                 new_event = {
                     "id": i["id"],
-                    "type": i["type"],
+                    "type": "push",
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": i["payload"]["size"],
                     "create_type": None,
                     "timestamp": i["created_at"]
                 }
 
-            else:
+            elif i["type"] == "CreateEvent":
                 new_event = {
                     "id": i["id"],
-                    "type": i["type"],
+                    "type": "create",
                     "repo": i["repo"]["name"].split("/")[1],
                     "commits": None,
                     "create_type": i["payload"]["ref_type"],

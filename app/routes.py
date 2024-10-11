@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap5
 from datetime import date
@@ -15,7 +17,7 @@ import os
 from app import app, db
 from app.models import Course, Project, Concept, Library, API, Tool, Resource, Event
 from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
-from events import GetEvents, validate_id
+from app.events import GetEvents, validate_id
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -38,7 +40,7 @@ def refresh_events(user):
     my_events = get_my_events.events
 
     for event in my_events:
-        validate = validate_id(event.id)
+        validate = validate_id(event["id"])
 
         if validate is None:
             new_event = Event(
@@ -74,11 +76,12 @@ def home():
 
     # Refresh events and get most recent
     refresh_events(GH_USERNAME)
+    now = datetime.datetime.now()
 
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp)).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    return render_template('index.html', all_events=recent_events)
+    return render_template('index.html', all_events=recent_events, now=now)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
