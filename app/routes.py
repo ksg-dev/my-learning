@@ -65,7 +65,7 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    return render_template('index.html', my_events=my_events, now=now)
+    return render_template('index.html', my_events=my_events, now=now, activity=recent_events)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')

@@ -447,7 +447,7 @@
 
               <div class="activity">
 
-			  {% for event in all_events %}
+			  {% for event in activity %}
                 <div class="activity-item d-flex">
 					{% if now.day == event.timestamp.day %}
                   <div class="activite-label">{{ (now - event.timestamp).seconds }} ago</div>
