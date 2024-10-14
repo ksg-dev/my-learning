@@ -62,6 +62,17 @@ def refresh_events(user):
 
     flash("Events Refreshed")
 
+def event_stats():
+    events_df = pd.read_sql("events", db.get_engine())
+
+    all_commits = int(events_df["commits"].sum())
+    today = events_df[events_df.timestamp == datetime.today()]
+    month = events_df[events_df.timestamp.dt.month == datetime.today().month]
+
+    today_commits = int(today["commits"].sum())
+    month_commits = int(month["commits"].sum())
+
+    return all_commits, today_commits, month_commits
 
 @app.route('/')
 @app.route('/index')
@@ -85,7 +96,9 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    return render_template('index.html', all_events=recent_events, now=now)
+    total_commits, today, month = event_stats()
+
+    return render_template('index.html', all_events=recent_events, now=now, total_commits=total_commits, today_commits=today, month_commits=month)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
