@@ -47,6 +47,9 @@ def home():
     dashboard = Dashboard(GH_USERNAME)
     now = datetime.now()
 
+    # Get event stats dict
+    my_events = dashboard.get_event_stats()
+
     # Query db for all courses. Convert to python list
     get_courses = db.session.execute(db.select(Course)).scalars().all()
     courses = [course for course in get_courses]
@@ -59,14 +62,10 @@ def home():
     # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     # concepts = [concept for concept in get_concepts]
 
-
-
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    total_commits, today, month = event_stats()
-
-    return render_template('index.html', all_events=recent_events, now=now, total_commits=total_commits, today_commits=today, month_commits=month)
+    return render_template('index.html', my_events=my_events, now=now)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
