@@ -19,6 +19,7 @@ from app import app, db
 from app.models import Course, Project, Concept, Library, API, Tool, Resource, Event
 from app.forms import NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
 from app.events import GetEvents, validate_id
+from app.stats import Dashboard
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -38,45 +39,14 @@ categories = {
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
 
-def refresh_events(user):
-    get_my_events = GetEvents(user)
-    my_events = get_my_events.events
-
-    for event in my_events:
-        validate = validate_id(event["id"])
-
-        if validate is None:
-            new_event = Event(
-                id=event["id"],
-                type=event["type"],
-                repo=event["repo"],
-                commits=event["commits"],
-                create_type=event["create_type"],
-                timestamp=datetime.fromisoformat(event["timestamp"])
-            )
-
-            print(type(new_event.timestamp))
-
-            db.session.add(new_event)
-            db.session.commit()
-
-    flash("Events Refreshed")
-
-def event_stats():
-    events_df = pd.read_sql("events", db.get_engine())
-
-    all_commits = int(events_df["commits"].sum())
-    today = events_df[events_df.timestamp == datetime.today()]
-    month = events_df[events_df.timestamp.dt.month == datetime.today().month]
-
-    today_commits = int(today["commits"].sum())
-    month_commits = int(month["commits"].sum())
-
-    return all_commits, today_commits, month_commits
 
 @app.route('/')
 @app.route('/index')
 def home():
+    # Create Dashboard Object - refresh events
+    dashboard = Dashboard(GH_USERNAME)
+    now = datetime.now()
+
     # Query db for all courses. Convert to python list
     get_courses = db.session.execute(db.select(Course)).scalars().all()
     courses = [course for course in get_courses]
@@ -89,9 +59,7 @@ def home():
     # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     # concepts = [concept for concept in get_concepts]
 
-    # Refresh events and get most recent
-    refresh_events(GH_USERNAME)
-    now = datetime.now()
+
 
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
