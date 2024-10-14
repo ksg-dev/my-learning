@@ -25,6 +25,8 @@ ckeditor = CKEditor(app)
 
 load_dotenv()
 
+DB_URI = os.environ["DB_URI"]
+
 GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
 # To show categories across pages
@@ -60,16 +62,6 @@ def refresh_events(user):
 
     flash("Events Refreshed")
 
-def commits_summary():
-    # push_events = db.session.execute(db.select(Event).filter_by(type="push")).scalars().all()
-
-    # pushes = pd.read_sql_query(push_events, db.engine, parse_dates=["timestamp"])
-
-    return pushes
-
-
-
-
 
 @app.route('/')
 @app.route('/index')
@@ -82,8 +74,6 @@ def home():
     get_projects = db.session.execute(db.select(Project)).scalars().all()
     projects = [project for project in get_projects]
 
-    my_pushes = commits_summary()
-
     # # Query db for all concepts. Convert to python list
     # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     # concepts = [concept for concept in get_concepts]
@@ -95,7 +85,7 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    return render_template('index.html', all_events=recent_events, now=now, pushes=my_pushes)
+    return render_template('index.html', all_events=recent_events, now=now)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')

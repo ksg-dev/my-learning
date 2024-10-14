@@ -245,22 +245,24 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Recent Pushes <span>| This Month </span></h5>
+                  <h5 class="card-title">Recent Projects <span>| This Month </span></h5>
 
                   <table class="table table-borderless datatable">
                     <thead>
                       <tr>
                         <th scope="col">Repo</th>
-                        <th scope="col">Commits</th>
-                        <th scope="col">Timestamp</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
-					{% for push in pushes %}
+					{% for project in all_projects %}
                       <tr>
-                        <th scope="row"><a href="#">{{ push.repo }}</a></th>
-                        <td>{{ push.commits }}</td>
-                        <td><a href="#" class="text-primary">{{ push.timestamp }}</a></td>
+                        <th scope="row"><a href="#">{{ project.project_repo }}</a></th>
+                        <td>{{ project.project_title }}</td>
+                        <td><a href="#" class="text-primary">{{ project.course.title }}</a></td>
                         <td>$64</td>
                         <td><span class="badge bg-success">Approved</span></td>
                       </tr>
