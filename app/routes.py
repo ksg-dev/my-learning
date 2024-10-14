@@ -13,6 +13,7 @@ from flask_ckeditor import CKEditor, CKEditorField
 from flask_ckeditor.utils import cleanify
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 from app import app, db
 from app.models import Course, Project, Concept, Library, API, Tool, Resource, Event
@@ -59,6 +60,15 @@ def refresh_events(user):
 
     flash("Events Refreshed")
 
+def commits_summary():
+    # push_events = db.session.execute(db.select(Event).filter_by(type="push")).scalars().all()
+
+    # pushes = pd.read_sql_query(push_events, db.engine, parse_dates=["timestamp"])
+
+    return pushes
+
+
+
 
 
 @app.route('/')
@@ -72,6 +82,8 @@ def home():
     get_projects = db.session.execute(db.select(Project)).scalars().all()
     projects = [project for project in get_projects]
 
+    my_pushes = commits_summary()
+
     # # Query db for all concepts. Convert to python list
     # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     # concepts = [concept for concept in get_concepts]
@@ -83,7 +95,7 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    return render_template('index.html', all_events=recent_events, now=now)
+    return render_template('index.html', all_events=recent_events, now=now, pushes=my_pushes)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
