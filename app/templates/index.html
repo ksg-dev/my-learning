@@ -108,7 +108,7 @@
               </div>
             </div><!-- End Commits - ALL Card -->
 
-			  <!-- Commits Card - TODAY -->
+			  <!-- Commits Card - MONTH -->
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card revenue-card">
 
@@ -126,16 +126,18 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Commits <span>| Today</span></h5>
+                  <h5 class="card-title">Commits <span>| This Month</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-github"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>{{ my_events["today_commits"] }}</h6>
-						{% if my_events["day_change"] %}
-                      <span class="text-success small pt-1 fw-bold">{{ my_events["day_change"] }}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      <h6>{{ my_events["month_commits"] }}</h6>
+						{% if my_events["mo_change"] > 0 %}
+                      <span class="text-success small pt-1 fw-bold">{{ my_events["mo_change"]|round(1)|abs }}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+						{% elif my_events["mo_change"] < 0 %}
+						<span class="text-danger small pt-1 fw-bold">{{ my_events["mo_change"]|round(1)|abs }}%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
 						{% endif %}
                     </div>
                   </div>
@@ -144,7 +146,7 @@
               </div>
             </div><!-- End Commits Card -->
 
-			  <!-- Commits Card YESTERDAY-->
+			  <!-- Commits Card YESTERDAY Month-->
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card revenue-card">
 
@@ -162,14 +164,14 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Commits <span>| Yesterday</span></h5>
+                  <h5 class="card-title">Commits <span>| Last Month</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-github"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>{{ my_events["yest_commits"] }}</h6>
+                      <h6>{{ my_events["ltmo_count"] }}</h6>
                       <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 
                     </div>

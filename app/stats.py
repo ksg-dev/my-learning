@@ -55,8 +55,15 @@ class Dashboard:
 
         # Stats for MONTH
         month = events_df[events_df.timestamp.dt.month == datetime.today().month]
+        last_mo = events_df[events_df.timestamp.dt.month == datetime.today().month - 1]
+        ltmo_count = int(last_mo["commits"].sum())
         month_count = int(month["commits"].sum())
         month_by_repo = month.groupby("repo")
+
+        if ltmo_count != 0:
+            mo_change = (month_count - ltmo_count) / ltmo_count * 100
+        else:
+            mo_change = None
 
         # Stats for YEAR
         year = events_df[events_df.timestamp.dt.year == datetime.today().year]
@@ -70,7 +77,9 @@ class Dashboard:
             "today_commits": today_count,
             "day_change": day_change,
             "today_by_repo": today_by_repo,
+            "ltmo_count": ltmo_count,
             "month_commits": month_count,
+            "mo_change": mo_change,
             "month_by_repo": month_by_repo,
             "year_commits": year_count,
             "year_by_repo": year_by_repo
