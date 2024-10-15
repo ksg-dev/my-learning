@@ -62,8 +62,8 @@
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                    <p class="text-center small">Enter your email & password to login</p>
                   </div>
 					<!-- Use Message Flashing to display feedback to the user with a <p> -->
 					{% with messages = get_flashed_messages() %}
@@ -75,8 +75,12 @@
 			 		{% endwith %}
 					<!-- Render your registration form here-->
 					{{ render_form(form, novalidate=True) }}
-				<div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+					 <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                      </div>
+					<div class="col-12">
+                      <p class="small mb-0">Don't have account? <a href="{{ url_for('register') }}">Create an account</a></p>
                     </div>
                 </div>
               </div>
