@@ -8,8 +8,9 @@ from datetime import datetime, timedelta
 
 
 class Dashboard:
-    def __init__(self, user):
+    def __init__(self, user_id, user):
         self.user = user
+        self.user_id = user_id
         self.refresh_events(user)
 
     def refresh_events(self, user):
@@ -26,7 +27,8 @@ class Dashboard:
                     repo=event["repo"],
                     commits=event["commits"],
                     create_type=event["create_type"],
-                    timestamp=datetime.fromisoformat(event["timestamp"])
+                    timestamp=datetime.fromisoformat(event["timestamp"]),
+                    user_id=self.user_id
                 )
 
                 # print(type(new_event.timestamp))

@@ -60,6 +60,7 @@ def register():
             new_user = User(
                 email=entered_email,
                 name=form.name.data.title(),
+                display_name=form.display_name.data,
                 password= generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
             )
 
@@ -77,6 +78,8 @@ def register():
 # Retrieve a user from the database based on their email.
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -104,14 +107,15 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('get_all_posts'))
+    return redirect(url_for("home"))
+
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def home():
-    current_user = "Sonni G"
     # Create Dashboard Object - refresh events
-    dashboard = Dashboard(GH_USERNAME)
+    dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
     now = datetime.now()
 
     # Get event stats dict
@@ -132,7 +136,7 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
 
-    return render_template('index.html', my_events=my_events, now=now, activity=recent_events, current_user=current_user)
+    return render_template('index.html', my_events=my_events, now=now, activity=recent_events)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')

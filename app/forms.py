@@ -30,7 +30,12 @@ class RegisterForm(FlaskForm):
                             InputRequired()
                         ]
                         )
-    name = StringField("Name",
+    name = StringField("Username",
+                       validators=[
+                           InputRequired()
+                       ]
+                       )
+    display_name = StringField("Display Name",
                        validators=[
                            InputRequired()
                        ]
