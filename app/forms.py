@@ -23,6 +23,32 @@ class ConceptListField(Field):
             self.data = []
 
 
+# USER FORMS
+class RegisterForm(FlaskForm):
+    email = StringField("Email",
+                        validators=[
+                            InputRequired()
+                        ]
+                        )
+    name = StringField("Name",
+                       validators=[
+                           InputRequired()
+                       ]
+                       )
+    password = StringField("Password",
+                           validators=[
+                               InputRequired()
+                           ]
+                           )
+    submit = SubmitField("Sign Up")
+
+
+# Create a LoginForm to login existing users
+class LoginForm(FlaskForm):
+    email = StringField("Email", validators=[InputRequired()])
+    password = StringField("Password", validators=[InputRequired()])
+    submit = SubmitField("Log In")
+
 
 # CREATE FORMS
 

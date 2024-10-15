@@ -1,11 +1,15 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date, DateTime
-from app import app, db
+from app import app, db, login_manager
 import datetime
 from typing import List
-from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user, login_required
+from flask_login import UserMixin
 import sqlalchemy as sa
 
+# Flask-Login user loader
+@login_manager.user_loader
+def load_user(user_id):
+    return db.get_or_404(User, user_id)
 
 #################### JOIN TABLES ####################
 # Join table for projects and concepts
@@ -58,7 +62,7 @@ class User(UserMixin, db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True)
-    password: Mapped[str] = mapped_column(String(100))
+    password: Mapped[str] = mapped_column(String(250))
     name: Mapped[str] = mapped_column(String(1000))
     # This will act like a List of Project/Course/Lib.etc objects attached to each User.
     # The "user" refers to the user property in the Project/Course/Lib. etc class.
@@ -79,7 +83,23 @@ class User(UserMixin, db.Model):
     # Link to Repos
     repos: Mapped[List["Repository"]] = relationship(back_populates="user")
     # Many-to-many relationship to concepts
-    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=user_concept, backref='projects')
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=user_concept, backref='user')
+
+
+# Create Repository model to being together events, projects data
+class Repository(db.Model):
+    __tablename__ = "repos"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "repos" refers to the repos property in the User class.
+    user: Mapped["User"] = relationship(back_populates="repos")
+
+    # Link to projects
+    projects: Mapped[List["Project"]] = relationship(back_populates="confirmed_repo")
 
 
 # Create Course model for all planned or completed courses
@@ -249,20 +269,7 @@ class Event(db.Model):
     user: Mapped["User"] = relationship(back_populates="events")
 
 
-# Create Repository model to being together events, projects data
-class Repository(db.Model):
-    __tablename__ = "repos"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(250), nullable=False)
-
-    # Create Foreign Key, "users.id" the users refers to the tablename of User.
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
-    # Create reference to the User object. The "repos" refers to the repos property in the User class.
-    user: Mapped["User"] = relationship(back_populates="repos")
-
-    # Link to projects
-    projects: Mapped[List["Project"]] = relationship(back_populates="confirmed_repo")
 
 
 # Create table schema in db w app context
