@@ -116,7 +116,7 @@ def logout():
 def home():
     # Create Dashboard Object - refresh events
     dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
-    now = datetime.now()
+    now = datetime.utcnow()
 
     # Get event stats dict
     my_events = dashboard.get_event_stats()
@@ -135,6 +135,18 @@ def home():
 
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
+
+
+    # for i in recent_events:
+    #     if now.day == i.timestamp.day:
+    #         diff = str((now - i.timestamp).seconds // 60) + "min"
+    #     else:
+    #         diff = str((now - i.timestamp).days) + "days"
+    #     i.append(diff)
+    #
+    # print(now)
+    # for i in recent_events:
+    #     print(i)
 
     return render_template('index.html', my_events=my_events, now=now, activity=recent_events)
 
