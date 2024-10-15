@@ -3,33 +3,22 @@ from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date, 
 from app import app, db
 import datetime
 from typing import List
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user, login_required
 import sqlalchemy as sa
 
 
-# Create Course model for all planned or completed courses
-class Course(db.Model):
-    __tablename__ = "courses"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(100), unique=True)
-    platform: Mapped[str] = mapped_column(String(100))
-    url: Mapped[str] = mapped_column(String(250), nullable=True)
-    instructor: Mapped[str] = mapped_column(String(100))
-    start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
-    complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
-    content_hours: Mapped[float] = mapped_column(nullable=True)
-    has_cert: Mapped[bool] = mapped_column(Boolean)
-    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
-
-    # This will act like a list of Project objects attached to each course
-    # The 'course' refers to the course property in the Property class
-    projects: Mapped[List["Project"]] = relationship(back_populates="course")
-
-
+#################### JOIN TABLES ####################
 # Join table for projects and concepts
 project_concept = db.Table(
     "project_concept",
     db.Column("project_id", db.Integer, db.ForeignKey("projects.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
+)
+
+# Join table for users and concepts
+user_concept = db.Table(
+    "user_concept",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
     db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
 )
 
@@ -62,6 +51,62 @@ resource_concept = db.Table(
 )
 
 
+#################### MODEL TABLES ####################
+# Create User model for all registered users
+class User(UserMixin, db.Model):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(100), unique=True)
+    password: Mapped[str] = mapped_column(String(100))
+    name: Mapped[str] = mapped_column(String(1000))
+    # This will act like a List of Project/Course/Lib.etc objects attached to each User.
+    # The "user" refers to the user property in the Project/Course/Lib. etc class.
+    # Link to Projects
+    projects: Mapped[List["Project"]] = relationship(back_populates="user")
+    # Link to Events
+    events: Mapped[List["Event"]] = relationship(back_populates="user")
+    # Link to Courses
+    courses: Mapped[List["Course"]] = relationship(back_populates="user")
+    # Link to Libraries
+    libraries: Mapped[List["Library"]] = relationship(back_populates="user")
+    # Link to APIs
+    apis: Mapped[List["API"]] = relationship(back_populates="user")
+    # Link to Tools/Utils
+    tools: Mapped[List["Tool"]] = relationship(back_populates="user")
+    # Link to Resources
+    resources: Mapped[List["Resource"]] = relationship(back_populates="user")
+    # Link to Repos
+    repos: Mapped[List["Repository"]] = relationship(back_populates="user")
+    # Many-to-many relationship to concepts
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=user_concept, backref='projects')
+
+
+# Create Course model for all planned or completed courses
+class Course(db.Model):
+    __tablename__ = "courses"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(String(100), unique=True)
+    platform: Mapped[str] = mapped_column(String(100))
+    url: Mapped[str] = mapped_column(String(250), nullable=True)
+    instructor: Mapped[str] = mapped_column(String(100))
+    start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    content_hours: Mapped[float] = mapped_column(nullable=True)
+    has_cert: Mapped[bool] = mapped_column(Boolean)
+    date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+
+    # This will act like a list of Project objects attached to each course
+    # The 'course' refers to the course property in the Property class
+    projects: Mapped[List["Project"]] = relationship(back_populates="course")
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "courses" refers to the courses property in the User class.
+    user: Mapped["User"] = relationship(back_populates="courses")
+
+
 # Create Projects model for individual projects
 class Project(db.Model):
     __tablename__ = "projects"
@@ -74,6 +119,9 @@ class Project(db.Model):
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
     complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
 
+    # Link to Repos
+    repo_id: Mapped[int] = mapped_column(Integer, ForeignKey(Repository.id), index=True)
+    confirmed_repo: Mapped["Repository"] = relationship(back_populates="projects")
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=project_concept, backref='projects')
@@ -86,6 +134,11 @@ class Project(db.Model):
     course_id: Mapped[int] = mapped_column(Integer, ForeignKey(Course.id), index=True)
     # Create reference to Course object. The "projects" refers to the projects property in the Course class.
     course: Mapped["Course"] = relationship(back_populates="projects")
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "projects" refers to the projects property in the User class.
+    user: Mapped["User"] = relationship(back_populates="projects")
 
 
 # Create Concepts model for tracking key terms and concepts
@@ -112,6 +165,11 @@ class Library(db.Model):
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=library_concept, backref='libraries')
 
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "libraries" refers to the libraries property in the User class.
+    user: Mapped["User"] = relationship(back_populates="libraries")
+
 
 # Create API model for tracking APIs you've used or have already gotten access to
 class API(db.Model):
@@ -128,6 +186,10 @@ class API(db.Model):
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=api_concept, backref='apis')
 
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "apis" refers to the apis property in the User class.
+    user: Mapped["User"] = relationship(back_populates="apis")
 
 
 # Create Tools / Utilities model for various tools and their use
@@ -144,6 +206,11 @@ class Tool(db.Model):
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=tool_concept, backref='tools')
 
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "tools" refers to the tools property in the User class.
+    user: Mapped["User"] = relationship(back_populates="tools")
+
 
 # Create Resources model to track cheatsheets, diagrams, reference pages - anything not tied to specific project/course
 class Resource(db.Model):
@@ -159,6 +226,11 @@ class Resource(db.Model):
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=resource_concept, backref='resources')
 
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "resources" refers to the resources property in the User class.
+    user: Mapped["User"] = relationship(back_populates="resources")
+
 
 # Create GitHub Events model for api events data
 class Event(db.Model):
@@ -170,6 +242,27 @@ class Event(db.Model):
     commits: Mapped[int] = mapped_column(Integer, nullable=True)
     create_type: Mapped[str] = mapped_column(String(250), nullable=True)
     timestamp: Mapped[datetime.datetime] = mapped_column(DateTime())
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "events" refers to the events property in the User class.
+    user: Mapped["User"] = relationship(back_populates="events")
+
+
+# Create Repository model to being together events, projects data
+class Repository(db.Model):
+    __tablename__ = "repos"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "repos" refers to the repos property in the User class.
+    user: Mapped["User"] = relationship(back_populates="repos")
+
+    # Link to projects
+    projects: Mapped[List["Project"]] = relationship(back_populates="confirmed_repo")
 
 
 # Create table schema in db w app context
