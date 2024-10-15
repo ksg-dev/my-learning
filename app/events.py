@@ -41,6 +41,7 @@ class GetEvents:
                     "id": i["id"],
                     "type": "push",
                     "repo": i["repo"]["name"].split("/")[1],
+                    "repo_id": i["repo"]["id"],
                     "commits": i["payload"]["size"],
                     "create_type": None,
                     "timestamp": i["created_at"].strip("Z")
@@ -51,6 +52,7 @@ class GetEvents:
                     "id": i["id"],
                     "type": "create",
                     "repo": i["repo"]["name"].split("/")[1],
+                    "repo_id": i["repo"]["id"],
                     "commits": None,
                     "create_type": i["payload"]["ref_type"],
                     "timestamp": i["created_at"].strip("Z")
@@ -61,6 +63,7 @@ class GetEvents:
         return all_events
 
 
-def validate_id(event_id):
-    check = db.session.execute(db.select(Event).filter_by(id=event_id)).first()
+def validate_id(model, ref_id):
+    check = db.session.execute(db.select(model).filter_by(id=ref_id)).first()
     return check
+

@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from app import app, db
-from app.models import Event, Course, Project, Concept
+from app.models import Event, Course, Project, Concept, Repository
 from app.events import GetEvents, validate_id
 from datetime import datetime, timedelta
 
@@ -18,9 +18,10 @@ class Dashboard:
         my_events = get_my_events.events
 
         for event in my_events:
-            validate = validate_id(event["id"])
+            validate_event = validate_id(Event, event["id"])
+            validate_repo = validate_id(Repository, event["repo_id"])
 
-            if validate is None:
+            if validate_event is None:
                 new_event = Event(
                     id=event["id"],
                     type=event["type"],
@@ -31,9 +32,17 @@ class Dashboard:
                     user_id=self.user_id
                 )
 
-                # print(type(new_event.timestamp))
-
                 db.session.add(new_event)
+                db.session.commit()
+
+            if validate_repo is None:
+                new_repo = Repository(
+                    id=event["repo_id"],
+                    name=event["repo"],
+                    user_id=self.user_id
+                )
+
+                db.session.add(new_repo)
                 db.session.commit()
 
     def get_event_stats(self):
