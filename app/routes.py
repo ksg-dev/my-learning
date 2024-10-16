@@ -20,7 +20,7 @@ from flask_login import login_user, LoginManager, current_user, logout_user, log
 
 from app import app, db
 from app.models import User, Course, Project, Concept, Library, API, Tool, Resource, Event, Repository
-from app.forms import RegisterForm, LoginForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
+from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
 from app.events import GetEvents, validate_id
 from app.stats import Dashboard
 
@@ -156,6 +156,7 @@ def home():
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
+@login_required
 def concepts_page():
     # Get concepts
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
@@ -165,18 +166,20 @@ def concepts_page():
 
 
 @app.route('/courses')
+@login_required
 def courses_page():
     # Get courses
-    get_courses = db.session.execute(db.select(Course)).scalars().all()
+    get_courses = db.session.execute(db.select(Course).filter_by(user_id=current_user.id)).scalars().all()
     courses = [course for course in get_courses]
 
     return render_template('courses.html', courses=courses)
 
 
 @app.route('/projects')
+@login_required
 def projects_page():
     # Get projects
-    get_projects = db.session.execute(db.select(Project)).scalars().all()
+    get_projects = db.session.execute(db.select(Project).filter_by(user_id=current_user.id)).scalars().all()
     projects = [project for project in get_projects]
 
     top_concepts = {}
@@ -197,36 +200,40 @@ def projects_page():
 
 
 @app.route('/libraries')
+@login_required
 def libraries_page():
     # Get libraries
-    get_libraries = db.session.execute(db.select(Library)).scalars().all()
+    get_libraries = db.session.execute(db.select(Library).filter_by(user_id=current_user.id)).scalars().all()
     libraries = [library for library in get_libraries]
 
     return render_template('libraries.html', libraries=libraries)
 
 
 @app.route('/apis')
+@login_required
 def apis_page():
     # Get apis
-    get_apis = db.session.execute(db.select(API)).scalars().all()
+    get_apis = db.session.execute(db.select(API).filter_by(user_id=current_user.id)).scalars().all()
     apis = [api for api in get_apis]
 
     return render_template('apis.html', apis=apis)
 
 
 @app.route('/tools')
+@login_required
 def tools_page():
     # Get tools
-    get_tools = db.session.execute(db.select(Tool)).scalars().all()
+    get_tools = db.session.execute(db.select(Tool).filter_by(user_id=current_user.id)).scalars().all()
     tools = [tool for tool in get_tools]
 
     return render_template('tools.html', tools=tools)
 
 
 @app.route('/resources')
+@login_required
 def resources_page():
     # Get resources
-    get_resources = db.session.execute(db.select(Resource)).scalars().all()
+    get_resources = db.session.execute(db.select(Resource).filter_by(user_id=current_user.id)).scalars().all()
     resources = [resource for resource in get_resources]
 
     return render_template('resources.html', resources=resources, badge=categories)
@@ -236,6 +243,7 @@ def resources_page():
 
 
 @app.route('/add-course', methods=["GET", "POST"])
+@login_required
 def add_new_course():
     form = NewCourseForm()
     if form.validate_on_submit():
@@ -248,7 +256,8 @@ def add_new_course():
             complete=form.complete_date.data,
             content_hours=form.content_hours.data,
             has_cert=form.has_cert.data,
-            date_added=date.today()
+            date_added=date.today(),
+            user_id=current_user.id
         )
 
         db.session.add(new_course)
@@ -258,6 +267,7 @@ def add_new_course():
 
 
 @app.route('/add-project/<int:course_id>', methods=["GET", "POST"])
+@login_required
 def add_new_project(course_id):
     target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
     form = NewProjectForm()
@@ -275,7 +285,8 @@ def add_new_project(course_id):
             complete=form.complete_date.data,
             section=form.section.data,
             lecture=form.lecture.data,
-            date_added=date.today()
+            date_added=date.today(),
+            user_id=current_user.id
         )
 
         db.session.add(new_proj)
@@ -299,6 +310,7 @@ def add_new_project(course_id):
 
 
 @app.route('/add-concept', methods=["GET", "POST"])
+@login_required
 def add_new_concept():
     form = NewConceptForm()
     if form.validate_on_submit():
@@ -316,6 +328,7 @@ def add_new_concept():
 
 
 @app.route('/add-library', methods=["GET", "POST"])
+@login_required
 def add_new_library():
     form = NewLibraryForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
@@ -326,7 +339,8 @@ def add_new_library():
             name=form.name.data,
             description=form.description.data,
             doc_link=form.doc_link.data,
-            date_added=date.today()
+            date_added=date.today(),
+            user_id=current_user.id
         )
 
         db.session.add(new_lib)
@@ -355,6 +369,7 @@ def add_new_library():
 
 
 @app.route('/add-api', methods=["GET", "POST"])
+@login_required
 def add_new_api():
     form = NewAPIForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
@@ -367,7 +382,8 @@ def add_new_api():
             url=form.url.data,
             doc_link=form.doc_link.data,
             requires_login=form.requires_login.data,
-            date_added=date.today()
+            date_added=date.today(),
+            user_id=current_user.id
         )
 
         db.session.add(new_api)
@@ -396,6 +412,7 @@ def add_new_api():
 
 
 @app.route('/add-tool', methods=["GET", "POST"])
+@login_required
 def add_new_tool():
     form = NewToolForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
@@ -407,7 +424,8 @@ def add_new_tool():
             description=form.description.data,
             url=form.url.data,
             doc_link=form.doc_link.data,
-            date_added=date.today()
+            date_added=date.today(),
+            user_id=current_user.id
         )
 
         db.session.add(new_tool)
@@ -436,6 +454,7 @@ def add_new_tool():
 
 
 @app.route('/add-resource', methods=["GET", "POST"])
+@login_required
 def add_new_resource():
     form = NewResourceForm()
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
@@ -447,7 +466,8 @@ def add_new_resource():
             description=form.description.data,
             type=form.type.data,
             resource_url=form.resource_url.data,
-            date_added=date.today()
+            date_added=date.today(),
+            user_id=current_user.id
         )
 
         db.session.add(new_resource)
@@ -479,6 +499,7 @@ def add_new_resource():
 
 
 @app.route('/courses/<int:num>')
+@login_required
 def course_detail(num):
     target_course = db.get_or_404(Course, num)
     all_projects = db.session.execute(db.select(Project).filter_by(course_id=num)).scalars().all()
@@ -501,6 +522,7 @@ def course_detail(num):
 
 
 @app.route('/projects/<int:num>')
+@login_required
 def project_detail(num):
     target_project = db.get_or_404(Project, num)
     proj_concepts = []
