@@ -66,7 +66,7 @@ class NewCourseForm(FlaskForm):
     complete_date = DateField("Complete Date", validators=[Optional()])
     content_hours = DecimalField("Content Hours", validators=[Optional()])
     has_cert = BooleanField("Certificate Upon Completion?")
-    submit = SubmitField("Add Course")
+    submit = SubmitField("Submit")
 
 
 class NewProjectForm(FlaskForm):
@@ -79,14 +79,14 @@ class NewProjectForm(FlaskForm):
     concepts = ConceptListField('Concepts')
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
-    submit = SubmitField("Add Project")
+    submit = SubmitField("Submit")
 
 
 class NewConceptForm(FlaskForm):
     concept = StringField("Concept or Term", validators=[InputRequired()])
     category = StringField("Category")
     description = TextAreaField("Description")
-    submit = SubmitField("Add Concept")
+    submit = SubmitField("Submit")
 
 
 class NewLibraryForm(FlaskForm):
@@ -94,7 +94,7 @@ class NewLibraryForm(FlaskForm):
     description = TextAreaField("Description")
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
-    submit = SubmitField("Add Library")
+    submit = SubmitField("Submit")
 
 
 class NewAPIForm(FlaskForm):
@@ -104,7 +104,7 @@ class NewAPIForm(FlaskForm):
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     requires_login = BooleanField("Requires Login?")
     concepts = ConceptListField('Concepts')
-    submit = SubmitField("Add Tool")
+    submit = SubmitField("Submit")
 
 
 class NewToolForm(FlaskForm):
@@ -113,7 +113,7 @@ class NewToolForm(FlaskForm):
     url = StringField("Tool URL", validators=[Optional(), URL()])
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
-    submit = SubmitField("Add Tool")
+    submit = SubmitField("Submit")
 
 
 class NewResourceForm(FlaskForm):
@@ -129,7 +129,7 @@ class NewResourceForm(FlaskForm):
                        ])
     resource_url = StringField("Resource URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
-    submit = SubmitField("Add Resource")
+    submit = SubmitField("Submit")
 
 
 # UPDATE FORMS

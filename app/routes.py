@@ -536,3 +536,30 @@ def project_detail(num):
 
     return render_template('project-detail.html', project=target_project, concepts=proj_concepts)
 
+
+##################################### UPDATE PAGES ########################################
+
+
+@app.route('/courses/<int:num>/update', methods=["GET", "POST"])
+@login_required
+def update_course(num):
+    course_to_update = db.session.execute(db.select(Course).where(Course.id == num)).scalar()
+    form = NewCourseForm(obj=course_to_update)
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            course_to_update.title = form.title.data
+            course_to_update.platform = form.platform.data
+            course_to_update.url = form.url.data
+            course_to_update.instructor = form.instructor.data
+            course_to_update.start = form.start_date.data
+            course_to_update.complete = form.complete_date.data
+            course_to_update.content_hours = form.content_hours.data
+            course_to_update.has_cert = form.has_cert.data
+
+            db.session.commit()
+
+            flash("Success! Record Updated.")
+
+            return redirect(url_for("course_detail", num=num))
+    return render_template('update.html', form=form, object="Course")
