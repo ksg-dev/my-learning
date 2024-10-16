@@ -51,7 +51,7 @@
 			  	<td>{{ resource.name }}</td>
 				<td>{{ resource.description }}</td>
 			    <td><span class="badge {{ badge[resource.type][1] }}"><i class="bi {{ badge[resource.type][2] }} me-1"></i> {{ badge[resource.type][0] }}</span></td>
-				<td><a href="{{ resource.resource_url }}"><i class="bi bi-file-earmark-text"></i></a></td>
+				<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
 			  </tr>
 			{% endfor %}
 			</tbody>

@@ -317,24 +317,24 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Recent Projects <span>| This Month </span></h5>
+                  <h5 class="card-title">Recent Repos <span>| This Month </span></h5>
 
                   <table class="table table-borderless datatable">
                     <thead>
                       <tr>
-                        <th scope="col">Repo</th>
-                        <th scope="col">Title</th>
+                        <th scope="col">Repository</th>
+                        <th scope="col">Projects</th>
                         <th scope="col">Course</th>
                         <th scope="col">Price</th>
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
-					{% for project in all_projects %}
+					{% for repo in my_repos %}
                       <tr>
-                        <th scope="row"><a href="#">{{ project.project_repo }}</a></th>
-                        <td>{{ project.project_title }}</td>
-                        <td><a href="#" class="text-primary">{{ project.course.title }}</a></td>
+                        <th scope="row"><a href="#">{{ repo.name }}</a></th>
+                        <td>{{ repo.projects }}</td>
+                        <td><a href="#" class="text-primary"></a></td>
                         <td>$64</td>
                         <td><span class="badge bg-success">Approved</span></td>
                       </tr>
@@ -451,7 +451,7 @@
 					{% if event.type == "push" %}
                   <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
                   <div class="activity-content">
-                    {{ event.type|capitalize }}ed {{ event.commits }} commit(s) to <a href="#" class="fw-bold text-dark">{{ event.repo }}</a>
+                    {{ event.type|capitalize }}ed {{ event.commits }} commit(s) to <a href="" class="fw-bold text-dark">{{ event.repo }}</a>
 					  </div>
 				  	{% elif event.type == "create" %}
 						{% if event.create_type == "branch" %}

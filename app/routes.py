@@ -118,6 +118,10 @@ def home():
     dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
     now = datetime.utcnow()
 
+    # Query db for repo activity, convert to python list
+    get_repos = db.session.execute(db.select(Repository).filter_by(user_id=current_user.id)).scalars().all()
+    repos = [repo for repo in get_repos]
+
     # Get event stats dict
     my_events = dashboard.get_event_stats()
 
@@ -148,7 +152,7 @@ def home():
     # for i in recent_events:
     #     print(i)
 
-    return render_template('index.html', my_events=my_events, now=now, activity=recent_events)
+    return render_template('index.html', my_events=my_events, now=now, activity=recent_events, my_repos=repos)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
