@@ -33,14 +33,24 @@ DB_URI = os.environ["DB_URI"]
 
 GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
-# To show categories across pages
-categories = {
+# To show resource categories across pages
+resource_categories = {
     'cheatsheet': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
     'diagram': ['Diagram', 'bg-primary', 'bi-diagram-2'],
     'quickref': ['Quick Reference', 'bg-info text-dark', 'bi-info-circle'],
     'template': ['Template', 'bg-success', 'bi-file-ruled'],
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
+
+# To show concept categories across pages
+concept_categories = {
+    'library': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
+    'api': ['Diagram', 'bg-primary', 'bi-diagram-2'],
+    'tool': ['Quick Reference', 'bg-info text-dark', 'bi-info-circle'],
+    'resource': ['Template', 'bg-success', 'bi-file-ruled'],
+    'other': ['Other', 'bg-secondary', 'bi-collection']
+}
+
 
 ##################################### LOGIN/REGISTER PAGES ########################################
 
@@ -236,7 +246,7 @@ def resources_page():
     get_resources = db.session.execute(db.select(Resource).filter_by(user_id=current_user.id)).scalars().all()
     resources = [resource for resource in get_resources]
 
-    return render_template('resources.html', resources=resources, badge=categories)
+    return render_template('resources.html', resources=resources, badge=resource_categories)
 
 
 ##################################### CREATE PAGES ########################################
