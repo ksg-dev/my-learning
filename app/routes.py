@@ -552,10 +552,13 @@ def update_course(num):
             course_to_update.platform = form.platform.data
             course_to_update.url = form.url.data
             course_to_update.instructor = form.instructor.data
-            course_to_update.start = form.start_date.data
-            course_to_update.complete = form.complete_date.data
             course_to_update.content_hours = form.content_hours.data
             course_to_update.has_cert = form.has_cert.data
+
+            if form.start_date.data:
+                course_to_update.start = form.start_date.data
+            if form.complete_date.data:
+                course_to_update.complete = form.complete_date.data
 
             db.session.commit()
 
