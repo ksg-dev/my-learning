@@ -21,6 +21,9 @@
 		<div class="card">
             <div class="card-body">
               <h5 class="card-title">Course Details</h5>
+				{% if course.status %}
+					<p><span class="badge {{ course_badge[course.status][1] }}"><i class="bi {{ course_badge[course.status][2] }} me-1"></i> {{ course_badge[course.status][0] }}</span></p>
+				{% endif %}
 					<p>Instructor: {{ course.instructor }}</p>
 					<p>Platform: {{ course.platform }}</p>
 					<p>Link: <a href="{{ course.url }}" target="_blank">Go to Course</a></p>

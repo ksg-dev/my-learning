@@ -42,6 +42,7 @@
 				<th scope="col">Title</th>
 				<th scope="col">Platform</th>
 				<th scope="col">Content Hours</th>
+			    <th scope="col">Status</th>
 				<th scope="col">Cert?</th>
 			  </tr>
 			</thead>
@@ -52,6 +53,11 @@
 			  	<td><a href="{{ url_for('course_detail', num=course.id ) }}">{{ course.title }}</a></td>
 				<td>{{ course.platform }}</td>
 				<td>{{ course.content_hours }}</td>
+				  {% if course.status %}
+				<td><span class="badge {{ course_badge[course.status][1] }}"><i class="bi {{ course_badge[course.status][2] }} me-1"></i> {{ course_badge[course.status][0] }}</span></td>
+				  {% else %}
+				  <td></td>
+				  {% endif %}
 				  {% if course.has_cert %}
 				<td><i class="bi bi-award"></i></td>
 				  {% else %}

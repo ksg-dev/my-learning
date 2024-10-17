@@ -33,7 +33,8 @@ DB_URI = os.environ["DB_URI"]
 
 GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
-# To show resource categories across pages
+# To show resource categories across pages, pass to index as badge=dict
+# 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
 resource_categories = {
     'cheatsheet': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
     'diagram': ['Diagram', 'bg-primary', 'bi-diagram-2'],
@@ -42,14 +43,25 @@ resource_categories = {
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
 
-# To show concept categories across pages
+# To show concept categories across pages, pass to index as badge=dict
+# 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
 concept_categories = {
-    'library': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
-    'api': ['Diagram', 'bg-primary', 'bi-diagram-2'],
-    'tool': ['Quick Reference', 'bg-info text-dark', 'bi-info-circle'],
-    'resource': ['Template', 'bg-success', 'bi-file-ruled'],
+    'library': ['Cheatsheet', 'bg-warning text-dark', 'bi-box'],
+    'api': ['Diagram', 'bg-primary', 'bi-outlet'],
+    'tool': ['Quick Reference', 'bg-info text-dark', 'bi-tools'],
+    'resource': ['Template', 'bg-success', 'bi-bookshelf'],
+    'topic': ['Topic', 'bg-danger', 'bi-hash'],
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
+
+# course statuses, pass to index as badge=dict
+# 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
+course_statuses = {
+    'not-started': ['Not Started', 'bg-secondary', 'bi-hourglass'],
+    'in-progress': ['In Progress', 'bg-warning text-dark', 'bi-arrow-repeat'],
+    'complete': ['Complete', 'bg-success', 'bi-check-circle']
+}
+
 
 
 ##################################### LOGIN/REGISTER PAGES ########################################
@@ -172,7 +184,7 @@ def concepts_page():
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     concepts = [concept for concept in get_concepts]
 
-    return render_template('concepts.html', concepts=concepts)
+    return render_template('concepts.html', concepts=concepts, badge=concept_categories)
 
 
 @app.route('/courses')
@@ -182,7 +194,7 @@ def courses_page():
     get_courses = db.session.execute(db.select(Course).filter_by(user_id=current_user.id)).scalars().all()
     courses = [course for course in get_courses]
 
-    return render_template('courses.html', courses=courses)
+    return render_template('courses.html', courses=courses, course_badge=course_statuses)
 
 
 @app.route('/projects')
@@ -270,10 +282,19 @@ def add_new_course():
             user_id=current_user.id
         )
 
+        if form.complete_date.data:
+            new_course.status = 'complete'
+
+        elif form.start_date.data:
+            new_course.status = 'in-progress'
+
+        else:
+            new_course.status = 'not-started'
+
         db.session.add(new_course)
         db.session.commit()
         return redirect(url_for("courses_page"))
-    return render_template('add.html', form=form, object="Course")
+    return render_template('add.html', form=form, object="Course", course_badge=course_statuses)
 
 
 @app.route('/add-project/<int:course_id>', methods=["GET", "POST"])
@@ -528,7 +549,7 @@ def course_detail(num):
     sorted_concepts = dict(
         sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
 
-    return render_template('course-detail.html', course=target_course, all_projects=all_projects, top_concepts=sorted_concepts)
+    return render_template('course-detail.html', course=target_course, all_projects=all_projects, top_concepts=sorted_concepts, course_badge=course_statuses)
 
 
 @app.route('/projects/<int:num>')
@@ -570,9 +591,18 @@ def update_course(num):
             if form.complete_date.data:
                 course_to_update.complete = form.complete_date.data
 
+            if course_to_update.complete:
+                course_to_update.status = 'complete'
+            elif course_to_update.start:
+                course_to_update.status = 'in-progress'
+            else:
+                course_to_update.status = 'not-started'
+
+            print(course_to_update.status)
+
             db.session.commit()
 
             flash("Success! Record Updated.")
 
-            return redirect(url_for("course_detail", num=num))
+            return redirect(url_for("course_detail", num=num, course_badge=course_statuses))
     return render_template('update.html', form=form, object="Course")

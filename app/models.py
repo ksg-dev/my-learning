@@ -117,6 +117,7 @@ class Course(db.Model):
     content_hours: Mapped[float] = mapped_column(nullable=True)
     has_cert: Mapped[bool] = mapped_column(Boolean)
     date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    status: Mapped[str] = mapped_column(String(100), nullable=True)
 
     # This will act like a list of Project objects attached to each course
     # The 'course' refers to the course property in the Property class
@@ -139,6 +140,7 @@ class Project(db.Model):
     assignment_link: Mapped[str] = mapped_column(String(250), nullable=True)
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
     complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+
 
     # Link to Repos
     repo_id: Mapped[int] = mapped_column(Integer, ForeignKey(Repository.id), index=True)
