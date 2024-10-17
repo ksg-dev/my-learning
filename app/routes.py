@@ -20,7 +20,7 @@ from flask_login import login_user, LoginManager, current_user, logout_user, log
 
 from app import app, db
 from app.models import User, Course, Project, Concept, Library, API, Tool, Resource, Event, Repository
-from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm
+from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
 from app.events import GetEvents, validate_id
 from app.stats import Dashboard
 
@@ -606,3 +606,22 @@ def update_course(num):
 
             return redirect(url_for("course_detail", num=num, course_badge=course_statuses))
     return render_template('update.html', form=form, object="Course")
+
+##################################### DELETE PAGES ########################################
+
+
+@app.route('/courses/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_course(num):
+    course_to_delete = db.session.execute(db.select(Course).where(Course.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(course_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("courses_page"))
+    return render_template("delete.html", form=form, object="Course", item=course_to_delete)

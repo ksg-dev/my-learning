@@ -132,18 +132,9 @@ class NewResourceForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-# UPDATE FORMS
-
-class UpdateCourseForm(FlaskForm):
-    pass
-
-
-class UpdateProjectForm(FlaskForm):
-    pass
-
-
-class UpdateConceptForm(FlaskForm):
-    pass
+# DELETE FORM
+class DeleteForm(FlaskForm):
+    submit = SubmitField("Confirm Delete")
 
 
 
