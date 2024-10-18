@@ -377,15 +377,26 @@ def add_new_library():
         db.session.add(new_lib)
 
         form_concepts = form.concepts.data
-        form_concepts.append(form.name.data)
+
+        # Check db for name of new library, add if not in db
+        if new_lib.name.lower() not in all_concepts:
+            add_asset = Concept(
+                concept_term=new_lib.name,
+                category='library',
+                date_added=date.today()
+            )
+
+            db.session.add(add_asset)
+
+            # add asset name to list of referenced concepts
+            new_lib.concepts.append(add_asset)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='library',
                         date_added=date.today()
                     )
 
@@ -420,15 +431,26 @@ def add_new_api():
         db.session.add(new_api)
 
         form_concepts = form.concepts.data
-        form_concepts.append(form.name.data)
+
+        # Check db for name of new api, add if not in db
+        if new_api.name.lower() not in all_concepts:
+            add_asset = Concept(
+                concept_term=new_api.name,
+                category='api',
+                date_added=date.today()
+            )
+
+            db.session.add(add_asset)
+
+            # add asset name to list of referenced concepts
+            new_api.concepts.append(add_asset)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='api',
                         date_added=date.today()
                     )
 
