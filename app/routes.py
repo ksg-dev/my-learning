@@ -462,15 +462,26 @@ def add_new_tool():
         db.session.add(new_tool)
 
         form_concepts = form.concepts.data
-        form_concepts.append(form.name.data)
+
+        # Check db for name of new tool, add if not in db
+        if new_tool.name.lower() not in all_concepts:
+            add_asset = Concept(
+                concept_term=new_tool.name,
+                category='tool',
+                date_added=date.today()
+            )
+
+            db.session.add(add_asset)
+
+            # add asset name to list of referenced concepts
+            new_tool.concepts.append(add_asset)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='tool',
                         date_added=date.today()
                     )
 
@@ -504,15 +515,13 @@ def add_new_resource():
         db.session.add(new_resource)
 
         form_concepts = form.concepts.data
-        form_concepts.append(form.name.data)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
-                        category='resource',
                         date_added=date.today()
                     )
 
