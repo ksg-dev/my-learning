@@ -324,15 +324,15 @@ def add_new_project(course_id):
 
         if form.concepts.data:
             for concept_name in form.concepts.data:
-                concept = Concept.query.filter_by(concept_term=concept_name.lower()).first()
-                if not concept:
+                # concept = Concept.query.filter_by(concept_term=concept_name).first()
+                if not concept_name.lower() not in all_concepts:
                     concept = Concept(
                         concept_term=concept_name
                     )
 
                     db.session.add(concept)
 
-                new_proj.concepts.append(concept)
+                    new_proj.concepts.append(concept)
 
         db.session.add(new_proj)
         db.session.commit()
@@ -540,8 +540,8 @@ def add_new_resource():
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
-                if not concept:
+                # concept = Concept.query.filter_by(concept_term=concept_name).first()
+                if not concept_name.lower() not in all_concepts:
                     concept = Concept(
                         concept_term=concept_name,
                         date_added=date.today()
@@ -549,7 +549,7 @@ def add_new_resource():
 
                     db.session.add(concept)
 
-                new_resource.concepts.append(concept)
+                    new_resource.concepts.append(concept)
 
         db.session.add(new_resource)
         db.session.commit()
@@ -580,7 +580,11 @@ def course_detail(num):
     sorted_concepts = dict(
         sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
 
-    return render_template('course-detail.html', course=target_course, all_projects=all_projects, top_concepts=sorted_concepts, course_badge=course_statuses)
+    return render_template('course-detail.html',
+                           course=target_course,
+                           all_projects=all_projects,
+                           top_concepts=sorted_concepts,
+                           course_badge=course_statuses)
 
 
 @app.route('/projects/<int:num>')

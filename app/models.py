@@ -19,6 +19,13 @@ project_concept = db.Table(
     db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
 )
 
+# Join table for codelinks and concepts
+codelink_concept = db.Table(
+    "codelink_concept",
+    db.Column("codelink_id", db.Integer, db.ForeignKey("codelinks.id"), primary_key=True),
+    db.Column("concept_id", db.Integer, db.ForeignKey("concepts.id"), primary_key=True)
+)
+
 # Join table for users and concepts
 user_concept = db.Table(
     "user_concept",
@@ -83,6 +90,8 @@ class User(UserMixin, db.Model):
     resources: Mapped[List["Resource"]] = relationship(back_populates="user")
     # Link to Repos
     repos: Mapped[List["Repository"]] = relationship(back_populates="user")
+    # Link to CodeLinks
+    codelinks: Mapped[List["CodeLink"]] = relationship(back_populates="user")
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=user_concept, backref='user')
 
@@ -101,6 +110,9 @@ class Repository(db.Model):
 
     # Link to projects
     projects: Mapped[List["Project"]] = relationship(back_populates="confirmed_repo")
+
+    # Link to codelinks
+    codelinks: Mapped[List["CodeLink"]] = relationship(back_populates="repo")
 
 
 # Create Course model for all planned or completed courses
@@ -158,11 +170,40 @@ class Project(db.Model):
     # Create reference to Course object. The "projects" refers to the projects property in the Course class.
     course: Mapped["Course"] = relationship(back_populates="projects")
 
+    # This will act like a list of CodeLink objects attached to each project
+    # The 'codelink' refers to the project property in the CodeLink class
+    codelinks: Mapped[List["CodeLink"]] = relationship(back_populates="project")
+
     # Create Foreign Key, "users.id" the users refers to the tablename of User.
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
     # Create reference to the User object. The "projects" refers to the projects property in the User class.
     user: Mapped["User"] = relationship(back_populates="projects")
 
+
+# Create CodeLinks model for tracking permalinks to github code examples
+class CodeLink(db.Model):
+    __tablename__ = "codelinks"
+
+    id: Mapped[int] = mapped_column(Integer,primary_key=True)
+    name: Mapped[str] = mapped_column(String(250), nullable=False)
+    link: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    # Link to Repos
+    repo_id: Mapped[int] = mapped_column(Integer, ForeignKey(Repository.id), index=True)
+    repo: Mapped["Repository"] = relationship(back_populates="codelinks")
+
+    # Create Foreign Key, 'projects.id' where projects refers to table name of Projects.
+    project_id: Mapped[int] = mapped_column(Integer, ForeignKey(Project.id), index=True)
+    # Create reference to Project object. The "codelinks" refers to the codelinks property in the Project class.
+    project: Mapped["Project"] = relationship(back_populates="codelinks")
+
+    # Many-to-many relationship to concepts
+    concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=codelink_concept, backref='codelinks')
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
+    # Create reference to the User object. The "codelinks" refers to the codelinks property in the User class.
+    user: Mapped["User"] = relationship(back_populates="codelinks")
 
 # Create Concepts model for tracking key terms and concepts
 class Concept(db.Model):
