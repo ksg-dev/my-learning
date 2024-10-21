@@ -59,6 +59,7 @@
 			  <tr>
 			    <th scope="col">#</th>
 				<th scope="col">CodeLink</th>
+			    <th scope="col">Repository</th>
 				<th scope="col">Project</th>
 			    <th scope="col">Link</th>
 				<th scope="col">Concepts</th>
@@ -68,7 +69,8 @@
 			{% for link in codelinks %}
 			  <tr>
 				<th scope="row">{{ link.id }}</th>
-			  	<td><a href="">{{ link.name }}</a></td>
+			  	<td>{{ link.name }}</td>
+			    <td>{{ link.repo.name }}</td>
 				<td>{{ link.project.project_title }}</td>
 				  {% if link.link %}
 				<td><a href="{{ link.link }}" target="_blank"><i class="bi bi-code-square"></i></a></td>

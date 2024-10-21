@@ -411,8 +411,10 @@ def add_new_codelink():
             )
 
             db.session.add(new_repo)
+            print(new_repo)
 
-        print(f"new_codelink repo: {new_codelink.repo}")
+            new_codelink.repo = new_repo
+            print(f"new_codelink repo: {new_codelink.repo}")
 
         db.session.add(new_codelink)
 
