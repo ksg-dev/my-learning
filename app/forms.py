@@ -71,8 +71,8 @@ class NewCourseForm(FlaskForm):
 
 class NewProjectForm(FlaskForm):
     project_title = StringField("Project Title", validators=[InputRequired()])
-    course = SelectField('Course', coerce=str)
-    repo = StringField("Project Repository", validators=[InputRequired()])
+    course = SelectField('Course', coerce=int)
+    repo = SelectField("Project Repository", coerce=int)
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
     assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
     start_date = DateField("Start Date", validators=[Optional()])

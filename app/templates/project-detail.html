@@ -21,7 +21,8 @@
 		<div class="card">
             <div class="card-body">
               <h5 class="card-title">Project Details</h5>
-					<p>Project Repo: {{ project.project_repo }}</p>
+					<p>Course: {{ project.course.title }}</p>
+					<p>Project Repo: {{ project.project_repo.name }}</p>
 					<p>Section: {{ project.section }}</p>
 					<p>Lecture: {{ project.lecture }}</p>
 					<p>Link: <a href="{{ project.assignment_link }}" target="_blank">Go to Assignment</a> </p>

@@ -323,8 +323,10 @@ def add_new_course():
 
 @app.route('/add-project', methods=["GET", "POST"])
 @login_required
-def add_new_project(*args):
+def add_new_project(course_id=None):
     form = NewProjectForm()
+    repos = db.session.execute(db.select(Repository).where(Repository.user_id == current_user.id)).scalars().all()
+    form.repo.choices = [(g.id, g.name) for g in repos]
     if course_id:
         target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
         form.course.data = target_course
@@ -337,10 +339,10 @@ def add_new_project(*args):
     if form.validate_on_submit():
         new_proj = Project(
             project_title=form.project_title.data,
-            project_repo=form.repo.data,
+            repo_id=form.repo.data,
             description=form.description.data,
             assignment_link=form.assignment_link.data,
-            course=form.course.data,
+            course_id=form.course.data,
             start=form.start_date.data,
             complete=form.complete_date.data,
             section=form.section.data,
@@ -349,21 +351,23 @@ def add_new_project(*args):
             user_id=current_user.id
         )
 
-        print(new_proj.course)
-
         db.session.add(new_proj)
 
-        if form.concepts.data:
-            for concept_name in form.concepts.data:
-                # concept = Concept.query.filter_by(concept_term=concept_name).first()
-                if not concept_name.lower() not in all_concepts:
+        form_concepts = form.concepts.data
+
+        if len(form_concepts) > 0:
+            for concept_name in form_concepts:
+                if concept_name.lower() not in all_concepts:
                     concept = Concept(
-                        concept_term=concept_name
+                        concept_term=concept_name,
+                        date_added=date.today()
                     )
 
                     db.session.add(concept)
 
-                    new_proj.concepts.append(concept)
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
+
+                new_proj.concepts.append(concept)
 
         db.session.add(new_proj)
         db.session.commit()
@@ -402,17 +406,20 @@ def add_new_codelink():
 
         db.session.add(new_codelink)
 
-        if form.concepts.data:
-            for concept_name in form.concepts.data:
-                if not concept_name.lower() not in all_concepts:
+        form_concepts = form.concepts.data
+
+        if len(form_concepts) > 0:
+            for concept_name in form_concepts:
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
+                if not concept:
                     concept = Concept(
-                        concept_term=concept_name
+                        concept_term=concept_name,
+                        date_added=date.today()
                     )
 
                     db.session.add(concept)
 
-                    new_codelink.concepts.append(concept)
-
+                new_codelink.concepts.append(concept)
 
         db.session.add(new_codelink)
         db.session.commit()

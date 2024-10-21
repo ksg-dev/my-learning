@@ -109,7 +109,7 @@ class Repository(db.Model):
     user: Mapped["User"] = relationship(back_populates="repos")
 
     # Link to projects
-    projects: Mapped[List["Project"]] = relationship(back_populates="confirmed_repo")
+    projects: Mapped[List["Project"]] = relationship(back_populates="project_repo")
 
     # Link to codelinks
     codelinks: Mapped[List["CodeLink"]] = relationship(back_populates="repo")
@@ -147,7 +147,6 @@ class Project(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_title: Mapped[str] = mapped_column(String(100), nullable=False)
-    project_repo: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=True)
     assignment_link: Mapped[str] = mapped_column(String(250), nullable=True)
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
@@ -156,7 +155,7 @@ class Project(db.Model):
 
     # Link to Repos
     repo_id: Mapped[int] = mapped_column(Integer, ForeignKey(Repository.id), index=True)
-    confirmed_repo: Mapped["Repository"] = relationship(back_populates="projects")
+    project_repo: Mapped["Repository"] = relationship(back_populates="projects")
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=project_concept, backref='projects')
