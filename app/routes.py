@@ -20,7 +20,7 @@ from flask_login import login_user, LoginManager, current_user, logout_user, log
 
 from app import app, db
 from app.models import User, Course, Project, CodeLink, Concept, Library, API, Tool, Resource, Event, Repository
-from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
+from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewCodeLinkForm,NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
 from app.events import GetEvents, validate_id
 from app.stats import Dashboard
 
@@ -321,11 +321,16 @@ def add_new_course():
     return render_template('add.html', form=form, object="Course", course_badge=course_statuses)
 
 
-@app.route('/add-project/<int:course_id>', methods=["GET", "POST"])
+@app.route('/add-project', methods=["GET", "POST"])
 @login_required
-def add_new_project(course_id):
-    target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
+def add_new_project(*args):
     form = NewProjectForm()
+    if course_id:
+        target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
+        form.course.data = target_course
+    else:
+        form.course.choices = [(g.id, g.title) for g in Course.query.all()]
+
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
@@ -335,7 +340,7 @@ def add_new_project(course_id):
             project_repo=form.repo.data,
             description=form.description.data,
             assignment_link=form.assignment_link.data,
-            course=target_course,
+            course=form.course.data,
             start=form.start_date.data,
             complete=form.complete_date.data,
             section=form.section.data,
@@ -343,6 +348,8 @@ def add_new_project(course_id):
             date_added=date.today(),
             user_id=current_user.id
         )
+
+        print(new_proj.course)
 
         db.session.add(new_proj)
 
@@ -363,6 +370,54 @@ def add_new_project(course_id):
         return redirect(url_for("projects_page"))
     return render_template('add.html', form=form, object="Project")
 
+
+@app.route('/add-codelink', methods=["GET", "POST"])
+@login_required
+def add_new_codelink():
+    form = NewCodeLinkForm()
+    form.project_id.choices = [(g.id, g.project_title) for g in Project.query.all()]
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    if form.validate_on_submit():
+        frags = form.link.data.split('/')
+        target_repo = frags[4]
+        get_repo = db.session.execute(db.select(Repository).filter_by(Repository.name == target_repo)).scalar()
+
+        if not get_repo:
+            new_repo = Repository(
+                name=target_repo,
+                user_id=current_user.id
+            )
+
+            db.session.add(new_repo)
+
+        new_codelink = CodeLink(
+            name=form.name.data,
+            link=form.link.data,
+            repo=target_repo,
+            project=form.project_id.data,
+            user_id=current_user.id
+        )
+
+        db.session.add(new_codelink)
+
+        if form.concepts.data:
+            for concept_name in form.concepts.data:
+                if not concept_name.lower() not in all_concepts:
+                    concept = Concept(
+                        concept_term=concept_name
+                    )
+
+                    db.session.add(concept)
+
+                    new_codelink.concepts.append(concept)
+
+
+        db.session.add(new_codelink)
+        db.session.commit()
+        return redirect(url_for("codelinks_page"))
+    return render_template('add.html', form=form, object="CodeLink")
 
 @app.route('/add-concept', methods=["GET", "POST"])
 @login_required

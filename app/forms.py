@@ -71,6 +71,7 @@ class NewCourseForm(FlaskForm):
 
 class NewProjectForm(FlaskForm):
     project_title = StringField("Project Title", validators=[InputRequired()])
+    course = SelectField('Course', coerce=str)
     repo = StringField("Project Repository", validators=[InputRequired()])
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
     assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
@@ -79,6 +80,14 @@ class NewProjectForm(FlaskForm):
     concepts = ConceptListField('Concepts')
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
+    submit = SubmitField("Submit")
+
+
+class NewCodeLinkForm(FlaskForm):
+    name = StringField("CodeLink Name", validators=[InputRequired()])
+    link = StringField("CodeLink URL", validators=[InputRequired(), URL()])
+    project_id = SelectField('Project', coerce=int)
+    concepts = ConceptListField('Concepts')
     submit = SubmitField("Submit")
 
 
