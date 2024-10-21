@@ -86,7 +86,7 @@ class NewProjectForm(FlaskForm):
 class NewCodeLinkForm(FlaskForm):
     name = StringField("CodeLink Name", validators=[InputRequired()])
     link = StringField("CodeLink URL", validators=[InputRequired(), URL()])
-    project_id = SelectField('Project', coerce=int)
+    project = SelectField('Project', coerce=int)
     concepts = ConceptListField('Concepts')
     submit = SubmitField("Submit")
 

@@ -67,15 +67,15 @@
 			<tbody>
 			{% for link in codelinks %}
 			  <tr>
-				<th scope="row">{{ codelink.id }}</th>
-			  	<td><a href="{{ url_for('project_detail', num=project.id ) }}">{{ codelink.name }}</a></td>
-				<td>{{ codelink.project.project_title }}</td>
+				<th scope="row">{{ link.id }}</th>
+			  	<td><a href="">{{ link.name }}</a></td>
+				<td>{{ link.project.project_title }}</td>
 				  {% if link.link %}
 				<td><a href="{{ link.link }}" target="_blank"><i class="bi bi-code-square"></i></a></td>
 				  {% else %}
 				  <td></td>
 				  {% endif %}
-				<td>{% for concept in codelink.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+				<td>{% for concept in link.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
 			  </tr>
 			{% endfor %}
 			</tbody>

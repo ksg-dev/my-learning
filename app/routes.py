@@ -380,16 +380,31 @@ def add_new_project(course_id=None):
 def add_new_codelink():
     form = NewCodeLinkForm()
     projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
-    form.project_id.choices = [(g.id, g.project_title) for g in projects]
+    form.project.choices = [(g.id, g.project_title) for g in projects]
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
     if form.validate_on_submit():
         frags = form.link.data.split('/')
         target_repo = frags[4]
-        get_repo = db.session.execute(db.select(Repository).filter_by(Repository.name == target_repo)).scalar()
+        get_repo = db.session.execute(db.select(Repository).where(Repository.name == target_repo)).scalar()
 
-        if not get_repo:
+        new_codelink = CodeLink(
+            name=form.name.data,
+            link=form.link.data,
+            project_id=form.project.data,
+            user_id=current_user.id
+        )
+
+        db.session.add(new_codelink)
+
+        print(f"target_repo: {target_repo}")
+        print(f"get_repo: {get_repo}")
+
+        if get_repo:
+            new_codelink.repo = get_repo
+
+        else:
             new_repo = Repository(
                 name=target_repo,
                 user_id=current_user.id
@@ -397,13 +412,7 @@ def add_new_codelink():
 
             db.session.add(new_repo)
 
-        new_codelink = CodeLink(
-            name=form.name.data,
-            link=form.link.data,
-            repo=target_repo,
-            project_id=form.project_id.data,
-            user_id=current_user.id
-        )
+        print(f"new_codelink repo: {new_codelink.repo}")
 
         db.session.add(new_codelink)
 
