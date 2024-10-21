@@ -379,7 +379,8 @@ def add_new_project(course_id=None):
 @login_required
 def add_new_codelink():
     form = NewCodeLinkForm()
-    form.project_id.choices = [(g.id, g.project_title) for g in Project.query.all()]
+    projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
+    form.project_id.choices = [(g.id, g.project_title) for g in projects]
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
@@ -400,7 +401,7 @@ def add_new_codelink():
             name=form.name.data,
             link=form.link.data,
             repo=target_repo,
-            project=form.project_id.data,
+            project_id=form.project_id.data,
             user_id=current_user.id
         )
 
@@ -410,14 +411,15 @@ def add_new_codelink():
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
-                if not concept:
+                if concept_name.lower() not in all_concepts:
                     concept = Concept(
                         concept_term=concept_name,
                         date_added=date.today()
                     )
 
                     db.session.add(concept)
+
+                concept = Concept.query.filter_by(concept_term=concept_name).first()
 
                 new_codelink.concepts.append(concept)
 
