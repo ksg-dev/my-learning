@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}CodeLinks{% endblock %}
+
+{% block content %}
+	<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>CodeLinks</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">My Learning</li>
+          <li class="breadcrumb-item active">CodeLinks</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+	<!--		Page Description Card-->
+	  <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">CodeLinks: A deeper dig into your projects</h5>
+		  <p>Link by line, project, or repository to code you've added to GitHub, so you can find what you've already done with ease.</p>
+		  <p>Tag your CodeLinks with Concepts, so you can easily look at your own code if you need a reference for a something you've done before.</p>
+			<p></p>
+		</div>
+	  </div>
+
+<!--		End Page Description Card-->
+
+	<div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Top Concepts</h5>
+
+              <!-- Top Concepts List group With Badges -->
+              <ul class="list-group">
+				  {% for concept, count in top_concepts.items() %}
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+					  {{ concept }}
+                  <span class="badge bg-primary rounded-pill">{{ count }}</span>
+                </li>
+				  {% endfor %}
+              </ul><!-- End Top Concepts List Group -->
+
+            </div>
+          </div>
+
+
+<!--	All CodeLinks Table-->
+
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">My CodeLinks</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">CodeLink</th>
+				<th scope="col">Project</th>
+			    <th scope="col">Link</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for link in codelinks %}
+			  <tr>
+				<th scope="row">{{ codelink.id }}</th>
+			  	<td><a href="{{ url_for('project_detail', num=project.id ) }}">{{ codelink.name }}</a></td>
+				<td>{{ codelink.project.project_title }}</td>
+				  {% if link.link %}
+				<td><a href="{{ link.link }}" target="_blank"><i class="bi bi-code-square"></i></a></td>
+				  {% else %}
+				  <td></td>
+				  {% endif %}
+				<td>{% for concept in codelink.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+			<a href="{{ url_for('add_new_project', course_id=0) }}">
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add CodeLink</button>
+			</a>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+
+    <section class="section">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Example Card</h5>
+              <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
+            </div>
+          </div>
+        </div>
+    </section>
+	</main> <!-- End #main -->
+{% endblock %}
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+

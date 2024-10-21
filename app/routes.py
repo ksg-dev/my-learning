@@ -19,7 +19,7 @@ from flask_login import login_user, LoginManager, current_user, logout_user, log
 
 
 from app import app, db
-from app.models import User, Course, Project, Concept, Library, API, Tool, Resource, Event, Repository
+from app.models import User, Course, Project, CodeLink, Concept, Library, API, Tool, Resource, Event, Repository
 from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
 from app.events import GetEvents, validate_id
 from app.stats import Dashboard
@@ -219,6 +219,30 @@ def projects_page():
         sorted(top_concepts.items(), key=lambda item: item[1], reverse=True))
 
     return render_template('projects.html', projects=projects, top_concepts=top_concepts)
+
+
+@app.route('/codelinks')
+@login_required
+def codelinks_page():
+    # Get codelinks
+    get_codelinks = db.session.execute(db.select(CodeLink).filter_by(user_id=current_user.id)).scalars().all()
+    codelinks = [codelink for codelink in get_codelinks]
+
+    top_concepts = {}
+
+    # Add all concepts to dict as key, and count of occurrence as value
+    for link in get_codelinks:
+        for concept in link.concepts:
+            if concept.concept_term in top_concepts:
+                top_concepts[concept.concept_term] += 1
+            else:
+                top_concepts[concept.concept_term] = 1
+
+    # Sort descending
+    sorted_concepts = dict(
+        sorted(top_concepts.items(), key=lambda item: item[1], reverse=True))
+
+    return render_template('codelinks.html', codelinks=codelinks, top_concepts=top_concepts)
 
 
 @app.route('/libraries')
