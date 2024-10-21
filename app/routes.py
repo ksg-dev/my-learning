@@ -391,7 +391,6 @@ def add_new_codelink():
         target_repo = frags[4]
         get_repo = db.session.execute(db.select(Repository).where(Repository.name == target_repo)).scalar()
 
-
         new_codelink = CodeLink(
             name=form.name.data,
             link=form.link.data,
