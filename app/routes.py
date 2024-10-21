@@ -21,7 +21,7 @@ from flask_login import login_user, LoginManager, current_user, logout_user, log
 from app import app, db
 from app.models import User, Course, Project, CodeLink, Concept, Library, API, Tool, Resource, Event, Repository
 from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewCodeLinkForm,NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
-from app.events import GetEvents, validate_id
+from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
 
 bootstrap = Bootstrap5(app)
@@ -379,7 +379,9 @@ def add_new_project(course_id=None):
 @login_required
 def add_new_codelink():
     form = NewCodeLinkForm()
+    repos = db.session.execute(db.select(Repository).where(Repository.user_id == current_user.id)).scalars().all()
     projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
+    # form.repo.choices = [(g.id, g.name) for g in repos]
     form.project.choices = [(g.id, g.project_title) for g in projects]
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
@@ -389,32 +391,14 @@ def add_new_codelink():
         target_repo = frags[4]
         get_repo = db.session.execute(db.select(Repository).where(Repository.name == target_repo)).scalar()
 
+
         new_codelink = CodeLink(
             name=form.name.data,
             link=form.link.data,
             project_id=form.project.data,
+            repo_id=get_repo.id,
             user_id=current_user.id
         )
-
-        db.session.add(new_codelink)
-
-        print(f"target_repo: {target_repo}")
-        print(f"get_repo: {get_repo}")
-
-        if get_repo:
-            new_codelink.repo = get_repo
-
-        else:
-            new_repo = Repository(
-                name=target_repo,
-                user_id=current_user.id
-            )
-
-            db.session.add(new_repo)
-            print(new_repo)
-
-            new_codelink.repo = new_repo
-            print(f"new_codelink repo: {new_codelink.repo}")
 
         db.session.add(new_codelink)
 

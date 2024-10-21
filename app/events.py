@@ -14,11 +14,12 @@ GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
 GH_API_URL = "https://api.github.com/"
 
-class GetEvents:
+class GetGitHub:
     def __init__(self, user):
         self.user = user
         self.token = GH_TOKEN
         self.events = self.get_events(user)
+        self.repos = self.get_repos(user)
 
     def get_events(self, user):
         headers = {
@@ -61,6 +62,33 @@ class GetEvents:
             all_events.append(new_event)
 
         return all_events
+
+    def get_repos(self, user):
+        headers = {
+            "accept": "application/vnd.github+json",
+            "authorization": f"Bearer {self.token}",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        user_repos = f"{GH_API_URL}users/{user}/repos"
+
+        response = requests.get(url=user_repos, headers=headers)
+        response.raise_for_status()
+        repos = response.json()
+
+        all_repos = []
+
+        for repo in repos:
+            new_repo = {
+                "id": repo["id"],
+                "name": repo["name"],
+                "created": repo["created_at"],
+                "language": repo["language"]
+            }
+
+            all_repos.append(new_repo)
+
+        return all_repos
 
 
 def validate_id(model, ref_id):

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from app import app, db
 from app.models import Event, Course, Project, Concept, Repository
-from app.events import GetEvents, validate_id
+from app.events import GetGitHub, validate_id
 from datetime import datetime, timedelta
 
 
@@ -14,8 +14,22 @@ class Dashboard:
         self.refresh_events(user)
 
     def refresh_events(self, user):
-        get_my_events = GetEvents(user)
-        my_events = get_my_events.events
+        get_my_data = GetGitHub(user)
+        my_events = get_my_data.events
+        my_repos = get_my_data.repos
+
+        for repo in my_repos:
+            validate_repo1 = validate_id(Repository, repo["id"])
+
+            if validate_repo1 is None:
+                new_repo = Repository(
+                    id=repo["id"],
+                    name=repo["name"],
+                    user_id=self.user_id
+                )
+
+                db.session.add(new_repo)
+                db.session.commit()
 
         for event in my_events:
             validate_event = validate_id(Event, event["id"])
