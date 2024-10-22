@@ -114,6 +114,9 @@ class Repository(db.Model):
     # Link to codelinks
     codelinks: Mapped[List["CodeLink"]] = relationship(back_populates="repo")
 
+    # Link to events
+    events: Mapped[List["Event"]] = relationship(back_populates="repo")
+
 
 # Create Course model for all planned or completed courses
 class Course(db.Model):
@@ -301,7 +304,6 @@ class Event(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     type: Mapped[str] = mapped_column(String(250))
-    repo: Mapped[str] = mapped_column(String(250))
     commits: Mapped[int] = mapped_column(Integer, nullable=True)
     create_type: Mapped[str] = mapped_column(String(250), nullable=True)
     timestamp: Mapped[datetime.datetime] = mapped_column(DateTime())
@@ -310,6 +312,12 @@ class Event(db.Model):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
     # Create reference to the User object. The "events" refers to the events property in the User class.
     user: Mapped["User"] = relationship(back_populates="events")
+
+    # Create Foreign Key, "repo.id" the repos refers to the tablename of Repo.
+    repo_id: Mapped[int] = mapped_column(Integer, ForeignKey(Repository.id), index=True)
+    # Create reference to the Repository object. The "events" refers to the events property in the Repository class.
+    repo: Mapped["Repository"] = relationship(back_populates="events")
+
 
 
 
