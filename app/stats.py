@@ -39,7 +39,6 @@ class Dashboard:
                 new_event = Event(
                     id=event["id"],
                     type=event["type"],
-                    repo=event["repo"],
                     commits=event["commits"],
                     create_type=event["create_type"],
                     timestamp=datetime.fromisoformat(event["timestamp"]),
@@ -47,17 +46,19 @@ class Dashboard:
                 )
 
                 db.session.add(new_event)
-                db.session.commit()
 
-            if validate_repo is None:
-                new_repo = Repository(
-                    id=event["repo_id"],
-                    name=event["repo"],
-                    user_id=self.user_id
-                )
+                if not validate_repo:
+                    new_repo = Repository(
+                        id=event["repo_id"],
+                        name=event["repo"],
+                        user_id=self.user_id
+                    )
 
-                db.session.add(new_repo)
-                db.session.commit()
+                    db.session.add(new_repo)
+
+                new_event.repo_id = event["repo_id"]
+
+            db.session.commit()
 
     def get_event_stats(self):
         events_df = pd.read_sql("events", db.get_engine())
