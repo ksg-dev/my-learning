@@ -109,7 +109,7 @@ class Repository(db.Model):
     user: Mapped["User"] = relationship(back_populates="repos")
 
     # Link to projects
-    projects: Mapped[List["Project"]] = relationship(back_populates="project_repo")
+    projects: Mapped[List["Project"]] = relationship(back_populates="repo")
 
     # Link to codelinks
     codelinks: Mapped[List["CodeLink"]] = relationship(back_populates="repo")
@@ -123,7 +123,7 @@ class Course(db.Model):
     __tablename__ = "courses"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True)
     platform: Mapped[str] = mapped_column(String(100))
     url: Mapped[str] = mapped_column(String(250), nullable=True)
     instructor: Mapped[str] = mapped_column(String(100))
@@ -149,7 +149,7 @@ class Project(db.Model):
     __tablename__ = "projects"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    project_title: Mapped[str] = mapped_column(String(100), nullable=False)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=True)
     assignment_link: Mapped[str] = mapped_column(String(250), nullable=True)
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
@@ -158,7 +158,7 @@ class Project(db.Model):
 
     # Link to Repos
     repo_id: Mapped[int] = mapped_column(Integer, ForeignKey(Repository.id), index=True)
-    project_repo: Mapped["Repository"] = relationship(back_populates="projects")
+    repo: Mapped["Repository"] = relationship(back_populates="projects")
 
     # Many-to-many relationship to concepts
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=project_concept, backref='projects')

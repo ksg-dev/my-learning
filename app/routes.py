@@ -144,6 +144,7 @@ def home():
     get_repos = db.session.execute(db.select(Repository).filter_by(user_id=current_user.id)).scalars().all()
     repos = [repo for repo in get_repos]
 
+
     # Get event stats dict
     my_events = dashboard.get_event_stats()
 
@@ -294,7 +295,7 @@ def add_new_course():
     form = NewCourseForm()
     if form.validate_on_submit():
         new_course = Course(
-            title=form.title.data,
+            name=form.name.data,
             platform=form.platform.data,
             url=form.url.data,
             instructor=form.instructor.data,
@@ -331,14 +332,14 @@ def add_new_project(course_id=None):
         target_course = db.session.execute(db.select(Course).where(Course.id == course_id)).scalar()
         form.course.data = target_course
     else:
-        form.course.choices = [(g.id, g.title) for g in Course.query.all()]
+        form.course.choices = [(g.id, g.name) for g in Course.query.all()]
 
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
     if form.validate_on_submit():
         new_proj = Project(
-            project_title=form.project_title.data,
+            name=form.name.data,
             repo_id=form.repo.data,
             description=form.description.data,
             assignment_link=form.assignment_link.data,
@@ -382,7 +383,7 @@ def add_new_codelink():
     repos = db.session.execute(db.select(Repository).where(Repository.user_id == current_user.id)).scalars().all()
     projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
     # form.repo.choices = [(g.id, g.name) for g in repos]
-    form.project.choices = [(g.id, g.project_title) for g in projects]
+    form.project.choices = [(g.id, g.name) for g in projects]
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
@@ -696,7 +697,7 @@ def update_course(num):
 
     if request.method == "POST":
         if form.validate_on_submit():
-            course_to_update.title = form.title.data
+            course_to_update.name = form.name.data
             course_to_update.platform = form.platform.data
             course_to_update.url = form.url.data
             course_to_update.instructor = form.instructor.data

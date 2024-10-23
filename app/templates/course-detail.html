@@ -7,13 +7,13 @@
 	<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>{{ course.title }}</h1>
+      <h1>{{ course.name }}</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
           <li class="breadcrumb-item">Courses</li>
-		  <li class="breadcrumb-item active">{{ course.title }}</li>
+		  <li class="breadcrumb-item active">{{ course.name }}</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -61,14 +61,14 @@
 <!--	All Projects for Course Table-->
 	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">{{ course.title }} Projects</h5>
+		  <h5 class="card-title">{{ course.name }} Projects</h5>
 
 		  <!-- Table with hoverable rows -->
 		  <table class="table table-hover">
 			<thead>
 			  <tr>
 			    <th scope="col">#</th>
-				<th scope="col">Project Title</th>
+				<th scope="col">Project Name</th>
 				<th scope="col">Repo</th>
 				<th scope="col">Concepts</th>
 			  </tr>
@@ -77,8 +77,8 @@
 			{% for project in all_projects %}
 			  <tr>
 				<th scope="row">{{ project.id }}</th>
-				<td>{{ project.project_title }}</td>
-				<td>{{ project.project_repo.name }}</td>
+				<td>{{ project.name }}</td>
+				<td>{{ project.repo.name }}</td>
 				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
 			  </tr>
 			{% endfor %}

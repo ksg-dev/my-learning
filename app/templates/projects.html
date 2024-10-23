@@ -68,7 +68,7 @@
 			{% for project in projects %}
 			  <tr>
 				<th scope="row">{{ project.id }}</th>
-			  	<td><a href="{{ url_for('project_detail', num=project.id ) }}">{{ project.project_title }}</a></td>
+			  	<td><a href="{{ url_for('project_detail', num=project.id ) }}">{{ project.name }}</a></td>
 				<td>{{ project.course.title }}</td>
 				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
 			  </tr>

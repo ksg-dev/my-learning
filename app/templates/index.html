@@ -451,18 +451,18 @@
 					{% if event.type == "push" %}
                   <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
                   <div class="activity-content">
-                    {{ event.type|capitalize }}ed {{ event.commits }} commit(s) to <a href="https://github.com/{{ current_user.name }}/{{ event.repo }}" class="fw-bold text-dark" target="_blank">{{ event.repo }}</a>
+                    {{ event.type|capitalize }}ed {{ event.commits }} commit(s) to <a href="https://github.com/{{ current_user.name }}/{{ event.repo.name }}" class="fw-bold text-dark" target="_blank">{{ event.repo.name }}</a>
 					  </div>
 				  	{% elif event.type == "create" %}
 						{% if event.create_type == "branch" %}
 							<i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
 							<div class="activity-content">
-                    		{{ event.type|capitalize }}d {{ event.create_type }} in <a href="https://github.com/{{ current_user.name }}/{{ event.repo }}" class="fw-bold text-dark" target="_blank">{{ event.repo }}</a>
+                    		{{ event.type|capitalize }}d {{ event.create_type }} in <a href="https://github.com/{{ current_user.name }}/{{ event.repo.name }}" class="fw-bold text-dark" target="_blank">{{ event.repo.name }}</a>
 							</div>
 						{% else %}
 							<i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                   			<div class="activity-content">
-                    		{{ event.type|capitalize }}d {{ event.create_type }}: <a href="https://github.com/{{ current_user.name }}/{{ event.repo }}" class="fw-bold text-dark" target="_blank">{{ event.repo }}</a>
+                    		{{ event.type|capitalize }}d {{ event.create_type }}: <a href="https://github.com/{{ current_user.name }}/{{ event.repo.name }}" class="fw-bold text-dark" target="_blank">{{ event.repo.name }}</a>
                   			</div>
 						{% endif %}
 					{% endif %}

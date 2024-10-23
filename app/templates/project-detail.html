@@ -13,7 +13,7 @@
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
           <li class="breadcrumb-item">Projects</li>
-		  <li class="breadcrumb-item active">{{ project.project_title }}</li>
+		  <li class="breadcrumb-item active">{{ project.name }}</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -21,8 +21,8 @@
 		<div class="card">
             <div class="card-body">
               <h5 class="card-title">Project Details</h5>
-					<p>Course: {{ project.course.title }}</p>
-					<p>Project Repo: {{ project.project_repo.name }}</p>
+					<p>Course: {{ project.course.name }}</p>
+					<p>Project Repo: {{ project.repo.name }}</p>
 					<p>Section: {{ project.section }}</p>
 					<p>Lecture: {{ project.lecture }}</p>
 					<p>Link: <a href="{{ project.assignment_link }}" target="_blank">Go to Assignment</a> </p>
@@ -53,7 +53,7 @@
 <!--	All Projects for Course Table-->
 	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">{{ project.project_title }} Files</h5>
+		  <h5 class="card-title">{{ project.name }} Files</h5>
 
 		</div>
 	 </div>

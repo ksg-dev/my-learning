@@ -58,7 +58,7 @@ class LoginForm(FlaskForm):
 # CREATE FORMS
 
 class NewCourseForm(FlaskForm):
-    title = StringField("Course Title", validators=[InputRequired()])
+    name = StringField("Course Name", validators=[InputRequired()])
     platform = StringField("Platform")
     url = StringField("Course URL", validators=[Optional(), URL()])
     instructor = StringField("Instructor")
@@ -70,7 +70,7 @@ class NewCourseForm(FlaskForm):
 
 
 class NewProjectForm(FlaskForm):
-    project_title = StringField("Project Title", validators=[InputRequired()])
+    name = StringField("Project Name", validators=[InputRequired()])
     course = SelectField('Course', coerce=int)
     repo = SelectField("Project Repository", coerce=int)
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
