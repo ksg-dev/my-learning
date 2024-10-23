@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap5
 from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Text
+from sqlalchemy import Integer, String, Text, func
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
@@ -461,8 +461,22 @@ def add_new_library():
 
         form_concepts = form.concepts.data
 
-        # Check db for name of new library, add if not in db
-        if new_lib.name.lower() not in all_concepts:
+        # If name in list, fetch and check for category, if none - update
+        if new_lib.name.lower() in all_concepts:
+            concept_check = db.session.execute(db.select(Concept).where(Concept.concept_term == new_lib.name)).scalar()
+            if not concept_check:
+                concept_check = db.session.execute(db.select(Concept).where(func.lower(Concept.concept_term) == new_lib.name.lower())).scalar()
+
+            if not concept_check.category:
+                concept_check.category = "library"
+
+                db.session.add(concept_check)
+
+                # add asset name to list of referenced concepts
+                new_lib.concepts.append(concept_check)
+
+        # if name not in all_concepts, add new to db
+        else:
             add_asset = Concept(
                 concept_term=new_lib.name,
                 category='library',
@@ -473,6 +487,8 @@ def add_new_library():
 
             # add asset name to list of referenced concepts
             new_lib.concepts.append(add_asset)
+
+
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
@@ -528,6 +544,17 @@ def add_new_api():
             # add asset name to list of referenced concepts
             new_api.concepts.append(add_asset)
 
+        # If name in list, fetch and check for category, if none - update
+        elif new_api.name.lower() in all_concepts:
+            api_check = db.session.execute(db.select(API).where(API.name == new_api.name)).scalar()
+            if not api_check.category:
+                api_check.category = "api"
+
+                db.session.add(api_check)
+
+                # add asset name to list of referenced concepts
+                new_api.concepts.append(api_check)
+
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
                 concept = Concept.query.filter_by(concept_term=concept_name).first()
@@ -580,6 +607,17 @@ def add_new_tool():
 
             # add asset name to list of referenced concepts
             new_tool.concepts.append(add_asset)
+
+        # If name in list, fetch and check for category, if none - update
+        elif new_tool.name.lower() in all_concepts:
+            tool_check = db.session.execute(db.select(Tool).where(Tool.name == new_tool.name)).scalar()
+            if not tool_check.category:
+                tool_check.category = "tool"
+
+                db.session.add(tool_check)
+
+                # add asset name to list of referenced concepts
+                new_tool.concepts.append(tool_check)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
