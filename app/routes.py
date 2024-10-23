@@ -178,7 +178,12 @@ def home():
     # for i in recent_events:
     #     print(i)
 
-    return render_template('index.html', my_events=my_events, now=now, activity=recent_events, my_repos=repos)
+    return render_template('index.html',
+                           my_events=my_events,
+                           now=now,
+                           activity=recent_events,
+                           my_repos=repos,
+                           my_courses=my_courses)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')

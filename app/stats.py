@@ -191,6 +191,7 @@ class Dashboard:
         # COMPLETE Stats
         complete = courses_df[courses_df["status"] == "complete"]
         complete_count = complete["name"].count()
+        complete_hours = complete["content_hours"].sum()
 
         start_min = complete["start"].min()
         start_max = complete["start"].max()
@@ -202,6 +203,7 @@ class Dashboard:
             "not-started-count": not_started_count,
             "in-progress-count": in_progress_count,
             "complete-count": complete_count,
+            "complete-hours": complete_hours,
             "start-min": start_min,
             "start-max": start_max,
             "complete-min": complete_min,
