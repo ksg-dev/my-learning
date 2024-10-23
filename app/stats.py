@@ -79,19 +79,19 @@ class Dashboard:
         try:
             # events_df = pd.read_sql("events", db.get_engine())
             events_df = pd.read_sql(query.statement, engine)
-            print(events_df)
-            print("---------------------------")
+            # print(events_df)
+            # print("---------------------------")
 
             # Stats for ALL
             all_commits = int(events_df["commits"].sum())
             all_commits_by_repo = events_df.groupby("repo_id")["commits"].sum()
-            print(f"all_by_repo: {all_commits_by_repo}")
+            # print(f"all_by_repo: {all_commits_by_repo}")
 
             # Stats for TODAY
             today = events_df[events_df.timestamp == datetime.today()]
-            print(f"today_df: {today}")
+            # print(f"today_df: {today}")
             yesterday = events_df[events_df.timestamp == (datetime.today() - timedelta(days=1))]
-            print(f"yest_df: {yesterday}")
+            # print(f"yest_df: {yesterday}")
             yest_count = int(yesterday["commits"].sum())
             today_count = int(today["commits"].sum())
             today_by_repo = today.groupby("repo_id")["commits"].sum()
@@ -158,7 +158,7 @@ class Dashboard:
                 "yr_change": 0,
                 "year_by_repo": 0
             }
-        print(f"event_stats: {event_stats}")
+        # print(f"event_stats: {event_stats}")
         return event_stats
 
     def get_course_stats(self):
