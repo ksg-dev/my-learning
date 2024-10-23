@@ -50,14 +50,17 @@ class Dashboard:
 
                 db.session.add(new_event)
 
-                if not validate_repo:
-                    new_repo = Repository(
-                        id=event["repo_id"],
-                        name=event["repo"],
-                        user_id=self.user_id
-                    )
+                target_repo = db.session.execute(db.select(Repository).where(id=event["repo_id"])).scalar()
+                target_repo.events.append(new_event)
 
-                    db.session.add(new_repo)
+                # if not validate_repo:
+                #     new_repo = Repository(
+                #         id=event["repo_id"],
+                #         name=event["repo"],
+                #         user_id=self.user_id
+                #     )
+                #
+                #     db.session.add(new_repo)
 
                 db.session.commit()
 
@@ -67,11 +70,11 @@ class Dashboard:
         session = Session()
 
         # Query db
-        query = session.query(Repository).join(Event)
+        query = session.query(Event).join(Repository)
 
         pd.set_option("expand_frame_repr", False)
-        df = pd.read_sql(query.statement, engine)
-        print(f"df: {df}")
+        # df = pd.read_sql(query.statement, engine)
+        # print(f"df: {df}")
 
         try:
             # events_df = pd.read_sql("events", db.get_engine())
@@ -80,14 +83,14 @@ class Dashboard:
 
             # Stats for ALL
             all_commits = int(events_df["commits"].sum())
-            all_commits_by_repo = events_df.groupby("repo")
+            all_commits_by_repo = events_df.groupby("repo_id")
 
             # Stats for TODAY
             today = events_df[events_df.timestamp == datetime.today()]
             yesterday = events_df[events_df.timestamp == (datetime.today() - timedelta(days=1))]
             yest_count = int(yesterday["commits"].sum())
             today_count = int(today["commits"].sum())
-            today_by_repo = today.groupby("repo")
+            today_by_repo = today.groupby("repo_id")
 
             if yest_count != 0:
                 day_change = (today_count - yest_count) / yest_count * 100
@@ -99,7 +102,7 @@ class Dashboard:
             last_mo = events_df[events_df.timestamp.dt.month == datetime.today().month - 1]
             ltmo_count = int(last_mo["commits"].sum())
             month_count = int(month["commits"].sum())
-            month_by_repo = month.groupby("repo")
+            month_by_repo = month.groupby("repo_id")
 
             if ltmo_count != 0:
                 mo_change = (month_count - ltmo_count) / ltmo_count * 100
@@ -111,7 +114,7 @@ class Dashboard:
             last_yr = events_df[events_df.timestamp.dt.year == datetime.today().year - 1]
             ltyr_count = int(last_yr["commits"].sum())
             year_count = int(year["commits"].sum())
-            year_by_repo = year.groupby("repo")
+            year_by_repo = year.groupby("repo_id")
 
             if ltyr_count != 0:
                 yr_change = (year_count - ltyr_count) / ltyr_count * 100
@@ -151,6 +154,7 @@ class Dashboard:
                 "yr_change": 0,
                 "year_by_repo": 0
             }
+        print(f"event_stats: {event_stats}")
         return event_stats
 
     def get_course_stats(self):
