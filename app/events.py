@@ -61,7 +61,7 @@ class GetGitHub:
 
             all_events.append(new_event)
 
-        print(f"all_events: {all_events}")
+        # print(f"all_events: {all_events}")
         return all_events
 
     def get_repos(self, user):

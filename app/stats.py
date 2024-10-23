@@ -89,7 +89,9 @@ class Dashboard:
 
             # Stats for TODAY
             today = events_df[events_df.timestamp == datetime.today()]
+            print(f"today_df: {today}")
             yesterday = events_df[events_df.timestamp == (datetime.today() - timedelta(days=1))]
+            print(f"yest_df: {yesterday}")
             yest_count = int(yesterday["commits"].sum())
             today_count = int(today["commits"].sum())
             today_by_repo = today.groupby("repo_id")["commits"].sum()
