@@ -148,9 +148,12 @@ def home():
     # Get event stats dict
     my_events = dashboard.get_event_stats()
 
-    # Query db for all courses. Convert to python list
-    get_courses = db.session.execute(db.select(Course)).scalars().all()
-    courses = [course for course in get_courses]
+    # Get course stats dict
+    my_courses = dashboard.get_course_stats()
+
+    # # Query db for all courses. Convert to python list
+    # get_courses = db.session.execute(db.select(Course)).scalars().all()
+    # courses = [course for course in get_courses]
 
     # Query db for all projects. Convert to python list
     get_projects = db.session.execute(db.select(Project)).scalars().all()

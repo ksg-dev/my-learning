@@ -94,7 +94,7 @@ class GetGitHub:
                 "created": repo["created_at"],
                 "language": repo["language"]
             }
-            print(new_repo)
+            # print(new_repo)
 
             all_repos.append(new_repo)
 

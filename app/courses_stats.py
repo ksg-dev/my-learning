@@ -19,7 +19,7 @@ pd.set_option("expand_frame_repr", False)
 # Convert query result to df
 df = pd.read_sql(query.statement, engine)
 
-print(df)
+# print(df)
 
 # class CourseStats:
 #     def __init__(self):

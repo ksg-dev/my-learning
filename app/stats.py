@@ -162,7 +162,55 @@ class Dashboard:
         return event_stats
 
     def get_course_stats(self):
-        pass
+        engine = db.get_engine()
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Query db
+        query = session.query(Course)
+
+        pd.set_option("expand_frame_repr", False)
+        # df = pd.read_sql(query.statement, engine)
+        # print(f"df: {df}")
+
+        courses_df = pd.read_sql(query.statement, engine)
+        print(courses_df)
+        print("---------------------------")
+
+        # Content Stats for ALL
+        all_courses_hr = courses_df["content_hours"].sum()
+
+        # NOT STARTED Stats
+        not_started = courses_df[courses_df["status"] == "not-started"]
+        not_started_count = not_started["name"].count()
+
+        # IN PROGRESS Stats
+        in_progress = courses_df[courses_df["status"] == "in-progress"]
+        in_progress_count = in_progress["name"].count()
+
+        # COMPLETE Stats
+        complete = courses_df[courses_df["status"] == "complete"]
+        complete_count = complete["name"].count()
+
+        start_min = complete["start"].min()
+        start_max = complete["start"].max()
+        complete_min = complete["complete"].min()
+        complete_max = complete["complete"].max()
+
+        course_stats = {
+            "all-course-hr": all_courses_hr,
+            "not-started-count": not_started_count,
+            "in-progress-count": in_progress_count,
+            "complete-count": complete_count,
+            "start-min": start_min,
+            "start-max": start_max,
+            "complete-min": complete_min,
+            "complete-max": complete_max
+           }
+        print(course_stats)
+        return course_stats
+
+
     def get_project_stats(self):
         pass
 
