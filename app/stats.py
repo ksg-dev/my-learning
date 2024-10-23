@@ -42,7 +42,7 @@ class Dashboard:
                     id=event["id"],
                     type=event["type"],
                     repo_id=event["repo_id"],
-                    commits=event["commits"],
+                    commits=int(event["commits"]),
                     create_type=event["create_type"],
                     timestamp=datetime.fromisoformat(event["timestamp"]),
                     user_id=self.user_id
@@ -80,46 +80,48 @@ class Dashboard:
             # events_df = pd.read_sql("events", db.get_engine())
             events_df = pd.read_sql(query.statement, engine)
             print(events_df)
+            print("---------------------------")
 
             # Stats for ALL
             all_commits = int(events_df["commits"].sum())
-            all_commits_by_repo = events_df.groupby("repo_id")
+            all_commits_by_repo = events_df.groupby("repo_id")["commits"].sum()
+            print(f"all_by_repo: {all_commits_by_repo}")
 
             # Stats for TODAY
             today = events_df[events_df.timestamp == datetime.today()]
             yesterday = events_df[events_df.timestamp == (datetime.today() - timedelta(days=1))]
             yest_count = int(yesterday["commits"].sum())
             today_count = int(today["commits"].sum())
-            today_by_repo = today.groupby("repo_id")
+            today_by_repo = today.groupby("repo_id")["commits"].sum()
 
             if yest_count != 0:
                 day_change = (today_count - yest_count) / yest_count * 100
             else:
-                day_change = None
+                day_change = 0
 
             # Stats for MONTH
             month = events_df[events_df.timestamp.dt.month == datetime.today().month]
             last_mo = events_df[events_df.timestamp.dt.month == datetime.today().month - 1]
             ltmo_count = int(last_mo["commits"].sum())
             month_count = int(month["commits"].sum())
-            month_by_repo = month.groupby("repo_id")
+            month_by_repo = month.groupby("repo_id")["commits"].sum()
 
             if ltmo_count != 0:
                 mo_change = (month_count - ltmo_count) / ltmo_count * 100
             else:
-                mo_change = None
+                mo_change = 0
 
             # Stats for YEAR
             year = events_df[events_df.timestamp.dt.year == datetime.today().year]
             last_yr = events_df[events_df.timestamp.dt.year == datetime.today().year - 1]
             ltyr_count = int(last_yr["commits"].sum())
             year_count = int(year["commits"].sum())
-            year_by_repo = year.groupby("repo_id")
+            year_by_repo = year.groupby("repo_id")["commits"].sum()
 
             if ltyr_count != 0:
                 yr_change = (year_count - ltyr_count) / ltyr_count * 100
             else:
-                yr_change = None
+                yr_change = 0
 
             event_stats = {
                 "all_commits": all_commits,
