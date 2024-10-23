@@ -42,7 +42,7 @@ class Dashboard:
                     id=event["id"],
                     type=event["type"],
                     repo_id=event["repo_id"],
-                    commits=int(event["commits"]),
+                    commits=event["commits"],
                     create_type=event["create_type"],
                     timestamp=datetime.fromisoformat(event["timestamp"]),
                     user_id=self.user_id
@@ -50,8 +50,8 @@ class Dashboard:
 
                 db.session.add(new_event)
 
-                target_repo = db.session.execute(db.select(Repository).where(id=event["repo_id"])).scalar()
-                target_repo.events.append(new_event)
+                # target_repo = db.session.execute(db.select(Repository).where(Repository.id == event["repo_id"])).scalar()
+                # target_repo.events.append(new_event)
 
                 # if not validate_repo:
                 #     new_repo = Repository(

@@ -28,9 +28,13 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+        params = {
+            "per_page": 100
+        }
+
         user_events = f"{GH_API_URL}users/{user}/events"
 
-        response = requests.get(url=user_events, headers=headers)
+        response = requests.get(url=user_events, headers=headers, params=params)
         response.raise_for_status()
         events = response.json()
 
@@ -71,9 +75,13 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+        params = {
+            "per_page": 100
+        }
+
         user_repos = f"{GH_API_URL}users/{user}/repos"
 
-        response = requests.get(url=user_repos, headers=headers)
+        response = requests.get(url=user_repos, headers=headers, params=params)
         response.raise_for_status()
         repos = response.json()
 
@@ -86,6 +94,7 @@ class GetGitHub:
                 "created": repo["created_at"],
                 "language": repo["language"]
             }
+            print(new_repo)
 
             all_repos.append(new_repo)
 
