@@ -531,8 +531,23 @@ def add_new_api():
 
         form_concepts = form.concepts.data
 
-        # Check db for name of new api, add if not in db
-        if new_api.name.lower() not in all_concepts:
+        # If name in list, fetch and check for category, if none - update
+        if new_api.name.lower() in all_concepts:
+            concept_check = db.session.execute(db.select(Concept).where(Concept.concept_term == new_api.name)).scalar()
+            if not concept_check:
+                concept_check = db.session.execute(
+                    db.select(Concept).where(func.lower(Concept.concept_term) == new_api.name.lower())).scalar()
+
+            if not concept_check.category:
+                concept_check.category = "api"
+
+                db.session.add(concept_check)
+
+                # add asset name to list of referenced concepts
+                new_api.concepts.append(concept_check)
+
+        # if name not in all_concepts, add new to db
+        else:
             add_asset = Concept(
                 concept_term=new_api.name,
                 category='api',
@@ -543,17 +558,6 @@ def add_new_api():
 
             # add asset name to list of referenced concepts
             new_api.concepts.append(add_asset)
-
-        # If name in list, fetch and check for category, if none - update
-        elif new_api.name.lower() in all_concepts:
-            api_check = db.session.execute(db.select(API).where(API.name == new_api.name)).scalar()
-            if not api_check.category:
-                api_check.category = "api"
-
-                db.session.add(api_check)
-
-                # add asset name to list of referenced concepts
-                new_api.concepts.append(api_check)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
@@ -595,8 +599,23 @@ def add_new_tool():
 
         form_concepts = form.concepts.data
 
-        # Check db for name of new tool, add if not in db
-        if new_tool.name.lower() not in all_concepts:
+        # If name in list, fetch and check for category, if none - update
+        if new_tool.name.lower() in all_concepts:
+            concept_check = db.session.execute(db.select(Concept).where(Concept.concept_term == new_tool.name)).scalar()
+            if not concept_check:
+                concept_check = db.session.execute(
+                    db.select(Concept).where(func.lower(Concept.concept_term) == new_tool.name.lower())).scalar()
+
+            if not concept_check.category:
+                concept_check.category = "tool"
+
+                db.session.add(concept_check)
+
+                # add asset name to list of referenced concepts
+                new_tool.concepts.append(concept_check)
+
+        # if name not in all_concepts, add new to db
+        else:
             add_asset = Concept(
                 concept_term=new_tool.name,
                 category='tool',
@@ -607,17 +626,6 @@ def add_new_tool():
 
             # add asset name to list of referenced concepts
             new_tool.concepts.append(add_asset)
-
-        # If name in list, fetch and check for category, if none - update
-        elif new_tool.name.lower() in all_concepts:
-            tool_check = db.session.execute(db.select(Tool).where(Tool.name == new_tool.name)).scalar()
-            if not tool_check.category:
-                tool_check.category = "tool"
-
-                db.session.add(tool_check)
-
-                # add asset name to list of referenced concepts
-                new_tool.concepts.append(tool_check)
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
