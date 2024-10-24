@@ -156,8 +156,9 @@ def home():
     # courses = [course for course in get_courses]
 
     # Query db for all projects. Convert to python list
-    get_projects = db.session.execute(db.select(Project)).scalars().all()
+    get_projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
     projects = [project for project in get_projects]
+    proj_count = len(projects)
 
     # # Query db for all concepts. Convert to python list
     # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
@@ -172,7 +173,9 @@ def home():
                            now=now,
                            activity=top_20_events,
                            my_repos=repos,
-                           my_courses=my_courses)
+                           my_courses=my_courses,
+                           my_projects=projects,
+                           project_count=proj_count)
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
