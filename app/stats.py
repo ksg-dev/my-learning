@@ -174,8 +174,11 @@ class Dashboard:
         # print(f"df: {df}")
 
         courses_df = pd.read_sql(query.statement, engine)
-        print(courses_df)
-        print("---------------------------")
+        courses_df.start = pd.to_datetime(courses_df.start)
+        courses_df.complete = pd.to_datetime(courses_df.complete)
+        # print(courses_df)
+        # print(courses_df.info())
+        # print("---------------------------")
 
         # Content Stats for ALL
         all_courses_hr = courses_df["content_hours"].sum()
@@ -198,6 +201,21 @@ class Dashboard:
         complete_min = complete["complete"].min()
         complete_max = complete["complete"].max()
 
+        # Add column for days it took to complete
+        complete["days_to_complete"] = complete["complete"] - complete["start"]
+
+        # PER COURSE Average content hr complete per day (content hr / days)
+        complete["avg_daily_content"] = complete["days_to_complete"] / complete["content_hours"]
+        # print(content)
+
+        # Overall Average content covered daily
+        avg_daily = complete['avg_daily_content'].mean()
+
+
+        # print(complete)
+        # print(complete.info())
+
+
         course_stats = {
             "all-course-hr": all_courses_hr,
             "not-started-count": not_started_count,
@@ -207,9 +225,11 @@ class Dashboard:
             "start-min": start_min,
             "start-max": start_max,
             "complete-min": complete_min,
-            "complete-max": complete_max
+            "complete-max": complete_max,
+            "avg-daily-content": avg_daily
            }
-        print(course_stats)
+
+        # print(course_stats)
         return course_stats
 
 
