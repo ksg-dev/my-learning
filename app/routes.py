@@ -15,12 +15,12 @@ from dotenv import load_dotenv
 import os
 import pandas as pd
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, LoginManager, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required
 
 
 from app import app, db
 from app.models import User, Course, Project, CodeLink, Concept, Library, API, Tool, Resource, Event, Repository
-from app.forms import RegisterForm, LoginForm,NewCourseForm, NewProjectForm, NewCodeLinkForm,NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
+from app.forms import RegisterForm, LoginForm, NewCourseForm, NewProjectForm, NewCodeLinkForm,NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
 
@@ -83,7 +83,7 @@ def register():
                 email=entered_email,
                 name=form.name.data.title(),
                 display_name=form.display_name.data,
-                password= generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+                password=generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
             )
 
             db.session.add(new_user)
