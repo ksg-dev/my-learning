@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, Field, SelectField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms.validators import InputRequired, URL, Optional
 from wtforms.widgets import TextInput
 from app import db
@@ -144,6 +145,14 @@ class NewResourceForm(FlaskForm):
 # DELETE FORM
 class DeleteForm(FlaskForm):
     submit = SubmitField("Confirm Delete")
+
+# BULK IMPORT - CSV FILE FORMS
+class UploadForm(FlaskForm):
+    upload = FileField('csv', validators=[
+        FileRequired(),
+        FileAllowed(['csv'], 'csv files only!')
+    ])
+    submit = SubmitField("Submit")
 
 
 

@@ -15,14 +15,19 @@ from dotenv import load_dotenv
 import os
 import pandas as pd
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import login_user, current_user, logout_user, login_required
 
 
 from app import app, db
 from app.models import User, Course, Project, CodeLink, Concept, Library, API, Tool, Resource, Event, Repository
-from app.forms import RegisterForm, LoginForm, NewCourseForm, NewProjectForm, NewCodeLinkForm,NewConceptForm, NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm, DeleteForm
+from app.forms import (RegisterForm, LoginForm,
+                       NewCourseForm, NewProjectForm, NewCodeLinkForm, NewConceptForm,
+                       NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm,
+                       DeleteForm, UploadForm)
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
+from app.upload import upload_courses
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -789,3 +794,24 @@ def delete_course(num):
 
             return redirect(url_for("courses_page"))
     return render_template("delete.html", form=form, object="Course", item=course_to_delete)
+
+
+##################################### IMPORT PAGES ########################################
+
+@app.route('/courses/upload', methods=["GET", "POST"])
+def import_courses():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_courses(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('courses_page'))
+    return render_template('upload.html', form=form, object="Course")

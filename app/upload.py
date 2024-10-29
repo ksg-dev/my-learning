@@ -1,11 +1,12 @@
 # For handling csv-loaded data
 import pandas as pd
 import numpy as np
-from app import db
+from app import db, app
 from app.models import Course
 from datetime import date
+import os
 
-def import_courses(filename, user_id):
+def upload_courses(filename, user_id):
     col_types = {
         'name': str,
         'platform': str,
@@ -16,7 +17,10 @@ def import_courses(filename, user_id):
         'content_hours': float,
         'has_cert': bool
     }
-    data = pd.read_csv(f"imports/{filename}", dtype=col_types, index_col=False, header=0)
+
+    filepath = os.path.join(app.instance_path, 'imports', filename)
+
+    data = pd.read_csv(filepath, dtype=col_types, index_col=False, header=0, skip_blank_lines=True)
 
     for row in data.itertuples(index=False):
         # print(row.name)
@@ -60,7 +64,7 @@ def import_courses(filename, user_id):
     # print(f"NAME: {start} TYPE: {type(start)}")
     # print(f"NAME: {has_cert} TYPE: {type(has_cert)}")
 
-    print(response_msg)
+    return(response_msg)
 
 
-import_courses("test_courses.csv", user_id=1)
+# upload_courses("test_courses.csv", user_id=1)
