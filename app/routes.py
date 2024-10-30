@@ -190,7 +190,7 @@ def concepts_page():
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     concepts = [concept for concept in get_concepts]
 
-    return render_template('concepts.html', concepts=concepts, badge=concept_categories)
+    return render_template('concepts.html', concepts=concepts, concept_badge=concept_categories)
 
 
 @app.route('/courses')
@@ -879,6 +879,23 @@ def delete_project(num):
 
             return redirect(url_for("projects_page"))
     return render_template("delete.html", form=form, object="Project", item=project_to_delete)
+
+
+@app.route('/concepts/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_concept(num):
+    concept_to_delete = db.session.execute(db.select(Concept).where(Concept.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(concept_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("concepts_page"))
+    return render_template("delete.html", form=form, object="Concept", item=concept_to_delete)
 
 
 ##################################### IMPORT PAGES ########################################
