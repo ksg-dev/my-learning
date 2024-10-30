@@ -747,11 +747,20 @@ def concept_detail(num):
 
     libraries = [library for library in target_concept.libraries]
     projects = [project for project in target_concept.projects]
+    codelinks = [codelink for codelink in target_concept.codelinks]
+    apis = [api for api in target_concept.apis]
+    tools = [tool for tool in target_concept.tools]
+    resources = [resource for resource in target_concept.resources]
 
     return render_template('concept-detail.html',
                            concept=target_concept,
                            projects=projects,
                            libraries=libraries,
+                           codelinks=codelinks,
+                           apis=apis,
+                           tools=tools,
+                           resources=resources,
+                           resource_badge=resource_categories,
                            concept_badge=concept_categories)
 
 

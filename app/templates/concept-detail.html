@@ -93,6 +93,133 @@
 	 </div>
 		  <!-- End Table with hoverable rows -->
 
+<!--	All CodeLinks for Concept Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">CodeLinks</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">CodeLink</th>
+			    <th scope="col">Project</th>
+				<th scope="col">Link</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for codelink in codelinks %}
+			  <tr>
+				<th scope="row">{{ codelink.id }}</th>
+				<td>{{ codelink.name }}</td>
+			    <td>{{ codelink.project.name }}</td>
+				<td><a href="{{ codelink.link }}" target="_blank"><i class="bi bi-code-slash"></i></a></td>
+				<td>{% for concept in codelink.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+<!--	All APIs for Concept Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Linked APIs</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">API</th>
+			    <th scope="col">Description</th>
+				<th scope="col">Docs</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for api in apis %}
+			  <tr>
+				<th scope="row">{{ api.id }}</th>
+				<td>{{ api.name }}</td>
+			    <td>{{ api.description }}</td>
+				<td><a href="{{ api.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
+				<td>{% for concept in api.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+<!--	All Tools for Concept Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Linked Tools & Utilities</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">Tool/Utility</th>
+			    <th scope="col">Description</th>
+				<th scope="col">Link</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for tool in tools %}
+			  <tr>
+				<th scope="row">{{ tool.id }}</th>
+				<td>{{ tool.name }}</td>
+			    <td>{{ tool.description }}</td>
+				<td><a href="{{ tool.url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
+				<td>{% for concept in tool.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+<!--	All Resources for Concept Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Linked Resources</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">Resource</th>
+			    <th scope="col">Type</th>
+				<th scope="col">URL</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for resource in resources %}
+			  <tr>
+				<th scope="row">{{ resource.id }}</th>
+				<td>{{ resource.name }}</td>
+			    <td><span class="badge {{ resource_badge[resource.type][1] }}"><i class="bi {{ resource_badge[resource.type][2] }} me-1"></i> {{ resource_badge[resource.type][0] }}</span></td>
+				<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
+				<td>{% for concept in resource.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
 
     <section class="section">
         <div class="col-lg-6">
