@@ -13,15 +13,17 @@
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
           <li class="breadcrumb-item">Concepts</li>
-		  <li class="breadcrumb-item active">{{ concept.concept_term }} Usage</li>
+		  <li class="breadcrumb-item active">Usage</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
 		<div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ concept.concept_term }} Usage</h5>
-					<p>Category: {{ concept.category }}</p>
+              <h5 class="card-title">{{ concept.concept_term }}</h5>
+				{% if concept.category %}
+					<p><span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span></p>
+				{% endif %}
 					<p>Description: {{ concept.description }}</p>
 					<p>Date Added: {{ concept.date_added }}</p>
 
@@ -55,9 +57,38 @@
 			{% endfor %}
 			</tbody>
 		  </table>
-			<a href="{{ url_for('add_new_project') }}">
-		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Project</button>
-			</a>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+<!--	All Libraries for Concept Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Linked Libraries</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">Library</th>
+			    <th scope="col">Description</th>
+				<th scope="col">Docs</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for library in libraries %}
+			  <tr>
+				<th scope="row">{{ library.id }}</th>
+				<td>{{ library.name }}</td>
+			    <td>{{ library.description }}</td>
+				<td><a href="{{ library.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
+				<td>{% for concept in library.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
 		</div>
 	 </div>
 		  <!-- End Table with hoverable rows -->

@@ -49,7 +49,7 @@
 			{% for concept in concepts %}
 			  <tr>
 				<th scope="row">{{ concept.id }}</th>
-				<td>{{ concept.concept_term }}</td>
+				<td><a href="{{ url_for('concept_detail', num=concept.id ) }}">{{ concept.concept_term }}</a></td>
 				<td>{{ concept.category }}</td>
 				<td>{{ concept.description }}</td>
 			  </tr>

@@ -51,10 +51,10 @@ resource_categories = {
 # To show concept categories across pages, pass to index as badge=dict
 # 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
 concept_categories = {
-    'library': ['Cheatsheet', 'bg-warning text-dark', 'bi-box'],
-    'api': ['Diagram', 'bg-primary', 'bi-outlet'],
-    'tool': ['Quick Reference', 'bg-info text-dark', 'bi-tools'],
-    'resource': ['Template', 'bg-success', 'bi-bookshelf'],
+    'library': ['Library', 'bg-warning text-dark', 'bi-box'],
+    'api': ['API', 'bg-primary', 'bi-outlet'],
+    'tool': ['Tool', 'bg-info text-dark', 'bi-tools'],
+    'resource': ['Resource', 'bg-success', 'bi-bookshelf'],
     'topic': ['Topic', 'bg-danger', 'bi-hash'],
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
@@ -744,23 +744,15 @@ def project_detail(num):
 @login_required
 def concept_detail(num):
     target_concept = db.session.execute(db.select(Concept).where(Concept.id == num)).scalar()
-    # projects = []
-    # for project in target_concept.projects:
-    #     projects.append(project.name)
-    #     print([concept.concept_term for concept in project.concepts])
 
-    # libraries = []
-    # for library in target_concept.libraries:
-    #     print(library.name)
-    #     print([concept.concept_term for concept in library.concepts])
+    libraries = [library for library in target_concept.libraries]
     projects = [project for project in target_concept.projects]
-    print(f"target: {target_concept.projects}")
-    print(f"proj list: {projects}")
-
 
     return render_template('concept-detail.html',
                            concept=target_concept,
-                           projects=projects)
+                           projects=projects,
+                           libraries=libraries,
+                           concept_badge=concept_categories)
 
 
 ##################################### UPDATE PAGES ########################################
