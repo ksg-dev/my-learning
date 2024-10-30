@@ -1,0 +1,4 @@
+﻿name,description,assignment_link,start,complete,section,lecture,repo,concepts,course
+flash-card-app,flash card app for studying languages using tkinter gui,https://www.udemy.com/course/100-days-of-code/learn/lecture/20944498#overview,6/12/2024,6/13/2024,Day 31,234,flash-card-app,tkinter+gui+error handling+pandas+random+csv,100 Days of Code
+hangman,hangman project for command line,https://www.udemy.com/course/100-days-of-code/learn/lecture/19140848#overview,4/26/2024,4/29/2024,Day 7,52,hangman,random+for loop+CLI,100 Days of Code
+django-blog,blog built w django framework,https://www.udemy.com/course/django-with-data-science/learn/lecture/18773756?start=0#overview,4/13/2023,4/13/2023,1,2,django-blog,django+models+sqlite3,Django w Data Science

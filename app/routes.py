@@ -24,10 +24,10 @@ from app.models import User, Course, Project, CodeLink, Concept, Library, API, T
 from app.forms import (RegisterForm, LoginForm,
                        NewCourseForm, NewProjectForm, NewCodeLinkForm, NewConceptForm,
                        NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm,
-                       DeleteForm, UploadForm)
+                       DeleteForm, UploadForm, UpdateProjectForm)
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
-from app.upload import upload_courses
+from app.upload import upload_courses, upload_projects
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -776,6 +776,47 @@ def update_course(num):
             return redirect(url_for("course_detail", num=num, course_badge=course_statuses))
     return render_template('update.html', form=form, object="Course")
 
+
+@app.route('/projects/<int:num>/update', methods=["GET", "POST"])
+@login_required
+def update_project(num):
+    project_to_update = db.session.execute(db.select(Project).where(Project.id == num)).scalar()
+    proj_concepts = project_to_update.concepts
+    # concepts_list = [concept.concept_term.lower() for concept in proj_concepts]
+    form = UpdateProjectForm(obj=project_to_update)
+    # form.concepts.data = concepts_list
+
+    # repos = db.session.execute(db.select(Repository).where(Repository.user_id == current_user.id)).scalars().all()
+    # form.repo.choices = [(g.id, g.name) for g in repos]
+    # form.course.choices = [(g.id, g.name) for g in Course.query.all()]
+
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+    # project_concepts = project_to_update.concepts
+    # print(f"project concepts: {project_concepts}")
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            project_to_update.name = form.name.data
+            project_to_update.description = form.description.data
+            project_to_update.assignment_link = form.assignment_link.data
+            project_to_update.section = form.section.data
+            project_to_update.lecture = form.lecture.data
+
+            # form_concepts = form.concepts.data
+
+            if form.start_date.data:
+                project_to_update.start = form.start_date.data
+            if form.complete_date.data:
+                project_to_update.complete = form.complete_date.data
+
+            db.session.commit()
+
+            flash("Success! Record Updated.")
+
+            return redirect(url_for("project_detail", num=num))
+    return render_template('update.html', form=form, object="Project")
+
 ##################################### DELETE PAGES ########################################
 
 
@@ -794,6 +835,23 @@ def delete_course(num):
 
             return redirect(url_for("courses_page"))
     return render_template("delete.html", form=form, object="Course", item=course_to_delete)
+
+
+@app.route('/projects/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_project(num):
+    project_to_delete = db.session.execute(db.select(Project).where(Project.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(project_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("projects_page"))
+    return render_template("delete.html", form=form, object="Project", item=project_to_delete)
 
 
 ##################################### IMPORT PAGES ########################################
@@ -815,3 +873,21 @@ def import_courses():
 
         return redirect(url_for('courses_page'))
     return render_template('upload.html', form=form, object="Course")
+
+@app.route('/projects/upload', methods=["GET", "POST"])
+def import_projects():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_projects(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('projects_page'))
+    return render_template('upload.html', form=form, object="Project")

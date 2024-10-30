@@ -30,7 +30,13 @@
 					<p>Complete: {{ project.complete }}</p>
 					<p>Description/Parameters: {{ project.description }}</p>
 					<p>Date Added: {{ project.date_added }}</p>
-              </div>
+              <a href="{{ url_for('update_project', num=project.id) }}">
+			  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Update Project</button>
+			</a>
+			<a href="{{ url_for('delete_project', num=project.id) }}">
+		  <button type="button" class="btn btn-danger"><i class="bi bi-exclamation-triangle"></i> Delete Project</button>
+			</a>
+				 </div>
 		  </div><!-- End Project Details -->
 
 

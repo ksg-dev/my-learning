@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from app import db, app
-from app.models import Course
+from app.models import Course, Project, Repository, Concept
 from datetime import date
 import os
 
@@ -67,4 +67,77 @@ def upload_courses(filename, user_id):
     return(response_msg)
 
 
-# upload_courses("test_courses.csv", user_id=1)
+def upload_projects(filename, user_id):
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    col_types = {
+        'name': str,
+        'description': str,
+        'assignment_link': str,
+        'start': str,
+        'complete': str,
+        'section': str,
+        'lecture': str,
+        'repo': str,
+        'concepts': str,
+        'course': str,
+    }
+
+    filepath = os.path.join(app.instance_path, 'imports', filename)
+
+    data = pd.read_csv(filepath, dtype=col_types, index_col=False, header=0, skip_blank_lines=True)
+
+    for row in data.itertuples(index=False):
+        # Handle relationship fields
+        # Look up Repo
+        target_repo = db.session.execute(db.select(Repository).where(Repository.name == row.repo)).scalar()
+
+        # Lookup Course
+        target_course = db.session.execute(db.select(Course).where(Course.name == row.course)).scalar()
+
+        new_project = Project(
+            name=row.name,
+            description=row.description,
+            assignment_link=row.assignment_link,
+            start=pd.to_datetime(row.start),
+            complete=pd.to_datetime(row.complete),
+            section=row.section,
+            lecture=row.lecture,
+            repo=target_repo,
+            course=target_course,
+            date_added=date.today(),
+            user_id=user_id
+        )
+
+        db.session.add(new_project)
+        # print(new_project.name)
+        # print(new_project.repo)
+        # print(new_project.course)
+
+        # print(new_project)
+
+        # Concepts
+        concepts = row.concepts.split('+')
+        # print(concepts)
+        for c in concepts:
+            if c.lower() not in all_concepts:
+                concept = Concept(
+                    concept_term=c,
+                    date_added=date.today()
+                )
+
+                db.session.add(concept)
+            concept = Concept.query.filter_by(concept_term=c).first()
+
+            new_project.concepts.append(concept)
+
+        db.session.add(new_project)
+        db.session.commit()
+    response_msg = "Project Upload Successful"
+
+    return response_msg
+
+
+
+# upload_projects("test_projects.csv", user_id=1)

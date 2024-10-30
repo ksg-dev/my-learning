@@ -142,6 +142,18 @@ class NewResourceForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+# UPDATE FORMS
+class UpdateProjectForm(FlaskForm):
+    name = StringField("Project Name", validators=[InputRequired()])
+    description = TextAreaField("Project Description/Parameters", validators=[Optional()])
+    assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
+    start_date = DateField("Start Date", validators=[Optional()])
+    complete_date = DateField("Complete Date", validators=[Optional()])
+    section = StringField("Course Section")
+    lecture = StringField("Course Lecture or Lesson")
+    submit = SubmitField("Submit")
+
+
 # DELETE FORM
 class DeleteForm(FlaskForm):
     submit = SubmitField("Confirm Delete")
@@ -153,6 +165,9 @@ class UploadForm(FlaskForm):
         FileAllowed(['csv'], 'csv files only!')
     ])
     submit = SubmitField("Submit")
+
+
+
 
 
 

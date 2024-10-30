@@ -23,7 +23,7 @@
 		<div class="card-body">
 		  <h5 class="card-title">Delete {{ object }}</h5>
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Are you SUPER sure you want to delete the {{ object }}: {{ item.title }}?
+                Are you SUPER sure you want to delete the {{ object }}: {{ item.name }}?
 				This cannot be undone.
               </div>
 			{{ render_form(form, novalidate=True) }}
