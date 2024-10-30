@@ -740,6 +740,29 @@ def project_detail(num):
     return render_template('project-detail.html', project=target_project, concepts=proj_concepts)
 
 
+@app.route('/concepts/<int:num>')
+@login_required
+def concept_detail(num):
+    target_concept = db.session.execute(db.select(Concept).where(Concept.id == num)).scalar()
+    # projects = []
+    # for project in target_concept.projects:
+    #     projects.append(project.name)
+    #     print([concept.concept_term for concept in project.concepts])
+
+    # libraries = []
+    # for library in target_concept.libraries:
+    #     print(library.name)
+    #     print([concept.concept_term for concept in library.concepts])
+    projects = [project for project in target_concept.projects]
+    print(f"target: {target_concept.projects}")
+    print(f"proj list: {projects}")
+
+
+    return render_template('concept-detail.html',
+                           concept=target_concept,
+                           projects=projects)
+
+
 ##################################### UPDATE PAGES ########################################
 
 

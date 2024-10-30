@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Concept Detail{% endblock %}
+
+{% block content %}
+	<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>{{ concept.concept_term }}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">My Learning</li>
+          <li class="breadcrumb-item">Concepts</li>
+		  <li class="breadcrumb-item active">{{ concept.concept_term }} Usage</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+		<div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ concept.concept_term }} Usage</h5>
+					<p>Category: {{ concept.category }}</p>
+					<p>Description: {{ concept.description }}</p>
+					<p>Date Added: {{ concept.date_added }}</p>
+
+				 </div>
+		  </div><!-- End Concept Details -->
+
+
+<!--	All Projects for Concept Table-->
+	 <div class="card">
+		<div class="card-body">
+		  <h5 class="card-title">Linked Projects</h5>
+
+		  <!-- Table with hoverable rows -->
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th scope="col">#</th>
+				<th scope="col">Project Name</th>
+				<th scope="col">Repo</th>
+				<th scope="col">Concepts</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for project in projects %}
+			  <tr>
+				<th scope="row">{{ project.id }}</th>
+				<td>{{ project.name }}</td>
+				<td>{{ project.repo.name }}</td>
+				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+			  </tr>
+			{% endfor %}
+			</tbody>
+		  </table>
+			<a href="{{ url_for('add_new_project') }}">
+		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Project</button>
+			</a>
+		</div>
+	 </div>
+		  <!-- End Table with hoverable rows -->
+
+
+    <section class="section">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Example Card</h5>
+              <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
+            </div>
+          </div>
+        </div>
+    </section>
+	</main> <!-- End #main -->
+{% endblock %}
+
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
