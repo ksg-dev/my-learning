@@ -224,7 +224,10 @@ def projects_page():
     sorted_concepts = dict(
         sorted(top_concepts.items(), key=lambda item: item[1], reverse=True))
 
-    return render_template('projects.html', projects=projects, top_concepts=top_concepts)
+    top_10_list = list(sorted_concepts)[:10]
+    top_10 = {concept: count for (concept, count) in sorted_concepts.items() if concept in top_10_list}
+
+    return render_template('projects.html', projects=projects, top_concepts=top_10)
 
 
 @app.route('/codelinks')
