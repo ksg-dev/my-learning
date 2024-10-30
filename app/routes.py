@@ -731,7 +731,7 @@ def project_detail(num):
     proj_concepts = []
 
     for concept in target_project.concepts:
-        proj_concepts.append(concept.concept_term)
+        proj_concepts.append(concept)
 
     # # Sort descending
     # sorted_concepts = dict(
