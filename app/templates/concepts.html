@@ -39,7 +39,6 @@
 		  <table class="table table-hover">
 			<thead>
 			  <tr>
-				<th scope="col">#</th>
 				<th scope="col">Concept</th>
 				<th scope="col">Category</th>
 			    <th scope="col">Projects</th>
@@ -54,7 +53,6 @@
 			<tbody>
 			{% for concept in concepts %}
 			  <tr>
-				<th scope="row">{{ concept.id }}</th>
 				<td><a href="{{ url_for('concept_detail', num=concept.id ) }}">{{ concept.concept_term }}</a></td>
 				{% if concept.category %}
 				  <td><span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span></td>

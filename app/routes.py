@@ -187,7 +187,7 @@ def home():
 @login_required
 def concepts_page():
     # Get concepts
-    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    get_concepts = db.session.execute(db.select(Concept).order_by(func.lower(Concept.concept_term))).scalars().all()
     concepts = [concept for concept in get_concepts]
 
     return render_template('concepts.html', concepts=concepts, concept_badge=concept_categories)
