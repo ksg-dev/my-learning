@@ -1,11 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, Field, SelectField
+from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, Field, SelectField, RadioField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms.validators import InputRequired, URL, Optional
 from wtforms.widgets import TextInput
 from app import db
 from app.models import Course, Project, Concept
-
 
 # Create Custom "Tag" Field for Concepts
 class ConceptListField(Field):
@@ -94,7 +93,15 @@ class NewCodeLinkForm(FlaskForm):
 
 class NewConceptForm(FlaskForm):
     concept = StringField("Concept or Term", validators=[InputRequired()])
-    category = StringField("Category")
+    category = RadioField("Category",
+                           choices=[
+                               ('library', 'Library'),
+                               ('api', 'API'),
+                               ('tool', 'Tool'),
+                               ('resource', 'Resource'),
+                               ('topic', 'Topic'),
+                               ('other', 'Other'),
+                           ], coerce=str)
     description = TextAreaField("Description")
     submit = SubmitField("Submit")
 
