@@ -731,7 +731,7 @@ def project_detail(num):
     # sorted_concepts = dict(
     #     sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
 
-    return render_template('project-detail.html', project=target_project, concepts=proj_concepts)
+    return render_template('project-detail.html', project=target_project, concepts=proj_concepts, concept_badge=concept_categories)
 
 
 @app.route('/concepts/<int:num>')

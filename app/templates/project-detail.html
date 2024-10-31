@@ -40,6 +40,25 @@
 		  </div><!-- End Project Details -->
 
 
+		<div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Libraries/APIs Used</h5>
+
+              <!-- Top Concepts List group With Badges -->
+              <ul class="list-group">
+				  {% for concept in concepts %}
+				  {% if concept.category == 'library' or concept.category == 'api' %}
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+					  {{ concept.concept_term }}
+					  <span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
+                </li>
+				  {% endif %}
+				  {% endfor %}
+              </ul><!-- End Top Concepts List Group -->
+
+            </div>
+          </div>
+
 	<div class="card">
             <div class="card-body">
               <h5 class="card-title">Top Concepts</h5>
