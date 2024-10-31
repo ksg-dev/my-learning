@@ -218,14 +218,16 @@ def upload_libraries(filename, user_id):
     return response_msg
 
 
-def upload_libraries(filename, user_id):
+def upload_apis(filename, user_id):
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
     col_types = {
         'name': str,
         'description': str,
+        'url': str,
         'doc_link': str,
+        'requires_login': bool,
         'concepts': str,
     }
 
@@ -235,46 +237,48 @@ def upload_libraries(filename, user_id):
 
     for row in data.itertuples(index=False):
 
-        new_library = Library(
+        new_api = API(
             name=row.name,
             description=row.description,
+            url=row.url,
             doc_link=row.doc_link,
+            requires_login=row.requires_login,
             date_added=date.today(),
             user_id=user_id
         )
 
-        db.session.add(new_library)
+        db.session.add(new_api)
 
         # Concepts
         concepts = row.concepts.split('+')
 
         # If name in list, fetch and check for category, if none - update
-        if new_library.name.lower() in all_concepts:
+        if new_api.name.lower() in all_concepts:
             concept_check = db.session.execute(
-                db.select(Concept).where(func.lower(Concept.concept_term) == func.lower(new_library.name))).scalar()
+                db.select(Concept).where(func.lower(Concept.concept_term) == func.lower(new_api.name))).scalar()
 
             if not concept_check.category:
-                concept_check.category = "library"
+                concept_check.category = "api"
 
                 db.session.add(concept_check)
 
                 # add asset name to list of referenced concepts
-                new_library.concepts.append(concept_check)
+                new_api.concepts.append(concept_check)
 
         # if name not in all_concepts, add new to db
         else:
             add_asset = Concept(
-                concept_term=new_library.name,
-                category='library',
+                concept_term=new_api.name,
+                category='api',
                 date_added=date.today()
             )
 
             db.session.add(add_asset)
 
             # add asset name to list of referenced concepts
-            new_library.concepts.append(add_asset)
+            new_api.concepts.append(add_asset)
             # add asset name to all concepts list
-            all_concepts.append(new_library.name.lower())
+            all_concepts.append(new_api.name.lower())
 
 
         for c in concepts:
@@ -287,11 +291,11 @@ def upload_libraries(filename, user_id):
                 db.session.add(concept)
             concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(c)).first()
 
-            new_library.concepts.append(concept)
+            new_api.concepts.append(concept)
 
-        db.session.add(new_library)
+        db.session.add(new_api)
         db.session.commit()
-    response_msg = "Library Upload Successful"
+    response_msg = "API Upload Successful"
 
     return response_msg
 
