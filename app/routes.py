@@ -27,7 +27,7 @@ from app.forms import (RegisterForm, LoginForm,
                        DeleteForm, UploadForm, UpdateProjectForm)
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
-from app.upload import upload_courses, upload_projects, upload_libraries
+from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -953,7 +953,7 @@ def import_projects():
 
 
 @app.route('/libraries/upload', methods=["GET", "POST"])
-def import_libraries():
+def import_libs():
     form = UploadForm()
 
     if form.validate_on_submit():
@@ -969,3 +969,60 @@ def import_libraries():
 
         return redirect(url_for('libraries_page'))
     return render_template('upload.html', form=form, object="Library")
+
+
+@app.route('/apis/upload', methods=["GET", "POST"])
+def import_apis():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_apis(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('apis_page'))
+    return render_template('upload.html', form=form, object="API")
+
+
+@app.route('/tools/upload', methods=["GET", "POST"])
+def import_tools():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_tools(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('tools_page'))
+    return render_template('upload.html', form=form, object="Tool")
+
+
+@app.route('/resources/upload', methods=["GET", "POST"])
+def import_resources():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_resources(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('resources_page'))
+    return render_template('upload.html', form=form, object="Resource")
