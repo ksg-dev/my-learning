@@ -1,0 +1,3 @@
+﻿name,description,doc_link,concepts
+WTForms,form injection for python,https://wtforms.readthedocs.io/en/3.0.x/fields/#basic-fields,forms+fields
+flask-wtf,wrapper for wtforms for flask,https://flask-wtf.readthedocs.io/en/1.2.x/api/#module-flask_wtf,forms+wtforms+flask

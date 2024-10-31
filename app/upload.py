@@ -2,8 +2,9 @@
 import pandas as pd
 import numpy as np
 from app import db, app
-from app.models import Course, Project, Repository, Concept
+from app.models import Course, Project, Repository, Concept, Library, API, Tool, Resource
 from datetime import date
+from sqlalchemy import func
 import os
 
 def upload_courses(filename, user_id):
@@ -137,6 +138,85 @@ def upload_projects(filename, user_id):
     response_msg = "Project Upload Successful"
 
     return response_msg
+
+
+def upload_libraries(filename, user_id):
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    col_types = {
+        'name': str,
+        'description': str,
+        'doc_link': str,
+        'concepts': str,
+    }
+
+    filepath = os.path.join(app.instance_path, 'imports', filename)
+
+    data = pd.read_csv(filepath, dtype=col_types, index_col=False, header=0, skip_blank_lines=True)
+
+    for row in data.itertuples(index=False):
+
+        new_library = Library(
+            name=row.name,
+            description=row.description,
+            doc_link=row.doc_link,
+            date_added=date.today(),
+            user_id=user_id
+        )
+
+        db.session.add(new_library)
+
+        # Concepts
+        concepts = row.concepts.split('+')
+
+        # If name in list, fetch and check for category, if none - update
+        if new_library.name.lower() in all_concepts:
+            concept_check = db.session.execute(
+                db.select(Concept).where(func.lower(Concept.concept_term) == func.lower(new_library.name))).scalar()
+
+            if not concept_check.category:
+                concept_check.category = "library"
+
+                db.session.add(concept_check)
+
+                # add asset name to list of referenced concepts
+                new_library.concepts.append(concept_check)
+
+        # if name not in all_concepts, add new to db
+        else:
+            add_asset = Concept(
+                concept_term=new_library.name,
+                category='library',
+                date_added=date.today()
+            )
+
+            db.session.add(add_asset)
+
+            # add asset name to list of referenced concepts
+            new_library.concepts.append(add_asset)
+            # add asset name to all concepts list
+            all_concepts.append(new_library.name.lower())
+
+
+        for c in concepts:
+            if c.lower() not in all_concepts:
+                concept = Concept(
+                    concept_term=c,
+                    date_added=date.today()
+                )
+
+                db.session.add(concept)
+            concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(c)).first()
+
+            new_library.concepts.append(concept)
+
+        db.session.add(new_library)
+        db.session.commit()
+    response_msg = "Library Upload Successful"
+
+    return response_msg
+
 
 
 

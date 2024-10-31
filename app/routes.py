@@ -27,7 +27,7 @@ from app.forms import (RegisterForm, LoginForm,
                        DeleteForm, UploadForm, UpdateProjectForm)
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
-from app.upload import upload_courses, upload_projects
+from app.upload import upload_courses, upload_projects, upload_libraries
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -950,3 +950,22 @@ def import_projects():
 
         return redirect(url_for('projects_page'))
     return render_template('upload.html', form=form, object="Project")
+
+
+@app.route('/libraries/upload', methods=["GET", "POST"])
+def import_libraries():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_libraries(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('libraries_page'))
+    return render_template('upload.html', form=form, object="Library")

@@ -1,0 +1,4 @@
+﻿name,description,doc_link,concepts
+tkinter,python library for gui,https://docs.python.org/3/library/tkinter.html#,gui+interface
+SQLAlchemy,database toolkit for python,https://docs.sqlalchemy.org/en/20/orm/quickstart.html,database+db+models+tables+data
+Flask-SQLAlchemy,wrapper for using SQLAlchemy with Flask,https://flask-sqlalchemy.palletsprojects.com/en/stable/quickstart/,database+db+models+tables+data+sqlalchemy
