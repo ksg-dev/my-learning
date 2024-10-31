@@ -374,7 +374,7 @@ def add_new_project(course_id=None):
 
                     db.session.add(concept)
 
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
+                concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
 
                 new_proj.concepts.append(concept)
 
@@ -422,7 +422,7 @@ def add_new_codelink():
 
                     db.session.add(concept)
 
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
+                concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
 
                 new_codelink.concepts.append(concept)
 
@@ -500,7 +500,7 @@ def add_new_library():
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
+                concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
@@ -569,7 +569,7 @@ def add_new_api():
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
+                concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
@@ -637,7 +637,7 @@ def add_new_tool():
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                concept = Concept.query.filter_by(concept_term=concept_name).first()
+                concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
                     concept = Concept(
                         concept_term=concept_name,
@@ -658,8 +658,6 @@ def add_new_tool():
 @login_required
 def add_new_resource():
     form = NewResourceForm()
-    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
-    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
 
     if form.validate_on_submit():
         new_resource = Resource(
@@ -677,8 +675,8 @@ def add_new_resource():
 
         if len(form_concepts) > 0:
             for concept_name in form_concepts:
-                # concept = Concept.query.filter_by(concept_term=concept_name).first()
-                if not concept_name.lower() not in all_concepts:
+                concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+                if not concept:
                     concept = Concept(
                         concept_term=concept_name,
                         date_added=date.today()
@@ -686,7 +684,7 @@ def add_new_resource():
 
                     db.session.add(concept)
 
-                    new_resource.concepts.append(concept)
+                new_resource.concepts.append(concept)
 
         db.session.add(new_resource)
         db.session.commit()
