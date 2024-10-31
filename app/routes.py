@@ -469,11 +469,11 @@ def add_new_library():
 
         form_concepts = form.concepts.data
 
+
         # If name in list, fetch and check for category, if none - update
         if new_lib.name.lower() in all_concepts:
-            concept_check = db.session.execute(db.select(Concept).where(Concept.concept_term == new_lib.name)).scalar()
-            if not concept_check:
-                concept_check = db.session.execute(db.select(Concept).where(func.lower(Concept.concept_term) == new_lib.name.lower())).scalar()
+            concept_check = db.session.execute(
+                db.select(Concept).where(func.lower(Concept.concept_term) == func.lower(new_lib.name))).scalar()
 
             if not concept_check.category:
                 concept_check.category = "library"
@@ -541,10 +541,8 @@ def add_new_api():
 
         # If name in list, fetch and check for category, if none - update
         if new_api.name.lower() in all_concepts:
-            concept_check = db.session.execute(db.select(Concept).where(Concept.concept_term == new_api.name)).scalar()
-            if not concept_check:
-                concept_check = db.session.execute(
-                    db.select(Concept).where(func.lower(Concept.concept_term) == new_api.name.lower())).scalar()
+            concept_check = db.session.execute(
+                db.select(Concept).where(func.lower(Concept.concept_term) == func.lower(new_api.name))).scalar()
 
             if not concept_check.category:
                 concept_check.category = "api"
@@ -609,10 +607,8 @@ def add_new_tool():
 
         # If name in list, fetch and check for category, if none - update
         if new_tool.name.lower() in all_concepts:
-            concept_check = db.session.execute(db.select(Concept).where(Concept.concept_term == new_tool.name)).scalar()
-            if not concept_check:
-                concept_check = db.session.execute(
-                    db.select(Concept).where(func.lower(Concept.concept_term) == new_tool.name.lower())).scalar()
+            concept_check = db.session.execute(
+                db.select(Concept).where(func.lower(Concept.concept_term) == func.lower(new_tool.name))).scalar()
 
             if not concept_check.category:
                 concept_check.category = "tool"
