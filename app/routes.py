@@ -437,7 +437,7 @@ def add_new_concept():
     form = NewConceptForm()
     if form.validate_on_submit():
         new_concept = Concept(
-            concept_term=form.concept.data,
+            concept_term=form.concept_term.data,
             category=form.category.data,
             description=form.description.data,
             date_added=date.today()
@@ -847,33 +847,17 @@ def update_concept(num):
 
     if request.method == "POST":
         if form.validate_on_submit():
-            concept_to_update.concept_term = form.concept.data
+            concept_to_update.concept_term = form.concept_term.data
             concept_to_update.category = form.category.data
-            course_to_update.url = form.url.data
-            course_to_update.instructor = form.instructor.data
-            course_to_update.content_hours = form.content_hours.data
-            course_to_update.has_cert = form.has_cert.data
+            concept_to_update.description = form.description.data
 
-            if form.start_date.data:
-                course_to_update.start = form.start_date.data
-            if form.complete_date.data:
-                course_to_update.complete = form.complete_date.data
-
-            if course_to_update.complete:
-                course_to_update.status = 'complete'
-            elif course_to_update.start:
-                course_to_update.status = 'in-progress'
-            else:
-                course_to_update.status = 'not-started'
-
-            print(course_to_update.status)
 
             db.session.commit()
 
             flash("Success! Record Updated.")
 
-            return redirect(url_for("course_detail", num=num, course_badge=course_statuses))
-    return render_template('update.html', form=form, object="Course")
+            return redirect(url_for("concept_detail", num=num, concept_badge=concept_categories))
+    return render_template('update.html', form=form, object="Concept")
 
 ##################################### DELETE PAGES ########################################
 

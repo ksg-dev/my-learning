@@ -24,8 +24,14 @@
 				{% if concept.category %}
 					<p><span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span></p>
 				{% endif %}
-					<p>Description: {{ concept.description }}</p>
+					<p><i class="bi bi-info-circle"> {{ concept.description }}</i></p>
 					<p>Date Added: {{ concept.date_added }}</p>
+				<a href="{{ url_for('update_concept', num=concept.id) }}">
+		  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update</button>
+			</a>
+			<a href="{{ url_for('delete_concept', num=concept.id) }}">
+		  <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete</button>
+			</a>
 
 				 </div>
 		  </div><!-- End Concept Details -->

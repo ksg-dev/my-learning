@@ -92,7 +92,7 @@ class NewCodeLinkForm(FlaskForm):
 
 
 class NewConceptForm(FlaskForm):
-    concept = StringField("Concept or Term", validators=[InputRequired()])
+    concept_term = StringField("Concept or Term", validators=[InputRequired()])
     category = RadioField("Category",
                            choices=[
                                ('library', 'Library'),
