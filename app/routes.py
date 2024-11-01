@@ -777,6 +777,44 @@ def library_detail(num):
                            concept_badge=concept_categories)
 
 
+@app.route('/apis/<int:num>')
+@login_required
+def api_detail(num):
+    target_api = db.session.execute(db.select(API).where(API.id == num)).scalar()
+    api_concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(target_api.name)).first()
+
+    projects = [project for project in api_concept.projects]
+    codelinks = [codelink for codelink in api_concept.codelinks]
+    resources = [resource for resource in api_concept.resources]
+
+    return render_template('api-detail.html',
+                           api=target_api,
+                           projects=projects,
+                           codelinks=codelinks,
+                           resources=resources,
+                           resource_badge=resource_categories,
+                           concept_badge=concept_categories)
+
+
+@app.route('/tools/<int:num>')
+@login_required
+def tool_detail(num):
+    target_tool = db.session.execute(db.select(Tool).where(Tool.id == num)).scalar()
+    tool_concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(target_tool.name)).first()
+
+    projects = [project for project in tool_concept.projects]
+    codelinks = [codelink for codelink in tool_concept.codelinks]
+    resources = [resource for resource in tool_concept.resources]
+
+    return render_template('tool-detail.html',
+                           tool=target_tool,
+                           projects=projects,
+                           codelinks=codelinks,
+                           resources=resources,
+                           resource_badge=resource_categories,
+                           concept_badge=concept_categories)
+
+
 ##################################### UPDATE PAGES ########################################
 
 
