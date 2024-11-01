@@ -970,6 +970,74 @@ def delete_concept(num):
     return render_template("delete.html", form=form, object="Concept", item=concept_to_delete)
 
 
+@app.route('/libraries/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_library(num):
+    library_to_delete = db.session.execute(db.select(Library).where(Library.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(library_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("libraries_page"))
+    return render_template("delete.html", form=form, object="Library", item=library_to_delete)
+
+
+@app.route('/apis/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_api(num):
+    api_to_delete = db.session.execute(db.select(API).where(API.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(api_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("apis_page"))
+    return render_template("delete.html", form=form, object="API", item=api_to_delete)
+
+
+@app.route('/tools/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_tool(num):
+    tool_to_delete = db.session.execute(db.select(Tool).where(Tool.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(tool_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("tools_page"))
+    return render_template("delete.html", form=form, object="Tool", item=tool_to_delete)
+
+
+@app.route('/resources/<int:num>/delete', methods=["GET", "POST"])
+@login_required
+def delete_resource(num):
+    resource_to_delete = db.session.execute(db.select(Resource).where(Resource.id == num)).scalar()
+    form = DeleteForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            db.session.delete(resource_to_delete)
+            db.session.commit()
+
+            flash("Success! Record Deleted.")
+
+            return redirect(url_for("resources_page"))
+    return render_template("delete.html", form=form, object="Resource", item=resource_to_delete)
+
+
 ##################################### IMPORT PAGES ########################################
 
 @app.route('/courses/upload', methods=["GET", "POST"])
