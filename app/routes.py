@@ -996,19 +996,52 @@ def update_library(num):
 @app.route('/apis/<int:num>/update', methods=["GET", "POST"])
 @login_required
 def update_api(num):
-    api_to_update = db.session.execute(db.select(API).where(API.id == num)).scalar()
-    form = NewAPIForm(obj=api_to_update)
+    update_target = db.session.execute(db.select(API).where(API.id == num)).scalar()
+    form = NewAPIForm()
+    concepts_list = [concept.concept_term for concept in update_target.concepts]
 
-    if request.method == "POST":
+    if request.method == "GET":
+        form.name.data = update_target.name
+        form.description.data = update_target.description
+        form.url.data = update_target.url
+        form.doc_link.data = update_target.doc_link
+        form.requires_login.data = update_target.requires_login
+        form.concepts.data = concepts_list
+
+    elif request.method == "POST":
         if form.validate_on_submit():
-            api_to_update.name = form.name.data
-            api_to_update.description = form.description.data
-            api_to_update.url = form.url.data
-            api_to_update.doc_link = form.doc_link.data
-            api_to_update.requires_login = form.requires_login.data
+            update_target.name = form.name.data
+            update_target.description = form.description.data
+            update_target.url = form.url.data
+            update_target.doc_link = form.doc_link.data
+            update_target.requires_login = form.requires_login.data
 
             form_concepts = form.concepts.data
+            lower = [concept.lower() for concept in concepts_list]
 
+            # Loop through list of concepts on form - if not on existing list of concepts, add
+            for concept_name in form_concepts:
+                if concept_name.lower() not in lower:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+                    if not concept:
+                        concept = Concept(
+                            concept_term=concept_name,
+                            date_added=date.today()
+                        )
+
+                        db.session.add(concept)
+
+                    update_target.concepts.append(concept)
+
+            lower_form_list = [concept.lower() for concept in form_concepts]
+            # Check for concept removal
+            for concept_name in concepts_list:
+                if concept_name.lower() not in lower_form_list:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+
+                    update_target.concepts.remove(concept)
 
             db.session.commit()
 
@@ -1021,17 +1054,50 @@ def update_api(num):
 @app.route('/tools/<int:num>/update', methods=["GET", "POST"])
 @login_required
 def update_tool(num):
-    tool_to_update = db.session.execute(db.select(Tool).where(Tool.id == num)).scalar()
-    form = NewToolForm(obj=tool_to_update)
+    update_target = db.session.execute(db.select(Tool).where(Tool.id == num)).scalar()
+    form = NewToolForm()
+    concepts_list = [concept.concept_term for concept in update_target.concepts]
 
-    if request.method == "POST":
+    if request.method == "GET":
+        form.name.data = update_target.name
+        form.description.data = update_target.description
+        form.url.data = update_target.url
+        form.doc_link.data = update_target.doc_link
+        form.concepts.data = concepts_list
+
+    elif request.method == "POST":
         if form.validate_on_submit():
-            tool_to_update.name = form.name.data
-            tool_to_update.description = form.description.data
-            tool_to_update.url = form.url.data
-            tool_to_update.doc_link = form.doc_link.data
+            update_target.name = form.name.data
+            update_target.description = form.description.data
+            update_target.url = form.url.data
+            update_target.doc_link = form.doc_link.data
 
             form_concepts = form.concepts.data
+            lower = [concept.lower() for concept in concepts_list]
+
+            # Loop through list of concepts on form - if not on existing list of concepts, add
+            for concept_name in form_concepts:
+                if concept_name.lower() not in lower:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+                    if not concept:
+                        concept = Concept(
+                            concept_term=concept_name,
+                            date_added=date.today()
+                        )
+
+                        db.session.add(concept)
+
+                    update_target.concepts.append(concept)
+
+            lower_form_list = [concept.lower() for concept in form_concepts]
+            # Check for concept removal
+            for concept_name in concepts_list:
+                if concept_name.lower() not in lower_form_list:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+
+                    update_target.concepts.remove(concept)
 
 
             db.session.commit()
@@ -1045,17 +1111,50 @@ def update_tool(num):
 @app.route('/resources/<int:num>/update', methods=["GET", "POST"])
 @login_required
 def update_resource(num):
-    resource_to_update = db.session.execute(db.select(Resource).where(Resource.id == num)).scalar()
-    form = NewResourceForm(obj=resource_to_update)
+    update_target = db.session.execute(db.select(Resource).where(Resource.id == num)).scalar()
+    form = NewResourceForm()
+    concepts_list = [concept.concept_term for concept in update_target.concepts]
 
-    if request.method == "POST":
+    if request.method == "GET":
+        form.name.data = update_target.name
+        form.description.data = update_target.description
+        form.type.data = update_target.type
+        form.resource_url.data = update_target.resource_url
+        form.concepts.data = concepts_list
+
+    elif request.method == "POST":
         if form.validate_on_submit():
-            resource_to_update.name = form.name.data
-            resource_to_update.description = form.description.data
-            resource_to_update.type = form.type.data
-            resource_to_update.resource_url = form.resource_url.data
+            update_target.name = form.name.data
+            update_target.description = form.description.data
+            update_target.type = form.type.data
+            update_target.resource_url = form.resource_url.data
 
             form_concepts = form.concepts.data
+            lower = [concept.lower() for concept in concepts_list]
+
+            # Loop through list of concepts on form - if not on existing list of concepts, add
+            for concept_name in form_concepts:
+                if concept_name.lower() not in lower:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+                    if not concept:
+                        concept = Concept(
+                            concept_term=concept_name,
+                            date_added=date.today()
+                        )
+
+                        db.session.add(concept)
+
+                    update_target.concepts.append(concept)
+
+            lower_form_list = [concept.lower() for concept in form_concepts]
+            # Check for concept removal
+            for concept_name in concepts_list:
+                if concept_name.lower() not in lower_form_list:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+
+                    update_target.concepts.remove(concept)
 
 
             db.session.commit()

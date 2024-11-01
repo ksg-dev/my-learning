@@ -23,10 +23,11 @@
             <div class="card-body">
               <h5 class="card-title">{{ api.name }}</h5>
 				<p><i class="bi bi-info-circle"> {{ api.description }}</i></p>
-				<p><i class="bi bi-link"></i><a href="{{ api.url }}" target="_blank">Go There</a></p>
-				<p><i class="bi bi-link"></i><a href="{{ api.doc_link }}" target="_blank">Go to Docs</a></p>
-				<p>Date Added: {{ api.date_added }}</p>
-				<a href="">
+				<p><i class="bi bi-link-45deg"></i><a href="{{ api.url }}" target="_blank">Go There</a></p>
+				<p><i class="bi bi-link-45deg"></i><a href="{{ api.doc_link }}" target="_blank">Go to Docs</a></p>
+				<p><i class="bi bi-calendar2-plus">{{ api.date_added }}</i></p>
+				<p>{% for concept in api.concepts %} <span class="badge rounded-pill bg-info"> {{ concept.concept_term }} </span> {% endfor %}</p>
+				<a href="{{ url_for('update_api', num=api.id) }}">
 		  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update</button>
 			</a>
 			<a href="{{ url_for('delete_api', num=api.id) }}">
