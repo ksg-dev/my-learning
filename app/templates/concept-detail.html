@@ -56,7 +56,7 @@
 			{% for project in projects %}
 			  <tr>
 				<th scope="row">{{ project.id }}</th>
-				<td>{{ project.name }}</td>
+				<td><a href="{{ url_for('project_detail', num=project.id) }}">{{ project.name }}</a></td>
 				<td>{{ project.repo.name }}</td>
 				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
 			  </tr>
@@ -87,7 +87,7 @@
 			{% for library in libraries %}
 			  <tr>
 				<th scope="row">{{ library.id }}</th>
-				<td>{{ library.name }}</td>
+				<td><a href="{{ url_for('library_detail', num=library.id) }}">{{ library.name }}</a></td>
 			    <td>{{ library.description }}</td>
 				<td><a href="{{ library.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
 				<td>{% for concept in library.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
