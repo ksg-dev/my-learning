@@ -859,21 +859,18 @@ def update_course(num):
 @login_required
 def update_project(num):
     project_to_update = db.session.execute(db.select(Project).where(Project.id == num)).scalar()
-    proj_concepts = project_to_update.concepts
-    # concepts_list = [concept.concept_term.lower() for concept in proj_concepts]
-    form = UpdateProjectForm(obj=project_to_update)
-    # form.concepts.data = concepts_list
+    form = UpdateProjectForm()
+    concepts_list = [concept.concept_term for concept in project_to_update.concepts]
 
-    # repos = db.session.execute(db.select(Repository).where(Repository.user_id == current_user.id)).scalars().all()
-    # form.repo.choices = [(g.id, g.name) for g in repos]
-    # form.course.choices = [(g.id, g.name) for g in Course.query.all()]
+    if request.method == "GET":
+        form.name.data = project_to_update.name
+        form.description.data = project_to_update.description
+        form.assignment_link.data = project_to_update.assignment_link
+        form.section.data = project_to_update.section
+        form.lecture.data = project_to_update.lecture
+        form.concepts.data = concepts_list
 
-    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
-    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
-    # project_concepts = project_to_update.concepts
-    # print(f"project concepts: {project_concepts}")
-
-    if request.method == "POST":
+    elif request.method == "POST":
         if form.validate_on_submit():
             project_to_update.name = form.name.data
             project_to_update.description = form.description.data
@@ -881,7 +878,32 @@ def update_project(num):
             project_to_update.section = form.section.data
             project_to_update.lecture = form.lecture.data
 
-            # form_concepts = form.concepts.data
+            form_concepts = form.concepts.data
+            lower = [concept.lower() for concept in concepts_list]
+
+            # Loop through list of concepts on form - if not on existing list of concepts, add
+            for concept_name in form_concepts:
+                if concept_name.lower() not in lower:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+                    if not concept:
+                        concept = Concept(
+                            concept_term=concept_name,
+                            date_added=date.today()
+                        )
+
+                        db.session.add(concept)
+
+                    project_to_update.concepts.append(concept)
+
+            lower_form_list = [concept.lower() for concept in form_concepts]
+            # Check for concept removal
+            for concept_name in concepts_list:
+                if concept_name.lower() not in lower_form_list:
+                    concept = Concept.query.filter(
+                        func.lower(Concept.concept_term) == func.lower(concept_name)).first()
+
+                    project_to_update.concepts.remove(concept)
 
             if form.start_date.data:
                 project_to_update.start = form.start_date.data
@@ -930,7 +952,7 @@ def update_library(num):
         form.doc_link.data = library_to_update.doc_link
         form.concepts.data = concepts_list
 
-    if request.method == "POST":
+    elif request.method == "POST":
         if form.validate_on_submit():
             library_to_update.name = form.name.data
             library_to_update.description = form.description.data
