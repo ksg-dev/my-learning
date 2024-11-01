@@ -46,12 +46,10 @@
 			<tbody>
 			{% for api in apis %}
 			  <tr>
-				<td>{{ api.name }}</td>
-			    <td><a href="{{ url_for('api_detail', num=api.id ) }}">{{ api.description }}</a></td>
+				<td><a href="{{ url_for('api_detail', num=api.id ) }}">{{ api.name }}</a></td>
+			    <td>{{ api.description }}</td>
 			    <td><a href="{{ api.url }}"><i class="bi bi-link45-deg"></i></a></td>
 			    <td><a href="{{ api.doc_link }}"><i class="bi bi-file-earmark-text"></i></a></td>
-
-				<td>{{ api.requires_login }}</td>
 				  {% if api.requires_login %}
 				<td><i class="bi bi-person-bounding-box"></i></td>
 				  {% else %}
