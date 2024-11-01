@@ -12,7 +12,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item">Courses</li>
+          <li class="breadcrumb-item"><a href="{{ url_for('courses_page') }}">Courses</a> </li>
 		  <li class="breadcrumb-item active">{{ course.name }}</li>
         </ol>
       </nav>

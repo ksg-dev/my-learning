@@ -758,6 +758,25 @@ def concept_detail(num):
                            concept_badge=concept_categories)
 
 
+@app.route('/libraries/<int:num>')
+@login_required
+def library_detail(num):
+    target_library = db.session.execute(db.select(Library).where(Library.id == num)).scalar()
+    library_concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(target_library.name)).first()
+
+    projects = [project for project in library_concept.projects]
+    codelinks = [codelink for codelink in library_concept.codelinks]
+    resources = [resource for resource in library_concept.resources]
+
+    return render_template('library-detail.html',
+                           library=target_library,
+                           projects=projects,
+                           codelinks=codelinks,
+                           resources=resources,
+                           resource_badge=resource_categories,
+                           concept_badge=concept_categories)
+
+
 ##################################### UPDATE PAGES ########################################
 
 
