@@ -136,14 +136,14 @@ class NewToolForm(FlaskForm):
 class NewResourceForm(FlaskForm):
     name = StringField("Resource Name", validators=[InputRequired()])
     description = TextAreaField("Description")
-    type = SelectField("Resource Type",
-                       choices=[
-                           ('other', 'Other'),
-                           ('cheatsheet', 'Cheatsheet'),
-                           ('diagram', 'Diagram'),
-                           ('quickref', 'Quick Reference'),
-                           ('template', 'Template')
-                       ])
+    type = RadioField("Resource Type",
+                      choices=[
+                            ('other', 'Other'),
+                            ('cheatsheet', 'Cheatsheet'),
+                            ('diagram', 'Diagram'),
+                            ('quickref', 'Quick Reference'),
+                            ('template', 'Template')
+                          ], coerce=str)
     resource_url = StringField("Resource URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')
     submit = SubmitField("Submit")

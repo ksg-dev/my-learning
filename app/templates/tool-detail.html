@@ -29,7 +29,7 @@
 				<a href="">
 		  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update</button>
 			</a>
-			<a href="">
+			<a href="{{ url_for('delete_tool', num=tool.id) }}">
 		  <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete</button>
 			</a>
 

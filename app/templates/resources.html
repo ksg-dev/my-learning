@@ -41,6 +41,8 @@
 				<th scope="col">Description</th>
 				<th scope="col">Type</th>
 				<th scope="col">Link</th>
+			    <th scope="col">Delete</th>
+			    <th scope="col">Update</th>
 			  </tr>
 			</thead>
 			<tbody>
@@ -51,6 +53,8 @@
 				<td>{{ resource.description }}</td>
 			    <td><span class="badge {{ badge[resource.type][1] }}"><i class="bi {{ badge[resource.type][2] }} me-1"></i> {{ badge[resource.type][0] }}</span></td>
 				<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
+				<td><a href="{{ url_for('delete_resource', num=resource.id) }}"><i class="bi bi-trash"></i></a></td>
+				<td><a href="{{ url_for('update_resource', num=resource.id) }}"><i class="bi bi-input-cursor-text"></i></a></td>
 			  </tr>
 			{% endfor %}
 			</tbody>
