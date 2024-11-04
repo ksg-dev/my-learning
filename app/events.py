@@ -2,8 +2,10 @@
 import os
 from dotenv import load_dotenv
 import requests
+from requests import HTTPError
+
 from app import app, db
-from app.models import Event
+from app.models import Event, Repository
 from datetime import datetime
 from pprint import pprint
 
@@ -90,18 +92,19 @@ class GetGitHub:
         all_repos = []
 
         for repo in repos:
-            repo_name = repo["name"]
-            get_sha = f"{GH_API_URL}repos/{GH_USERNAME}/{repo_name}/git/ref/heads/main"
+            # default_branch = repo["default_branch"]
+                # repo_name = repo["name"]
+                # get_sha = f"{GH_API_URL}repos/{GH_USERNAME}/{repo_name}/git/ref/heads/{default_branch}"
+                #
+                # sha_response = requests.get(url=get_sha, headers=headers)
+                # sha_response.raise_for_status()
+                # data = sha_response.json()
+                # sha = data["object"]["sha"]
 
-            sha_response = requests.get(url=get_sha, headers=headers)
-            sha_response.raise_for_status()
-            data = sha_response.json()
-            sha = data["object"]["sha"]
 
             new_repo = {
                 "id": repo["id"],
                 "name": repo["name"],
-                "sha": sha,
                 "created": repo["created_at"],
                 "language": repo["language"]
             }
@@ -110,6 +113,38 @@ class GetGitHub:
             all_repos.append(new_repo)
 
         return all_repos
+
+    def get_tree(self, repo):
+        user = self.user
+        headers = {
+            "accept": "application/vnd.github+json",
+            "authorization": f"Bearer {self.token}",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        # Get repo data for default branch
+        get_repo = f"{GH_API_URL}repos/{user}/{repo}"
+        repo_response = requests.get(url=get_repo, headers=headers)
+        repo_response.raise_for_status()
+        repo_data = repo_response.json()
+        default_branch = repo_data["default_branch"]
+
+        # Get sha reference
+        get_sha = f"{GH_API_URL}repos/{user}/{repo}/git/ref/heads/{default_branch}"
+
+        sha_response = requests.get(url=get_sha, headers=headers)
+        sha_response.raise_for_status()
+        data = sha_response.json()
+        sha = data["object"]["sha"]
+
+        # Get tree
+        get_tree = f"{GH_API_URL}repos/{user}/{repo}/git/trees/{sha}"
+
+        tree_response = requests.get(url=get_tree, headers=headers)
+        tree_response.raise_for_status()
+        tree = tree_response.json()["tree"]
+
+        return tree
 
 
 def validate_id(model, ref_id):

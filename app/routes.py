@@ -36,6 +36,7 @@ load_dotenv()
 
 DB_URI = os.environ["DB_URI"]
 
+GH_API_URL = "https://api.github.com/"
 GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
 # To show resource categories across pages, pass to index as badge=dict
@@ -727,11 +728,18 @@ def project_detail(num):
     for concept in target_project.concepts:
         proj_concepts.append(concept)
 
+    user = db.get_or_404(User, current_user.id)
+    # print(user.name)
+    gh = GetGitHub(user.name)
+    tree = gh.get_tree(target_project.repo.name)
+    # gh = GetGitHub(user.name).get_tree(user=user, repo=target_project.repo)
+    # print(tree)
+
     # # Sort descending
     # sorted_concepts = dict(
     #     sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
 
-    return render_template('project-detail.html', project=target_project, concepts=proj_concepts, concept_badge=concept_categories)
+    return render_template('project-detail.html', project=target_project, concepts=proj_concepts, concept_badge=concept_categories, tree=tree)
 
 
 @app.route('/concepts/<int:num>')
