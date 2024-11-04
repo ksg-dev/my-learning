@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from app import db, app
-from app.models import Course, Project, Repository, Concept, Library, API, Tool, Resource
+from app.models import Course, Project, Repository, Concept, Library, API, Tool, Resource, CodeLink
 from datetime import date
 from sqlalchemy import func
 import os
@@ -428,6 +428,62 @@ def upload_resources(filename, user_id):
         db.session.add(new_resource)
         db.session.commit()
     response_msg = "Resource Upload Successful"
+
+    return response_msg
+
+
+def upload_codelinks(filename, user_id):
+    get_concepts = db.session.execute(db.select(Concept)).scalars().all()
+    all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    col_types = {
+        'name': str,
+        'link': str,
+        'project': str,
+        'concepts': str,
+    }
+
+    filepath = os.path.join(app.instance_path, 'imports', filename)
+
+    data = pd.read_csv(filepath, dtype=col_types, index_col=False, header=0, skip_blank_lines=True)
+
+    for row in data.itertuples(index=False):
+
+        frags = row.link.split('/')
+        target_repo = frags[4]
+        get_repo = db.session.execute(db.select(Repository).where(Repository.name == target_repo)).scalar()
+        get_project = db.session.execute(db.select(Project).where(Project.name == row.project)).scalar()
+
+        new_codelink = CodeLink(
+            name=row.name,
+            link=row.link,
+            project_id=get_project.id,
+            repo_id=get_repo.id,
+            date_added=date.today(),
+            user_id=user_id
+        )
+
+        db.session.add(new_codelink)
+
+        # Concepts
+        concepts = row.concepts.split('+')
+
+
+        for c in concepts:
+            if c.lower() not in all_concepts:
+                concept = Concept(
+                    concept_term=c,
+                    date_added=date.today()
+                )
+
+                db.session.add(concept)
+            concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(c)).first()
+
+            new_codelink.concepts.append(concept)
+
+        db.session.add(new_codelink)
+        db.session.commit()
+    response_msg = "CodeLink Upload Successful"
 
     return response_msg
 

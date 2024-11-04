@@ -27,7 +27,7 @@ from app.forms import (RegisterForm, LoginForm,
                        DeleteForm, UploadForm, UpdateProjectForm)
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
-from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources
+from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources, upload_codelinks
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -1400,3 +1400,22 @@ def import_resources():
 
         return redirect(url_for('resources_page'))
     return render_template('upload.html', form=form, object="Resource")
+
+
+@app.route('/codelinks/upload', methods=["GET", "POST"])
+def import_codelinks():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        upload = form.upload.data
+        filename = secure_filename(upload.filename)
+        upload.save(os.path.join(
+            app.instance_path, 'imports', filename
+        ))
+
+        msg = upload_codelinks(filename, current_user.id)
+
+        flash(msg)
+
+        return redirect(url_for('codelinks_page'))
+    return render_template('upload.html', form=form, object="CodeLink")
