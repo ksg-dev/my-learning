@@ -103,6 +103,9 @@ class Repository(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(250), nullable=False)
 
+    # # sha to get tree
+    # sha: Mapped[str] = mapped_column(String(250), nullable=True)
+
     # Create Foreign Key, "users.id" the users refers to the tablename of User.
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
     # Create reference to the User object. The "repos" refers to the repos property in the User class.

@@ -68,6 +68,7 @@ class GetGitHub:
         # print(f"all_events: {all_events}")
         return all_events
 
+
     def get_repos(self, user):
         headers = {
             "accept": "application/vnd.github+json",
@@ -81,6 +82,7 @@ class GetGitHub:
 
         user_repos = f"{GH_API_URL}users/{user}/repos"
 
+
         response = requests.get(url=user_repos, headers=headers, params=params)
         response.raise_for_status()
         repos = response.json()
@@ -88,9 +90,18 @@ class GetGitHub:
         all_repos = []
 
         for repo in repos:
+            repo_name = repo["name"]
+            get_sha = f"{GH_API_URL}repos/{GH_USERNAME}/{repo_name}/git/ref/heads/main"
+
+            sha_response = requests.get(url=get_sha, headers=headers)
+            sha_response.raise_for_status()
+            data = sha_response.json()
+            sha = data["object"]["sha"]
+
             new_repo = {
                 "id": repo["id"],
                 "name": repo["name"],
+                "sha": sha,
                 "created": repo["created_at"],
                 "language": repo["language"]
             }
@@ -104,4 +115,5 @@ class GetGitHub:
 def validate_id(model, ref_id):
     check = db.session.execute(db.select(model).filter_by(id=ref_id)).first()
     return check
+
 
