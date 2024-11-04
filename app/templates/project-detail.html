@@ -84,6 +84,22 @@
 	 <div class="card">
 		<div class="card-body">
 		  <h5 class="card-title">{{ project.name }} Files</h5>
+			<!-- Top Concepts List group With Badges -->
+              <ul class="list-group">
+				  {% for item in tree %}
+
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+					  {% if item.type == "tree" %}
+					  <i class="bi bi-folder"> {{ item.path }}</i>
+					  {% elif item.type == "blob" %}
+					  <i class="bi bi-file-earmark-code"> {{ item.path }}</i>
+					  {% else %}
+					  {{ item.path }}
+					  {{ item.type }}
+					  {% endif %}
+                </li>
+				  {% endfor %}
+              </ul><!-- End Top Concepts List Group -->
 
 		</div>
 	 </div>
