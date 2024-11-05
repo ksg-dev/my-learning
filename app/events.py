@@ -122,6 +122,10 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+        params = {
+            "recursive": True
+        }
+
         # Get repo data for default branch
         get_repo = f"{GH_API_URL}repos/{user}/{repo}"
         repo_response = requests.get(url=get_repo, headers=headers)
@@ -140,10 +144,15 @@ class GetGitHub:
         # Get tree
         get_tree = f"{GH_API_URL}repos/{user}/{repo}/git/trees/{sha}"
 
-        tree_response = requests.get(url=get_tree, headers=headers)
+        # tree_root = requests.get(url=get_tree, headers=headers)
+        tree_response = requests.get(url=get_tree, headers=headers, params=params)
+        # tree_root.raise_for_status()
         tree_response.raise_for_status()
+        # troot = tree_root.json()["tree"]
         tree = tree_response.json()["tree"]
 
+        # print(f"************")
+        # print(tree)
         return tree
 
 
