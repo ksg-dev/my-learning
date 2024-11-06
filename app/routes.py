@@ -28,6 +28,7 @@ from app.forms import (RegisterForm, LoginForm,
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
 from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources, upload_codelinks
+from app.tree import generate_tree, generate_dict
 
 bootstrap = Bootstrap5(app)
 ckeditor = CKEditor(app)
@@ -732,7 +733,9 @@ def project_detail(num):
     # print(user.name)
     gh = GetGitHub(user.name)
     tree = gh.get_tree(target_project.repo.name)
-    # gh = GetGitHub(user.name).get_tree(user=user, repo=target_project.repo)
+    # tree = generate_tree(tree_data, target_project.repo.name)
+    # tree = generate_dict(tree_data)
+    # tree = GetGitHub(user.name).get_tree(user=user, repo=target_project.repo)
     # print(tree)
 
     # # Sort descending
