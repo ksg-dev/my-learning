@@ -86,22 +86,23 @@
 		  <h5 class="card-title">{{ project.name }} Files</h5>
 			<!-- Accordion without outline borders -->
               <div class="accordion accordion-flush" id="accordionFlushExample">
-                {% for i in tree.children %}
-				  <div class="accordion-item">
-                  <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-						{{ i.name }}
-                    </button>
-                  </h2>
-					{% if i.children %}
-					  {% for x in i.children %}
-                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">{{ x.name }}</div>
-                  </div>
-					  {% endfor %}
-				    {% endif %}
-                </div>
+			  	{% for i in tree.children %}
+					<div class="accordion-item">
+                  	<h2 class="accordion-header" id="flush-headingOne">
+					  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+							 {{ i.name }}
+						</button>
+					  </h2>
+				  	{% if i.children %}
+						{% for x in i.children %}
+							<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+								<div class="accordion-body">>> {{ x.name }}</div>
+                  		</div>
+						{% endfor %}
+					  {% endif %}
+                		</div>
 				  {% endfor %}
+
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="flush-headingTwo">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
