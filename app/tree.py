@@ -1,81 +1,78 @@
 # Takes GitHub json tree file and structures data for route
-from app.events import GetGitHub
-from pathlib import PurePath
-import json
-from treelib import Node, Tree
+from github import Github, Auth
+from dotenv import load_dotenv
+import os
 
-class TreeObject:
-    def __init__(self, path_name, obj_type):
-        self.path_name = path_name
-        self.obj_type = obj_type
-        self.name = self.clean_name()
-        self.parent = self.get_parent()
-        # self.sha = sha
-        # self.url = url
+# load_dotenv()
 
-    def get_parent(self):
-        path_check = self.path_name.split("/")
+GH_TOKEN = os.environ["GITHUB_TOKEN"]
+# GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
-        if len(path_check) > 1:
-            parent = path_check[-2]
 
+def make_tree(username, repo_name):
+    # Authenticate w token
+    auth = Auth.Token(GH_TOKEN)
+
+    # Pygithub object
+    g = Github(auth=auth)
+
+    # Get user by username
+    user = g.get_user(username)
+
+    # Get repo contents recursively
+    repo = g.get_repo(f"{username}/{repo_name}")
+    contents = repo.get_contents("")
+    tree = {
+        'name': 'root',
+        'children': []
+    }
+
+    while contents:
+        file_content = contents.pop(0)
+        segments = file_content.path.split("/")
+        depth = len(segments)
+        name = segments[-1]
+        if depth > 1:
+            parent = segments[-2]
         else:
-            parent = None
+            parent = "root"
 
-        return parent
+        if parent == tree["name"]:
+            tree["children"].append({
+                'name': name,
+                'children': []
+            })
 
-    def clean_name(self):
-        name = self.path_name.split("/")[-1]
+        elif depth == 2:
+            for entry in tree["children"]:
+                if parent == entry["name"]:
+                    entry["children"].append({
+                        'name': name,
+                        'children': []
+                    })
 
-        return name
-
-def generate_dict(data):
-
-    html_parts = []
-
-
-    for item in data:
-        depth = item["path"].count("/")
-        indent = "  " * depth
-        name = item["path"].split("/")[-1]
-        if item["type"] == "blob":
-            html_parts.append(f"{indent}<i class='bi bi-file-earmark-code'> {name}</i>")
-        else:
-            html_parts.append(f"{indent}<i class='bi bi-folder'> {name}</i>")
-
-    # html_parts.append("</pre>")
-    # html_content = "\n".join(html_parts)
-    # print(html_parts)
-
-    for i in html_parts:
-        print(i)
-    # return html_content
-
-def generate_tree(data, repo):
-    # Takes API json data and formats each as TreeObject
-
-    ftree = Tree()
-    ftree.create_node(f"{repo} /", f"{repo}")
-
-    for item in data:
-        pathname = item["path"]
-        obj_type = item["type"]
+        elif depth > 2:
+            for entry in tree["children"]:
+                # print(f"entry: {entry}")
+                # for key, value in entry.items():
+                    # print(f"key: {key} value: {value}")
+                if entry["name"] == segments[-3]:
+                    entry["children"].append(
+                        {
+                            'name': segments[-3],
+                            'children': [
+                                {
+                                    'name': name,
+                                    'children': []
+                                }]
+                            }
+                    )
 
 
-        new_obj = TreeObject(path_name=pathname, obj_type=obj_type)
-        if new_obj.parent is None:
-            new_obj.parent = repo
 
+        if file_content.type == "dir":
+            contents.extend(repo.get_contents(file_content.path))
 
-        check_node = ftree.get_node(new_obj.name)
-        if not check_node:
-            ftree.create_node(new_obj.name, new_obj.name, parent=new_obj.parent, data=new_obj)
+        # print(file_content)
 
-    return ftree.show(stdout=False)
-
-# gh = GetGitHub("ksg-dev")
-# tree = gh.get_tree(REPO)
-# print(generate_tree(tree, REPO))
-# generate_dict(tree)
-
-
+    return tree
