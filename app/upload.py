@@ -440,6 +440,7 @@ def upload_codelinks(filename, user_id):
 
     col_types = {
         'name': str,
+        'description': str,
         'link': str,
         'project': str,
         'concepts': str,
@@ -458,6 +459,7 @@ def upload_codelinks(filename, user_id):
 
         new_codelink = CodeLink(
             name=row.name,
+            description=row.description,
             link=row.link,
             project_id=get_project.id,
             repo_id=get_repo.id,
