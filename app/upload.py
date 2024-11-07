@@ -7,6 +7,92 @@ from datetime import date
 from sqlalchemy import func
 import os
 
+course_params = [
+    {
+        'col': 1,
+        'name': 'name',
+        'input': 'string in desired case'
+    },
+    {
+        'col': 2,
+        'name': 'platform',
+        'input': 'string in desired case'
+    },
+    {
+        'col': 3,
+        'name': 'url',
+        'input': 'url string'
+    },
+    {
+        'col': 4,
+        'name': 'instructor',
+        'input': 'string in desired case'
+    },
+    {
+        'col': 5,
+        'name': 'start',
+        'input': 'date m/dd/YYYY'
+    },
+    {
+        'col': 6,
+        'name': 'complete',
+        'input': 'date m/dd/YYYY'
+    },
+    {
+        'col': 7,
+        'name': 'content_hours',
+        'input': 'float'
+    },
+    {
+        'col': 8,
+        'name': 'has_cert',
+        'input': 'True/False case insensitive'
+    },
+]
+
+course_params = [
+    {
+        'col': 1,
+        'name': 'name',
+        'input': 'string in desired case'
+    },
+    {
+        'col': 2,
+        'name': 'platform',
+        'input': 'string in desired case'
+    },
+    {
+        'col': 3,
+        'name': 'url',
+        'input': 'url string'
+    },
+    {
+        'col': 4,
+        'name': 'instructor',
+        'input': 'string in desired case'
+    },
+    {
+        'col': 5,
+        'name': 'start',
+        'input': 'date m/dd/YYYY'
+    },
+    {
+        'col': 6,
+        'name': 'complete',
+        'input': 'date m/dd/YYYY'
+    },
+    {
+        'col': 7,
+        'name': 'content_hours',
+        'input': 'float'
+    },
+    {
+        'col': 8,
+        'name': 'has_cert',
+        'input': 'True/False case insensitive'
+    },
+]
+
 def upload_courses(filename, user_id):
     col_types = {
         'name': str,
