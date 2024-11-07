@@ -188,6 +188,7 @@ class CodeLink(db.Model):
 
     id: Mapped[int] = mapped_column(Integer,primary_key=True)
     name: Mapped[str] = mapped_column(String(250), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
     link: Mapped[str] = mapped_column(String(250), nullable=False)
 
     # Link to Repos
