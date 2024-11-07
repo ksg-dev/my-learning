@@ -48,7 +48,7 @@
                   <tr>
                     <th scope="row">{{ item.col }}</th>
                     <td>{{ item.name }}</td>
-                    <td>{{ item.input }}</td>
+                    <td>{% if item.optional %}<em>optional</em> - {% endif %}{{ item.input }}</td>
                   </tr>
 				{% endfor %}
                 </tbody>
