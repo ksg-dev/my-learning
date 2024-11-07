@@ -50,18 +50,6 @@ class Dashboard:
 
                 db.session.add(new_event)
 
-                # target_repo = db.session.execute(db.select(Repository).where(Repository.id == event["repo_id"])).scalar()
-                # target_repo.events.append(new_event)
-
-                # if not validate_repo:
-                #     new_repo = Repository(
-                #         id=event["repo_id"],
-                #         name=event["repo"],
-                #         user_id=self.user_id
-                #     )
-                #
-                #     db.session.add(new_repo)
-
                 db.session.commit()
 
     def get_event_stats(self):

@@ -33,7 +33,7 @@ class GetGitHub:
         }
 
         params = {
-            "per_page": 100
+            "per_page": 50
         }
 
         user_events = f"{GH_API_URL}users/{user}/events"
@@ -81,7 +81,7 @@ class GetGitHub:
         }
 
         params = {
-            "per_page": 100
+            "per_page": 50
         }
 
         user_repos = f"{GH_API_URL}users/{user}/repos"
