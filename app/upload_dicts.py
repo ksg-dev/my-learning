@@ -116,3 +116,64 @@ library_params = [
         'input': 'string separated by +, ex: "tkinter+gui+try block+random"'
     },
 ]
+
+api_params = [
+    {
+        'col': 1,
+        'name': 'name',
+        'input': 'string'
+    },
+    {
+        'col': 2,
+        'name': 'description',
+        'input': 'string'
+    },
+    {
+        'col': 3,
+        'name': 'url',
+        'input': 'url string'
+    },
+    {
+        'col': 4,
+        'name': 'doc_link',
+        'input': 'url string to reference docs'
+    },
+    {
+        'col': 5,
+        'name': 'requires_login',
+        'input': 'True/False case insensitive'
+    },
+    {
+        'col': 6,
+        'name': 'concepts',
+        'input': 'string separated by +, ex: "tkinter+gui+try block+random"'
+    },
+]
+
+tool_params = [
+    {
+        'col': 1,
+        'name': 'name',
+        'input': 'string'
+    },
+    {
+        'col': 2,
+        'name': 'description',
+        'input': 'string'
+    },
+    {
+        'col': 3,
+        'name': 'url',
+        'input': 'url string'
+    },
+    {
+        'col': 4,
+        'name': 'doc_link',
+        'input': 'url string to reference docs'
+    },
+    {
+        'col': 5,
+        'name': 'concepts',
+        'input': 'string separated by +, ex: "tkinter+gui+try block+random"'
+    },
+]
