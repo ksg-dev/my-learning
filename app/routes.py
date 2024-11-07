@@ -28,6 +28,7 @@ from app.forms import (RegisterForm, LoginForm,
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
 from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources, upload_codelinks
+from app.upload_dicts import course_params, project_params, library_params, api_params, tool_params, resource_params, codelink_params
 from app.tree import make_tree
 
 bootstrap = Bootstrap5(app)
@@ -1325,7 +1326,7 @@ def import_courses():
         flash(msg)
 
         return redirect(url_for('courses_page'))
-    return render_template('upload.html', form=form, object="Course")
+    return render_template('upload.html', form=form, object="Course", params=course_params)
 
 @app.route('/projects/upload', methods=["GET", "POST"])
 def import_projects():
@@ -1343,7 +1344,7 @@ def import_projects():
         flash(msg)
 
         return redirect(url_for('projects_page'))
-    return render_template('upload.html', form=form, object="Project")
+    return render_template('upload.html', form=form, object="Project", params=project_params)
 
 
 @app.route('/libraries/upload', methods=["GET", "POST"])
@@ -1362,7 +1363,7 @@ def import_libs():
         flash(msg)
 
         return redirect(url_for('libraries_page'))
-    return render_template('upload.html', form=form, object="Library")
+    return render_template('upload.html', form=form, object="Library", params=library_params)
 
 
 @app.route('/apis/upload', methods=["GET", "POST"])
@@ -1381,7 +1382,7 @@ def import_apis():
         flash(msg)
 
         return redirect(url_for('apis_page'))
-    return render_template('upload.html', form=form, object="API")
+    return render_template('upload.html', form=form, object="API", params=api_params)
 
 
 @app.route('/tools/upload', methods=["GET", "POST"])
@@ -1400,7 +1401,7 @@ def import_tools():
         flash(msg)
 
         return redirect(url_for('tools_page'))
-    return render_template('upload.html', form=form, object="Tool")
+    return render_template('upload.html', form=form, object="Tool", params=tool_params)
 
 
 @app.route('/resources/upload', methods=["GET", "POST"])
@@ -1419,7 +1420,7 @@ def import_resources():
         flash(msg)
 
         return redirect(url_for('resources_page'))
-    return render_template('upload.html', form=form, object="Resource")
+    return render_template('upload.html', form=form, object="Resource", params=resource_params)
 
 
 @app.route('/codelinks/upload', methods=["GET", "POST"])
@@ -1438,4 +1439,4 @@ def import_codelinks():
         flash(msg)
 
         return redirect(url_for('codelinks_page'))
-    return render_template('upload.html', form=form, object="CodeLink")
+    return render_template('upload.html', form=form, object="CodeLink", params=codelink_params)

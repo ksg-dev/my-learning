@@ -177,3 +177,54 @@ tool_params = [
         'input': 'string separated by +, ex: "tkinter+gui+try block+random"'
     },
 ]
+
+resource_params = [
+    {
+        'col': 1,
+        'name': 'name',
+        'input': 'string'
+    },
+    {
+        'col': 2,
+        'name': 'description',
+        'input': 'string'
+    },
+    {
+        'col': 3,
+        'name': 'type',
+        'input': 'choose one: cheatsheet, diagram, quickref, template, other'
+    },
+    {
+        'col': 4,
+        'name': 'resource_url',
+        'input': 'url string'
+    },
+    {
+        'col': 5,
+        'name': 'concepts',
+        'input': 'string separated by +, ex: "tkinter+gui+try block+random"'
+    },
+]
+
+codelink_params = [
+    {
+        'col': 1,
+        'name': 'name',
+        'input': 'string'
+    },
+    {
+        'col': 2,
+        'name': 'link',
+        'input': 'url permalink from GitHub'
+    },
+    {
+        'col': 3,
+        'name': 'project',
+        'input': 'string matching existing project name'
+    },
+    {
+        'col': 4,
+        'name': 'concepts',
+        'input': 'string separated by +, ex: "tkinter+gui+try block+random"'
+    },
+]
