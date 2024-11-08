@@ -59,6 +59,7 @@ concept_categories = {
     'tool': ['Tool', 'bg-info text-dark', 'bi-tools'],
     'resource': ['Resource', 'bg-success', 'bi-bookshelf'],
     'topic': ['Topic', 'bg-danger', 'bi-hash'],
+    'function': ['Function', 'bg-dark', 'bi-code'],
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
 

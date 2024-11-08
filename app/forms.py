@@ -100,6 +100,7 @@ class NewConceptForm(FlaskForm):
                                ('tool', 'Tool'),
                                ('resource', 'Resource'),
                                ('topic', 'Topic'),
+                               ('function', 'Function'),
                                ('other', 'Other'),
                            ], coerce=str)
     description = TextAreaField("Description")
