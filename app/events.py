@@ -73,15 +73,16 @@ class GetGitHub:
         return all_events
 
 
-    def get_repos(self, user):
+    def get_repos(self, user, first=False):
         headers = {
             "accept": "application/vnd.github+json",
             "authorization": f"Bearer {self.token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+
         params = {
-            "per_page": 50
+            "per_page": 100
         }
 
         user_repos = f"{GH_API_URL}users/{user}/repos"
@@ -105,12 +106,12 @@ class GetGitHub:
 
 
             new_repo = {
-                "id": repo["id"],
+                "id": int(repo["id"]),
                 "name": repo["name"],
                 "created": repo["created_at"],
                 "language": repo["language"]
             }
-            # print(new_repo)
+            print(new_repo)
 
             all_repos.append(new_repo)
 

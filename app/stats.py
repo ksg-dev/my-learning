@@ -38,10 +38,21 @@ class Dashboard:
             validate_repo = validate_id(Repository, event["repo_id"])
 
             if validate_event is None:
+                get_repo = db.session.execute(db.select(Repository).where(Repository.id == event["repo_id"])).scalar()
+
+                if get_repo is None:
+                    add_repo = Repository(
+                        id=event["repo_id"],
+                        name=event["repo"],
+                        user_id=self.user_id
+                    )
+                    db.session.add(add_repo)
+                    db.session.commit()
+
                 new_event = Event(
                     id=event["id"],
                     type=event["type"],
-                    repo_id=event["repo_id"],
+                    repo_id=get_repo.id,
                     commits=event["commits"],
                     create_type=event["create_type"],
                     timestamp=datetime.fromisoformat(event["timestamp"]),

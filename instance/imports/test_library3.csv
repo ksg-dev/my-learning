@@ -1,4 +1,0 @@
-﻿name,description,doc_link,concepts
-turtle,python library for gui,https://docs.python.org/3/library/tkinter.html#,gui+interface+turtle
-WTForms,database toolkit for python,https://docs.sqlalchemy.org/en/20/orm/quickstart.html,forms+fields+database
-test-turtle,testing if turtle concept here linked to turtle created in same import,https://flask-sqlalchemy.palletsprojects.com/en/stable/quickstart/,database+db+models+tables+data+sqlalchemy+turtle

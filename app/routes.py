@@ -176,6 +176,11 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
     top_20_events = recent_events[:21]
+    # for i in top_20_events:
+        # print(i.type)
+        # print(i.commits)
+        # print(i.repo_id)
+        # print(i.repo)
 
     return render_template('index.html',
                            my_events=my_events,
@@ -1356,6 +1361,13 @@ def delete_resource(num):
             return redirect(url_for("resources_page"))
     return render_template("delete.html", form=form, object="Resource", item=resource_to_delete)
 
+
+def clear_data(session):
+    meta = db.metadata
+    for table in reversed(meta.sorted_tables):
+        print(f"Clear table {table}")
+        session.execute(table.delete())
+    session.commit()
 
 ##################################### IMPORT PAGES ########################################
 
