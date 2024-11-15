@@ -1223,6 +1223,22 @@ def delete_project(num):
             return redirect(url_for("projects_page"))
     return render_template("delete.html", form=form, object="Project", item=project_to_delete)
 
+@app.route('/projects/delete-all', methods=["GET", "POST"])
+@login_required
+def bulk_delete_project():
+    form = DeleteForm()
+    rows_deleted = Project.query.all()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            try:
+                Project.query.delete()
+                db.session.commit()
+            except:
+                db.session.rollback()
+            return redirect(url_for("projects_page"))
+    return render_template("bulk-delete.html", form=form, object="Project", num_rows=len(rows_deleted))
+
 
 @app.route('/concepts/<int:num>/delete', methods=["GET", "POST"])
 @login_required
@@ -1244,18 +1260,17 @@ def delete_concept(num):
 @login_required
 def bulk_delete_concept():
     form = DeleteForm()
-    num_rows_deleted = Concept.query.all()
+    rows_deleted = Concept.query.all()
 
     if request.method == "POST":
         if form.validate_on_submit():
-            print(f"num rows: {num_rows_deleted}")
-            # try:
-                # db.session.commit()
-
-            # except:
-                # db.session.rollback()
+            try:
+                Concept.query.delete()
+                db.session.commit()
+            except:
+                db.session.rollback()
             return redirect(url_for("concepts_page"))
-    return render_template("bulk-delete.html", form=form, object="Concept", num_rows=num_rows_deleted)
+    return render_template("bulk-delete.html", form=form, object="Concept", num_rows=len(rows_deleted))
 
 
 
