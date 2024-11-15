@@ -1240,7 +1240,7 @@ def delete_concept(num):
             return redirect(url_for("concepts_page"))
     return render_template("delete.html", form=form, object="Concept", item=concept_to_delete)
 
-@app.route('concepts/delete-all', methods=["GET", "POST"])
+@app.route('/concepts/delete-all', methods=["GET", "POST"])
 @login_required
 def bulk_delete_concept():
     form = DeleteForm()
