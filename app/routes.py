@@ -1272,9 +1272,6 @@ def bulk_delete_concept():
             return redirect(url_for("concepts_page"))
     return render_template("bulk-delete.html", form=form, object="Concept", num_rows=len(rows_deleted))
 
-
-
-
 @app.route('/libraries/<int:num>/delete', methods=["GET", "POST"])
 @login_required
 def delete_library(num):
@@ -1290,6 +1287,23 @@ def delete_library(num):
 
             return redirect(url_for("libraries_page"))
     return render_template("delete.html", form=form, object="Library", item=library_to_delete)
+
+
+@app.route('/libraries/delete-all', methods=["GET", "POST"])
+@login_required
+def bulk_delete_library():
+    form = DeleteForm()
+    rows_deleted = Library.query.all()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            try:
+                Library.query.delete()
+                db.session.commit()
+            except:
+                db.session.rollback()
+            return redirect(url_for("libraries_page"))
+    return render_template("bulk-delete.html", form=form, object="Library", num_rows=len(rows_deleted))
 
 
 @app.route('/apis/<int:num>/delete', methods=["GET", "POST"])
