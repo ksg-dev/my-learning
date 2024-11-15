@@ -1240,6 +1240,25 @@ def delete_concept(num):
             return redirect(url_for("concepts_page"))
     return render_template("delete.html", form=form, object="Concept", item=concept_to_delete)
 
+@app.route('concepts/delete-all', methods=["GET", "POST"])
+@login_required
+def bulk_delete_concept():
+    form = DeleteForm()
+    num_rows_deleted = Concept.query.all()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            print(f"num rows: {num_rows_deleted}")
+            # try:
+                # db.session.commit()
+
+            # except:
+                # db.session.rollback()
+            return redirect(url_for("concepts_page"))
+    return render_template("bulk-delete.html", form=form, object="Concept", num_rows=num_rows_deleted)
+
+
+
 
 @app.route('/libraries/<int:num>/delete', methods=["GET", "POST"])
 @login_required
@@ -1441,3 +1460,5 @@ def import_codelinks():
 
         return redirect(url_for('codelinks_page'))
     return render_template('upload.html', form=form, object="CodeLink", params=codelink_params)
+
+

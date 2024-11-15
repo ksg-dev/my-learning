@@ -131,6 +131,8 @@ def upload_projects(filename, user_id):
                 )
 
                 db.session.add(concept)
+                # add concept name to all concepts list so subsequent refs don't create dupes
+                all_concepts.append(concept.concept_term.lower())
             concept = Concept.query.filter_by(concept_term=c).first()
 
             new_project.concepts.append(concept)
@@ -182,8 +184,8 @@ def upload_libraries(filename, user_id):
 
                 db.session.add(concept_check)
 
-                # add asset name to list of referenced concepts
-                new_library.concepts.append(concept_check)
+            # add asset name to list of referenced concepts
+            new_library.concepts.append(concept_check)
 
         # if name not in all_concepts, add new to db
         else:
@@ -209,6 +211,8 @@ def upload_libraries(filename, user_id):
                 )
 
                 db.session.add(concept)
+                # add concept name to all concepts list so subsequent refs don't create dupes
+                all_concepts.append(concept.concept_term.lower())
             concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(c)).first()
 
             new_library.concepts.append(concept)

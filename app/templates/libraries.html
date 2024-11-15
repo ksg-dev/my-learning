@@ -38,7 +38,8 @@
 			  <tr>
 				<th scope="col">Name</th>
 				<th scope="col">Description</th>
-				<th scope="col">Check the Docs</th>
+				<th scope="col">Concepts</th>
+			    <th scope="col">Docs</th>
 			  </tr>
 			</thead>
 			<tbody>
@@ -46,6 +47,7 @@
 			  <tr>
 			  	<td><a href="{{ url_for('library_detail', num=library.id ) }}">{{ library.name }}</a></td>
 				<td>{{ library.description }}</td>
+				<td>{% for concept in library.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
 				<td><a href="{{ library.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
 			  </tr>
 			{% endfor %}
