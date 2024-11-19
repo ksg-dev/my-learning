@@ -1365,8 +1365,11 @@ def delete_resource(num):
 def clear_data(session):
     meta = db.metadata
     for table in reversed(meta.sorted_tables):
-        print(f"Clear table {table}")
-        session.execute(table.delete())
+        if table != "users":
+            print(f"Clear table {table}")
+            session.execute(table.delete())
+        else:
+            print(f"Skipping table {table}")
     session.commit()
 
 ##################################### IMPORT PAGES ########################################

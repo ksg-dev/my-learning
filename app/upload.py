@@ -211,8 +211,8 @@ def upload_libraries(filename, user_id):
                 )
 
                 db.session.add(concept)
-                # # add concept name to all concepts list so subsequent refs don't create dupes
-                # all_concepts.append(concept.concept_term.lower())
+                # add concept name to all concepts list so subsequent refs don't create dupes
+                all_concepts.append(concept.concept_term.lower())
             concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(c)).first()
 
             new_library.concepts.append(concept)
