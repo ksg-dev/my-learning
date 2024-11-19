@@ -141,6 +141,11 @@ def logout():
     return redirect(url_for("home"))
 
 
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template("profile.html")
+
 @app.route('/')
 @app.route('/index')
 @login_required
