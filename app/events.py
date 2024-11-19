@@ -15,28 +15,34 @@ load_dotenv()
 GH_TOKEN = os.environ["GITHUB_TOKEN"]
 GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
-GH_API_URL = "https://api.github.com/"
+GH_API_URL = "https://api.github.com"
 
 class GetGitHub:
-    def __init__(self, user):
+    def __init__(self, user, bulk=False):
         self.user = user
         self.token = GH_TOKEN
-        self.events = self.get_events(user)
-        self.repos = self.get_repos(user)
+        self.bulk = bulk
+        self.events = self.get_events(user, bulk)
+        self.repos = self.get_repos(user, bulk)
 
 
-    def get_events(self, user):
+    def get_events(self, user, bulk):
         headers = {
             "accept": "application/vnd.github+json",
             "authorization": f"Bearer {self.token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-        params = {
-            "per_page": 50
-        }
+        if bulk is True:
+            params = {
+                "per_page": 100
+            }
+        else:
+            params = {
+                "per_page": 50
+            }
 
-        user_events = f"{GH_API_URL}users/{user}/events"
+        user_events = f"{GH_API_URL}/users/{user}/events"
 
         response = requests.get(url=user_events, headers=headers, params=params)
         response.raise_for_status()
@@ -73,19 +79,23 @@ class GetGitHub:
         return all_events
 
 
-    def get_repos(self, user, first=False):
+    def get_repos(self, user, bulk):
         headers = {
             "accept": "application/vnd.github+json",
             "authorization": f"Bearer {self.token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+        if bulk is True:
+            params = {
+                "per_page": 100
+            }
+        else:
+            params = {
+                "per_page": 50
+            }
 
-        params = {
-            "per_page": 100
-        }
-
-        user_repos = f"{GH_API_URL}users/{user}/repos"
+        user_repos = f"{GH_API_URL}/users/{user}/repos"
 
 
         response = requests.get(url=user_repos, headers=headers, params=params)
@@ -111,7 +121,7 @@ class GetGitHub:
                 "created": repo["created_at"],
                 "language": repo["language"]
             }
-            print(new_repo)
+            # print(new_repo)
 
             all_repos.append(new_repo)
 
@@ -137,7 +147,7 @@ class GetGitHub:
         default_branch = repo_data["default_branch"]
 
         # Get sha reference
-        get_sha = f"{GH_API_URL}repos/{user}/{repo}/git/ref/heads/{default_branch}"
+        get_sha = f"{GH_API_URL}/repos/{user}/{repo}/git/ref/heads/{default_branch}"
 
         sha_response = requests.get(url=get_sha, headers=headers)
         sha_response.raise_for_status()
@@ -145,7 +155,7 @@ class GetGitHub:
         sha = data["object"]["sha"]
 
         # Get tree
-        get_tree = f"{GH_API_URL}repos/{user}/{repo}/git/trees/{sha}"
+        get_tree = f"{GH_API_URL}/repos/{user}/{repo}/git/trees/{sha}"
 
         # tree_root = requests.get(url=get_tree, headers=headers)
         tree_response = requests.get(url=get_tree, headers=headers, params=params)

@@ -9,59 +9,67 @@ from sqlalchemy.orm import sessionmaker
 
 
 class Dashboard:
-    def __init__(self, user_id, user):
+    def __init__(self, user_id, user, bulk=False):
         self.user = user
         self.user_id = user_id
-        self.refresh_events(user)
+        self.bulk = bulk
+        self.refresh_all(user, bulk)
 
-    def refresh_events(self, user):
+    def refresh_all(self, user, bulk):
         # Get Github API Events/Repos Data
-        get_my_data = GetGitHub(user)
-        my_events = get_my_data.events
-        my_repos = get_my_data.repos
+        get_my_data = GetGitHub(user, bulk)
+        self._refresh_repos(get_my_data.repos)
+        self._refresh_events(get_my_data.events)
 
-        for repo in my_repos:
-            validate_repo1 = validate_id(Repository, repo["id"])
+    def _refresh_repos(self, data):
+        if data:
+            for repo in data:
+                validate_repo = validate_id(Repository, repo["id"])
 
-            if validate_repo1 is None:
-                new_repo = Repository(
-                    id=repo["id"],
-                    name=repo["name"],
-                    user_id=self.user_id
-                )
-
-                db.session.add(new_repo)
-                db.session.commit()
-
-        for event in my_events:
-            validate_event = validate_id(Event, event["id"])
-            validate_repo = validate_id(Repository, event["repo_id"])
-
-            if validate_event is None:
-                get_repo = db.session.execute(db.select(Repository).where(Repository.id == event["repo_id"])).scalar()
-
-                if get_repo is None:
-                    add_repo = Repository(
-                        id=event["repo_id"],
-                        name=event["repo"],
+                if validate_repo is None:
+                    new_repo = Repository(
+                        id=repo["id"],
+                        name=repo["name"],
                         user_id=self.user_id
                     )
-                    db.session.add(add_repo)
+
+                    db.session.add(new_repo)
                     db.session.commit()
 
-                new_event = Event(
-                    id=event["id"],
-                    type=event["type"],
-                    repo_id=get_repo.id,
-                    commits=event["commits"],
-                    create_type=event["create_type"],
-                    timestamp=datetime.fromisoformat(event["timestamp"]),
-                    user_id=self.user_id
-                )
+    def _refresh_events(self, data):
+        if data:
+            for event in data:
+                validate_event = validate_id(Event, event["id"])
 
-                db.session.add(new_event)
+                if validate_event is None:
+                    repo_check = validate_id(Repository, event["repo_id"])
 
-                db.session.commit()
+                    if repo_check is None:
+                        data = []
+                        repo_dict = {
+                            "id": int(event["repo_id"]),
+                            "name": event["repo"]
+                        }
+                        data.append(repo_dict)
+                        print(data)
+
+                        self._refresh_repos(data)
+
+                    get_repo = db.session.execute(db.select(Repository).where(Repository.id == event["repo_id"])).scalar()
+
+                    new_event = Event(
+                        id=event["id"],
+                        type=event["type"],
+                        repo_id=get_repo.id,
+                        commits=event["commits"],
+                        create_type=event["create_type"],
+                        timestamp=datetime.fromisoformat(event["timestamp"]),
+                        user_id=self.user_id
+                    )
+
+                    db.session.add(new_event)
+                    db.session.commit()
+
 
     def get_event_stats(self):
         engine = db.get_engine()
