@@ -1365,6 +1365,8 @@ def delete_resource(num):
 def clear_data(session):
     meta = db.metadata
     for table in reversed(meta.sorted_tables):
+        # NOTE TO SELF: if-statement does not skip over users table, clears all tables,
+        # will have to add admin user back via console
         if table != "users":
             print(f"Clear table {table}")
             session.execute(table.delete())

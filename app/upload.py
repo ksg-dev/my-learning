@@ -103,15 +103,18 @@ def upload_projects(filename, user_id):
             name=row.name,
             description=row.description,
             assignment_link=row.assignment_link,
-            start=pd.to_datetime(row.start),
-            complete=pd.to_datetime(row.complete),
             section=row.section,
             lecture=row.lecture,
-            repo=target_repo,
-            course=target_course,
+            repo_id=target_repo.id,
+            course_id=target_course.id,
             date_added=date.today(),
             user_id=user_id
         )
+
+        if row.start:
+            new_project.start=pd.to_datetime(row.start)
+        if row.complete:
+            new_project.complete=pd.to_datetime(row.complete)
 
         db.session.add(new_project)
         # print(new_project.name)
