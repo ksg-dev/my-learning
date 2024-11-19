@@ -146,6 +146,10 @@ def logout():
 def profile():
     return render_template("profile.html")
 
+@app.route('/faq')
+def faq():
+    return render_template("faq.html")
+
 @app.route('/')
 @app.route('/index')
 @login_required
