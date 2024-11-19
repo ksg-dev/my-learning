@@ -150,6 +150,10 @@ def profile():
 def faq():
     return render_template("faq.html")
 
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
 @app.route('/')
 @app.route('/index')
 @login_required
