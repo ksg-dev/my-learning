@@ -168,9 +168,41 @@ class GetGitHub:
         # print(tree)
         return tree
 
+    def get_feed(self):
+        user = self.user
+        headers = {
+            "accept": "application/vnd.github+json",
+            "authorization": f"Bearer {self.token}",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        # Get all available feeds
+        get_feeds = f"{GH_API_URL}/feeds"
+
+        response = requests.get(url=get_feeds, headers=headers)
+        response.raise_for_status()
+        all_feeds = response.json()
+        user_feed = f"{all_feeds['user_url']}"
+
+        print(all_feeds)
+
+        print(user_feed)
+        # clipped = user_feed.strip(".atom")
+        # print(clipped)
+
+        # Request for user-specific feed
+        # user_feed = requests.get(url=user_feed)
+        # user_feed.raise_for_status()
+        # my_feed = user_feed.json()
+
+        # print(my_feed)
+
+
 
 def validate_id(model, ref_id):
     check = db.session.execute(db.select(model).filter_by(id=ref_id)).first()
     return check
 
 
+# gh = GetGitHub(GH_USERNAME)
+# gh.get_feed()

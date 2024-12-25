@@ -86,7 +86,7 @@ def register():
         user_check = db.session.execute(db.select(User).where(User.email == entered_email)).scalar()
         if user_check:
             flash("That email is already registered. Login instead")
-            return redirect(url_for("login", form=form))
+            return redirect(url_for("login"))
         else:
             new_user = User(
                 email=entered_email,
@@ -115,22 +115,22 @@ def login():
 
     if form.validate_on_submit():
         email = form.email.data
-        login_password = form.password.data
+        password = form.password.data
 
         user = db.session.execute(db.select(User).where(User.email == email)).scalar()
         if user:
-            if check_password_hash(user.password, login_password):
+            if check_password_hash(user.password, password):
                 login_user(user)
 
                 return redirect(url_for("home"))
 
             else:
                 flash("Email/Password combination incorrect")
-                return redirect(url_for("login", form=form))
+                return redirect(url_for("login"))
 
         else:
             flash("We have no record of that email. Please try again.")
-            return redirect(url_for("login", form=form))
+            return redirect(url_for("login"))
 
     return render_template("login.html", form=form)
 
@@ -1241,21 +1241,21 @@ def delete_project(num):
             return redirect(url_for("projects_page"))
     return render_template("delete.html", form=form, object="Project", item=project_to_delete)
 
-@app.route('/projects/delete-all', methods=["GET", "POST"])
-@login_required
-def bulk_delete_project():
-    form = DeleteForm()
-    rows_deleted = Project.query.all()
-
-    if request.method == "POST":
-        if form.validate_on_submit():
-            try:
-                Project.query.delete()
-                db.session.commit()
-            except:
-                db.session.rollback()
-            return redirect(url_for("projects_page"))
-    return render_template("bulk-delete.html", form=form, object="Project", num_rows=len(rows_deleted))
+# @app.route('/projects/delete-all', methods=["GET", "POST"])
+# @login_required
+# def bulk_delete_project():
+#     form = DeleteForm()
+#     rows_deleted = Project.query.all()
+#
+#     if request.method == "POST":
+#         if form.validate_on_submit():
+#             try:
+#                 Project.query.delete()
+#                 db.session.commit()
+#             except:
+#                 db.session.rollback()
+#             return redirect(url_for("projects_page"))
+#     return render_template("bulk-delete.html", form=form, object="Project", num_rows=len(rows_deleted))
 
 
 @app.route('/concepts/<int:num>/delete', methods=["GET", "POST"])
@@ -1274,21 +1274,21 @@ def delete_concept(num):
             return redirect(url_for("concepts_page"))
     return render_template("delete.html", form=form, object="Concept", item=concept_to_delete)
 
-@app.route('/concepts/delete-all', methods=["GET", "POST"])
-@login_required
-def bulk_delete_concept():
-    form = DeleteForm()
-    rows_deleted = Concept.query.all()
-
-    if request.method == "POST":
-        if form.validate_on_submit():
-            try:
-                Concept.query.delete()
-                db.session.commit()
-            except:
-                db.session.rollback()
-            return redirect(url_for("concepts_page"))
-    return render_template("bulk-delete.html", form=form, object="Concept", num_rows=len(rows_deleted))
+# @app.route('/concepts/delete-all', methods=["GET", "POST"])
+# @login_required
+# def bulk_delete_concept():
+#     form = DeleteForm()
+#     rows_deleted = Concept.query.all()
+#
+#     if request.method == "POST":
+#         if form.validate_on_submit():
+#             try:
+#                 Concept.query.delete()
+#                 db.session.commit()
+#             except:
+#                 db.session.rollback()
+#             return redirect(url_for("concepts_page"))
+#     return render_template("bulk-delete.html", form=form, object="Concept", num_rows=len(rows_deleted))
 
 @app.route('/libraries/<int:num>/delete', methods=["GET", "POST"])
 @login_required
@@ -1307,22 +1307,22 @@ def delete_library(num):
     return render_template("delete.html", form=form, object="Library", item=library_to_delete)
 
 
-@app.route('/libraries/delete-all', methods=["GET", "POST"])
-@login_required
-def bulk_delete_library():
-    form = DeleteForm()
-    rows_deleted = Library.query.all()
-
-    if request.method == "POST":
-        if form.validate_on_submit():
-            try:
-                Library.query.delete()
-                db.session.commit()
-            except:
-                db.session.rollback()
-            return redirect(url_for("libraries_page"))
-    return render_template("bulk-delete.html", form=form, object="Library", num_rows=len(rows_deleted))
-
+# @app.route('/libraries/delete-all', methods=["GET", "POST"])
+# @login_required
+# def bulk_delete_library():
+#     form = DeleteForm()
+#     rows_deleted = Library.query.all()
+#
+#     if request.method == "POST":
+#         if form.validate_on_submit():
+#             try:
+#                 Library.query.delete()
+#                 db.session.commit()
+#             except:
+#                 db.session.rollback()
+#             return redirect(url_for("libraries_page"))
+#     return render_template("bulk-delete.html", form=form, object="Library", num_rows=len(rows_deleted))
+#
 
 @app.route('/apis/<int:num>/delete', methods=["GET", "POST"])
 @login_required
