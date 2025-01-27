@@ -16,6 +16,7 @@ import os
 import pandas as pd
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import BadRequestKeyError
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -147,10 +148,18 @@ def profile():
     if request.method == "POST":
         user = db.session.execute(db.select(User).where(User.email == current_user.email)).scalar()
         if user:
-            if current_user.display_name != request.form["fullName"]:
-                user.display_name = request.form["fullName"]
-            if current_user.name != request.form["company"]:
-                user.name = request.form["company"]
+            try:
+                if current_user.display_name != request.form["fullName"]:
+                    user.display_name = request.form["fullName"]
+                if current_user.name != request.form["company"]:
+                    user.name = request.form["company"]
+            # Catch error if changing password and no name data passed
+            except BadRequestKeyError:
+                # Just using random word as verification for now to fix non-hashed stored pw
+                if request.form["password"] == "bananas":
+                    if request.form["newpassword"] == request.form["renewpassword"]:
+                        user.password = generate_password_hash(request.form["newpassword"], method='pbkdf2:sha256', salt_length=8)
+
         db.session.commit()
     return render_template("profile.html")
 

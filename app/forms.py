@@ -58,6 +58,7 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+
 # Create a LoginForm to login existing users
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[InputRequired()])
