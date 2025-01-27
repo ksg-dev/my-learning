@@ -472,7 +472,7 @@
 
 			  {% for event in activity %}
                 <div class="activity-item d-flex">
-					{% if now.day == event.timestamp.day %}
+					{% if (now.day)-(now.month) == (event.timestamp.day)-(event.timestamp.month) %}
 						{% if ((now - event.timestamp).seconds // 60) < 60 %}
                   			<div class="activite-label">{{ (now - event.timestamp).seconds // 60 }} min</div>
 						{% else %}

@@ -189,11 +189,12 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
     top_20_events = recent_events[:21]
-    # for i in top_20_events:
-        # print(i.type)
-        # print(i.commits)
+    for i in top_20_events:
+        print(i.type)
+        print(i.commits)
         # print(i.repo_id)
-        # print(i.repo)
+        print(i.repo.name)
+        print(i.timestamp)
 
     return render_template('index.html',
                            my_events=my_events,
