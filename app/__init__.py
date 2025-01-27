@@ -21,4 +21,4 @@ login_manager.login_view = 'login'
 # db migration engine object
 migrate = Migrate(app, db, render_as_batch=True)
 
-from app import routes, models
+from app import routes, models, errors
