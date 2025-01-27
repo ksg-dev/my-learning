@@ -57,6 +57,14 @@ class EditProfileForm(FlaskForm):
     display_name = StringField("Display Name", validators=[InputRequired()])
     submit = SubmitField("Submit")
 
+class PasswordReset(FlaskForm):
+    codeword = StringField("Code Word", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired()])
+    password = StringField("New Password", validators=[
+        InputRequired(),
+        EqualTo('confirm', message='Passwords must match')])
+    confirm = StringField("Re-enter Password")
+    submit = SubmitField("Change Password")
 
 
 # Create a LoginForm to login existing users

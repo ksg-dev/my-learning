@@ -347,6 +347,8 @@
         </a>
       </li><!-- End Contact Page Nav -->
 
+	{% if not current_user.is_authenticated %}
+
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{ url_for('register') }}">
           <i class="bi bi-card-list"></i>
@@ -354,12 +356,23 @@
         </a>
       </li><!-- End Register Page Nav -->
 
+
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{ url_for('login') }}">
           <i class="bi bi-box-arrow-in-right"></i>
           <span>Login</span>
         </a>
       </li><!-- End Login Page Nav -->
+
+	{% else %}
+		<li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url_for('logout') }}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+
+	{% endif %}
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-error-404.html">

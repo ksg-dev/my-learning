@@ -25,7 +25,7 @@ from app.models import User, Course, Project, CodeLink, Concept, Library, API, T
 from app.forms import (RegisterForm, LoginForm,
                        NewCourseForm, NewProjectForm, NewCodeLinkForm, NewConceptForm,
                        NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm,
-                       DeleteForm, UploadForm, UpdateProjectForm)
+                       DeleteForm, UploadForm, UpdateProjectForm, PasswordReset)
 from app.events import GetGitHub, validate_id
 from app.stats import Dashboard
 from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources, upload_codelinks
@@ -163,6 +163,17 @@ def profile():
         db.session.commit()
     return render_template("profile.html")
 
+@app.route('/resetpassword', methods=["POST", "GET"])
+def secret_password_reset():
+    form = PasswordReset()
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).where(User.email == form.email.data)).scalar()
+        if user and form.codeword.data == 'bananas':
+            user.password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+        db.session.commit()
+        return redirect(url_for("login"))
+    return render_template("secret_password.html", form=form)
+
 @app.route('/faq')
 def faq():
     return render_template("faq.html")
@@ -206,12 +217,12 @@ def home():
     recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
     recent_events = [event for event in recent]
     top_20_events = recent_events[:21]
-    for i in top_20_events:
-        print(i.type)
-        print(i.commits)
-        # print(i.repo_id)
-        print(i.repo.name)
-        print(i.timestamp)
+    # for i in top_20_events:
+    #     print(i.type)
+    #     print(i.commits)
+    #     # print(i.repo_id)
+    #     print(i.repo.name)
+    #     print(i.timestamp)
 
     return render_template('index.html',
                            my_events=my_events,
