@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, DateField, DecimalField, TextAreaField, Field, SelectField, RadioField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms.validators import InputRequired, URL, Optional
+from wtforms.validators import InputRequired, URL, Optional, ValidationError, EqualTo
 from wtforms.widgets import TextInput
 from app import db
-from app.models import Course, Project, Concept
+from app.models import Course, Project, Concept, User
 
 # Create Custom "Tag" Field for Concepts
 class ConceptListField(Field):
@@ -45,7 +45,17 @@ class RegisterForm(FlaskForm):
                                InputRequired()
                            ]
                            )
+    password2 = StringField('Re-enter Password',
+                            validators=[
+                                InputRequired(),
+                                EqualTo('password')
+                            ])
     submit = SubmitField("Sign Up")
+
+class EditProfileForm(FlaskForm):
+    name = StringField("Username", validators=[InputRequired()])
+    display_name = StringField("Display Name", validators=[InputRequired()])
+    submit = SubmitField("Submit")
 
 
 # Create a LoginForm to login existing users

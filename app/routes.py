@@ -141,9 +141,17 @@ def logout():
     return redirect(url_for("home"))
 
 
-@app.route('/profile')
+@app.route('/profile', methods=["POST", "GET"])
 @login_required
 def profile():
+    if request.method == "POST":
+        user = db.session.execute(db.select(User).where(User.email == current_user.email)).scalar()
+        if user:
+            if current_user.display_name != request.form["fullName"]:
+                user.display_name = request.form["fullName"]
+            if current_user.name != request.form["company"]:
+                user.name = request.form["company"]
+        db.session.commit()
     return render_template("profile.html")
 
 @app.route('/faq')
