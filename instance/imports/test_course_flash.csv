@@ -1,0 +1,3 @@
+﻿name,platform,url,instructor,start,complete,content_hours,has_cert
+test1,testing,www.fake.com,Dr. Snape,1/1/2001,1/1/2001,10,FALSE
+Business Analytics,Udacity,,Ben,1/2/2002,1/3/2002,15,TRUE

@@ -1429,9 +1429,13 @@ def import_courses():
             app.instance_path, 'imports', filename
         ))
 
-        msg = upload_courses(filename, current_user.id)
+        msg, skipped = upload_courses(filename, current_user.id)
 
         flash(msg)
+        flash(f"{len(skipped)} items skipped due to name duplicate.")
+        if len(skipped) > 0:
+            for i in skipped:
+                flash(f"{i} skipped")
 
         return redirect(url_for('courses_page'))
     return render_template('upload.html', form=form, object="Course", params=course_params)

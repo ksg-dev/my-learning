@@ -10,6 +10,10 @@ import os
 
 
 def upload_courses(filename, user_id):
+    get_courses = db.session.execute(db.select(Course).where(Course.user_id == user_id)).scalars().all()
+    courses = [course.name.lower() for course in get_courses]
+    skipped = []
+
     col_types = {
         'name': str,
         'platform': str,
@@ -21,39 +25,44 @@ def upload_courses(filename, user_id):
         'has_cert': bool
     }
 
+
+
     filepath = os.path.join(app.instance_path, 'imports', filename)
 
     data = pd.read_csv(filepath, dtype=col_types, index_col=False, header=0, skip_blank_lines=True)
 
     for row in data.itertuples(index=False):
-        # print(row.name)
-        # print(row.platform)
-        new_course = Course(
-            name=row.name,
-            platform=row.platform,
-            url=row.url,
-            instructor=row.instructor,
-            start=pd.to_datetime(row.start),
-            complete=pd.to_datetime(row.complete),
-            content_hours=row.content_hours,
-            has_cert=row.has_cert,
-            date_added=date.today(),
-            user_id=user_id
-        )
+        print(f"courses: {courses}")
+        print(f"row name {row.name.lower()}")
+        if row.name.lower() not in courses:
+            new_course = Course(
+                name=row.name,
+                platform=row.platform,
+                url=row.url,
+                instructor=row.instructor,
+                start=pd.to_datetime(row.start),
+                complete=pd.to_datetime(row.complete),
+                content_hours=row.content_hours,
+                has_cert=row.has_cert,
+                date_added=date.today(),
+                user_id=user_id
+            )
 
-        if row.complete:
-            new_course.status = 'complete'
+            if row.complete:
+                new_course.status = 'complete'
 
-        elif row.start:
-            new_course.status = 'in-progress'
+            elif row.start:
+                new_course.status = 'in-progress'
 
+            else:
+                new_course.status = 'complete'
+
+            # print(new_course.name)
+            db.session.add(new_course)
+            db.session.commit()
         else:
-            new_course.status = 'complete'
+            skipped.append(row.name)
 
-        # print(new_course.name)
-        db.session.add(new_course)
-        db.session.commit()
-    # print(data.info())
 
     response_msg = "Course Import Successful"
 
@@ -67,7 +76,7 @@ def upload_courses(filename, user_id):
     # print(f"NAME: {start} TYPE: {type(start)}")
     # print(f"NAME: {has_cert} TYPE: {type(has_cert)}")
 
-    return(response_msg)
+    return(response_msg, skipped)
 
 
 def upload_projects(filename, user_id):

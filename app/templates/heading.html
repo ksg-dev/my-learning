@@ -230,15 +230,7 @@
 
   </header><!-- End Header -->
 
-<!-- Use Message Flashing to display feedback to the user with a <p> -->
-      {% with messages = get_flashed_messages() %}
-          {% if messages %}
-              {% for message in messages %}
-                <p class="flash">{{ message }}</p>
-              {% endfor %}
-          {% endif %}
-       {% endwith %}
-<!-- End Flashed Messages -->
+
 
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
