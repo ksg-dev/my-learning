@@ -13,6 +13,7 @@ def upload_courses(filename, user_id):
     get_courses = db.session.execute(db.select(Course).where(Course.user_id == user_id)).scalars().all()
     courses = [course.name.lower() for course in get_courses]
     skipped = []
+    success = 0
 
     col_types = {
         'name': str,
@@ -32,8 +33,6 @@ def upload_courses(filename, user_id):
     data = pd.read_csv(filepath, dtype=col_types, index_col=False, header=0, skip_blank_lines=True)
 
     for row in data.itertuples(index=False):
-        print(f"courses: {courses}")
-        print(f"row name {row.name.lower()}")
         if row.name.lower() not in courses:
             new_course = Course(
                 name=row.name,
@@ -57,24 +56,17 @@ def upload_courses(filename, user_id):
             else:
                 new_course.status = 'complete'
 
-            # print(new_course.name)
             db.session.add(new_course)
             db.session.commit()
+
+            success += 1
+
         else:
             skipped.append(row.name)
 
 
-    response_msg = "Course Import Successful"
+    response_msg = f"{success} Record(s) Added. Course Import Successful"
 
-
-    # name = data["name"]
-    # start = data["start"]
-    # has_cert = data["has_cert"]
-
-    # print(data)
-    # print(f"NAME: {name} TYPE: {type(name)}")
-    # print(f"NAME: {start} TYPE: {type(start)}")
-    # print(f"NAME: {has_cert} TYPE: {type(has_cert)}")
 
     return(response_msg, skipped)
 
@@ -82,6 +74,10 @@ def upload_courses(filename, user_id):
 def upload_projects(filename, user_id):
     get_concepts = db.session.execute(db.select(Concept)).scalars().all()
     all_concepts = [concept.concept_term.lower() for concept in get_concepts]
+
+    added_course = []
+    skipped_repo = []
+    success = 0
 
     col_types = {
         'name': str,
@@ -108,52 +104,81 @@ def upload_projects(filename, user_id):
         # Lookup Course
         target_course = db.session.execute(db.select(Course).where(Course.name == row.course)).scalar()
 
-        new_project = Project(
-            name=row.name,
-            description=row.description,
-            assignment_link=row.assignment_link,
-            section=row.section,
-            lecture=row.lecture,
-            repo_id=target_repo.id,
-            course_id=target_course.id,
-            date_added=date.today(),
-            user_id=user_id
-        )
+        # If no repo, add to skipped_repo
+        if not target_repo:
+            skipped_repo.append(row.repo)
 
-        if row.start:
-            new_project.start=pd.to_datetime(row.start)
-        if row.complete:
-            new_project.complete=pd.to_datetime(row.complete)
+        # Else create project object
+        else:
+            new_project = Project(
+                name=row.name,
+                description=row.description,
+                assignment_link=row.assignment_link,
+                section=row.section,
+                lecture=row.lecture,
+                repo_id=target_repo.id,
+                date_added=date.today(),
+                user_id=user_id
+            )
 
-        db.session.add(new_project)
-        # print(new_project.name)
-        # print(new_project.repo)
-        # print(new_project.course)
+            if target_course:
+                new_project.course_id=target_course.id
 
-        # print(new_project)
+            # if target course not found, quick add course
+            else:
+                # add course name to list for flash message
+                added_course.append(row.course)
 
-        # Concepts
-        concepts = row.concepts.split('+')
-        # print(concepts)
-        for c in concepts:
-            if c.lower() not in all_concepts:
-                concept = Concept(
-                    concept_term=c,
-                    date_added=date.today()
+                new_course = Course(
+                    name=row.course,
+                    platform='Quick Added from Project Import',
+                    instructor='Quick Added from Project Import',
+                    start=date.today(),
+                    complete=pd.to_datetime('12/31/2099'),
+                    content_hours=0,
+                    has_cert=False,
+                    date_added=date.today(),
+                    user_id=user_id
                 )
 
-                db.session.add(concept)
-                # add concept name to all concepts list so subsequent refs don't create dupes
-                all_concepts.append(concept.concept_term.lower())
-            concept = Concept.query.filter_by(concept_term=c).first()
+                db.session.add(new_course)
 
-            new_project.concepts.append(concept)
+            course = Course.query.filter_by(name=row.course).first()
+            new_project.course_id=course.id
 
-        db.session.add(new_project)
-        db.session.commit()
-    response_msg = "Project Upload Successful"
+            if row.start:
+                new_project.start=pd.to_datetime(row.start)
+            if row.complete:
+                new_project.complete=pd.to_datetime(row.complete)
 
-    return response_msg
+            db.session.add(new_project)
+
+            # Concepts
+            concepts = row.concepts.split('+')
+
+            for c in concepts:
+                if c.lower() not in all_concepts:
+                    concept = Concept(
+                        concept_term=c,
+                        date_added=date.today()
+                    )
+
+                    db.session.add(concept)
+                    # add concept name to all concepts list so subsequent refs don't create dupes
+                    all_concepts.append(concept.concept_term.lower())
+                concept = Concept.query.filter_by(concept_term=c).first()
+
+                new_project.concepts.append(concept)
+
+            db.session.add(new_project)
+            db.session.commit()
+
+            success += 1
+
+    response_msg = f"{success} Record(s) Added. Project Upload Successful"
+    skipped = [skipped_repo, added_course]
+
+    return response_msg, skipped
 
 
 def upload_libraries(filename, user_id):

@@ -15,10 +15,10 @@
               {% for message in messages %}
 				{% if 'Success' in message %}
                 <p class="flash"><i class="bi bi-check-circle me-1"></i>{{ message }}</p>
-				{% elif 'items skipped' in message %}
+				{% elif 'skipped' in message %}
 				<p class="flash"><i class="bi bi-info-circle me-1"></i>{{ message }}</p>
 				{% else %}
-				<p class="flash"><i class="bi bi-exclamation-octagon me-1"></i>{{ message }}</p>
+				<p style="text-indent: 25px;" class="flash"><i class="bi bi-exclamation-octagon me-1"></i>{{ message }}</p>
 				{% endif %}
               {% endfor %}
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

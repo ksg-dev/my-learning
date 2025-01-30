@@ -1432,10 +1432,10 @@ def import_courses():
         msg, skipped = upload_courses(filename, current_user.id)
 
         flash(msg)
-        flash(f"{len(skipped)} items skipped due to name duplicate.")
         if len(skipped) > 0:
+            flash(f"{len(skipped)} item(s) skipped due to name duplicate.")
             for i in skipped:
-                flash(f"{i} skipped")
+                flash(f"{i} already exists")
 
         return redirect(url_for('courses_page'))
     return render_template('upload.html', form=form, object="Course", params=course_params)
@@ -1451,9 +1451,21 @@ def import_projects():
             app.instance_path, 'imports', filename
         ))
 
-        msg = upload_projects(filename, current_user.id)
+        msg, skipped = upload_projects(filename, current_user.id)
+        no_repo = skipped[0]
+        new_course = skipped[1]
 
         flash(msg)
+        if len(no_repo) > 0:
+            flash(f"{len(no_repo)} item(s) skipped because repo wasn't found.")
+
+            for i in no_repo:
+                flash(f"{i} not found")
+
+        if len(new_course) > 0:
+            flash(f"{len(new_course)} course(s) quick added because no course found with that name - their details may need updating")
+            for i in new_course:
+                flash(f"{i} added")
 
         return redirect(url_for('projects_page'))
     return render_template('upload.html', form=form, object="Project", params=project_params)

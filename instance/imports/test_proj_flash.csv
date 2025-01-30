@@ -1,0 +1,4 @@
+﻿name,description,assignment_link,start,complete,section,lecture,repo,concepts,course
+hangman,test repo and course exist,www.test.com,1/1/2025,1/1/2025,13,43,hangman,CLI+tkinter,test1
+test_no_repo,testing no repo,www.test.com,1/1/2025,1/1/2025,13,43,bananas,test+repo,test1
+test_no_course,testing no course,www.test.com,1/1/2025,1/1/2025,13,43,hangman,test+course,test2

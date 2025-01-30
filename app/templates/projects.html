@@ -6,6 +6,31 @@
 {% block content %}
 	<main id="main" class="main">
 
+<!-- Use Message Flashing to display feedback to the user with a <p> -->
+
+		{% with messages = get_flashed_messages() %}
+          {% if messages %}
+			<div class="alert alert-primary alert-dismissible fade show" role="alert">
+              {% for message in messages %}
+				{% if 'Success' in message %}
+                <p class="flash"><i class="bi bi-check-circle me-1"></i>{{ message }}</p>
+				{% elif 'skipped' in message %}
+				<p class="flash"><i class="bi bi-info-circle me-1"></i>{{ message }}</p>
+				{% elif 'quick' in message %}
+				<p class="flash"><i class="bi bi-info-circle me-1"></i>{{ message }}</p>
+				{% else %}
+				<p style="text-indent: 25px;" class="flash"><i class="bi bi-exclamation-octagon me-1"></i>{{ message }}</p>
+				{% endif %}
+              {% endfor %}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+          {% endif %}
+       {% endwith %}
+
+
+<!-- End Flashed Messages -->
+
+
     <div class="pagetitle">
       <h1>Projects</h1>
       <nav>
