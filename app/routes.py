@@ -27,7 +27,8 @@ from app.forms import (RegisterForm, LoginForm,
                        NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm,
                        DeleteForm, UploadForm, UpdateProjectForm, PasswordReset)
 from app.events import GetGitHub, validate_id
-from app.stats import Dashboard
+# from app.stats import Dashboard
+from app.dashboard import Dashboard
 from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources, upload_codelinks
 from app.upload_dicts import course_params, project_params, library_params, api_params, tool_params, resource_params, codelink_params
 from app.tree import make_tree
@@ -190,6 +191,9 @@ def home():
     dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
     now = datetime.utcnow()
 
+    # Structure events feed
+    feed = dashboard.feed
+
     # Query db for repo activity, convert to python list
     get_repos = db.session.execute(db.select(Repository).filter_by(user_id=current_user.id)).scalars().all()
     repos = [repo for repo in get_repos]
@@ -210,24 +214,12 @@ def home():
     projects = [project for project in get_projects]
     proj_count = len(projects)
 
-    # # Query db for all concepts. Convert to python list
-    # get_concepts = db.session.execute(db.select(Concept)).scalars().all()
-    # concepts = [concept for concept in get_concepts]
 
-    recent = db.session.execute(db.select(Event).order_by(Event.timestamp.desc())).scalars().yield_per(10)
-    recent_events = [event for event in recent]
-    top_20_events = recent_events[:21]
-    # for i in top_20_events:
-    #     print(i.type)
-    #     print(i.commits)
-    #     # print(i.repo_id)
-    #     print(i.repo.name)
-    #     print(i.timestamp)
 
     return render_template('index.html',
                            my_events=my_events,
                            now=now,
-                           activity=top_20_events,
+                           activity=feed,
                            my_repos=repos,
                            my_courses=my_courses,
                            my_projects=projects,

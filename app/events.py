@@ -51,29 +51,47 @@ class GetGitHub:
         all_events = []
 
         for i in events:
+            event_id = i["id"]
+            event_type = i["type"]
+            repo = i["repo"]["name"].split("/")[1]
+            repo_id = i["repo"]["id"]
+            event_timestamp = i["created_at"].strip("Z")
+
             if i['type'] == "PushEvent":
-                new_event = {
-                    "id": i["id"],
-                    "type": "push",
-                    "repo": i["repo"]["name"].split("/")[1],
-                    "repo_id": i["repo"]["id"],
-                    "commits": i["payload"]["size"],
-                    "create_type": None,
-                    "timestamp": i["created_at"].strip("Z")
+                commits = int(i["payload"]["size"])
+                event = {
+                    "timestamp": datetime.fromisoformat(event_timestamp),
+                    "action": f"Pushed {commits} commit(s) to {repo}"
                 }
+
+                # new_event = {
+                #     "id": i["id"],
+                #     "type": "push",
+                #     "repo": i["repo"]["name"].split("/")[1],
+                #     "repo_id": i["repo"]["id"],
+                #     "commits": i["payload"]["size"],
+                #     "create_type": None,
+                #     "timestamp": i["created_at"].strip("Z")
+                # }
 
             elif i["type"] == "CreateEvent":
-                new_event = {
-                    "id": i["id"],
-                    "type": "create",
-                    "repo": i["repo"]["name"].split("/")[1],
-                    "repo_id": i["repo"]["id"],
-                    "commits": None,
-                    "create_type": i["payload"]["ref_type"],
-                    "timestamp": i["created_at"].strip("Z")
+                create_type = i["payload"]["ref_type"]
+                event = {
+                    "timestamp": datetime.fromisoformat(event_timestamp),
+                    "action": f"Created {create_type} in {repo}"
                 }
 
-            all_events.append(new_event)
+                # new_event = {
+                #     "id": i["id"],
+                #     "type": "create",
+                #     "repo": i["repo"]["name"].split("/")[1],
+                #     "repo_id": i["repo"]["id"],
+                #     "commits": None,
+                #     "create_type": i["payload"]["ref_type"],
+                #     "timestamp": i["created_at"].strip("Z")
+                # }
+
+            all_events.append(event)
 
         # print(f"all_events: {all_events}")
         return all_events
