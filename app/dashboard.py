@@ -14,6 +14,7 @@ class Dashboard:
         self.user_id = user_id
         self.github_data = GetGitHub(user)
         self.feed = self.build_feed(self.github_data.events)
+        self.course_data = self.get_course_stats()
 
 
     # Format timedelta into string for feed
@@ -155,7 +156,7 @@ class Dashboard:
         session = Session()
 
         # Query db
-        query = session.query(Course)
+        query = session.query(Course).where(Course.user_id == self.user_id)
 
         pd.set_option("expand_frame_repr", False)
         # df = pd.read_sql(query.statement, engine)
