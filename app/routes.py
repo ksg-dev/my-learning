@@ -243,7 +243,11 @@ def courses_page():
     get_courses = db.session.execute(db.select(Course).filter_by(user_id=current_user.id)).scalars().all()
     courses = [course for course in get_courses]
 
-    return render_template('courses.html', courses=courses, course_badge=course_statuses)
+    # Get course stats dict from Dashboard
+    dashboard = Dashboard(user_id=current_user.id, user=current_user.name)
+    course_stats = dashboard.get_course_stats()
+
+    return render_template('courses.html', courses=courses, course_badge=course_statuses, my_courses=course_stats)
 
 
 @app.route('/projects')

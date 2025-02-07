@@ -441,10 +441,10 @@
 					<div class="activite-label">{{ event['delta'] }}</div>
 					{% if 'Pushed' in event['action'] %}
                   		<i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                  		<div class="activity-content">{{ event['action'] }} </div>
+                  		<div class="activity-content">{{ event['action'] }} <a href="https://github.com/{{ current_user.name }}/{{ event['repo'] }}" class="fw-bold text-dark" target="_blank">{{ event["repo"] }}</a></div>
 				  	{% elif 'Created' in event['action'] %}
 						<i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-						<div class="activity-content">{{ event['action'] }}</div>
+						<div class="activity-content">{{ event['action'] }} <a href="https://github.com/{{ current_user.name }}/{{ event['repo'] }}" class="fw-bold text-dark" target="_blank">{{ event["repo"] }}</a></div>
 					{% else %}
 						<i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
 						<div class="activity-content">

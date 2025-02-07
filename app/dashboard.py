@@ -43,7 +43,8 @@ class Dashboard:
             formatted_delta = self.format_timedelta(delta)
             event = {
                 "delta": formatted_delta,
-                "action": item["action"]
+                "action": item["action"],
+                "repo": item["repo"]
             }
 
             feed.append(event)

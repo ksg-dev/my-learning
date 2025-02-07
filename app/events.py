@@ -61,7 +61,8 @@ class GetGitHub:
                 commits = int(i["payload"]["size"])
                 event = {
                     "timestamp": datetime.fromisoformat(event_timestamp),
-                    "action": f"Pushed {commits} commit(s) to {repo}"
+                    "action": f"Pushed {commits} commit(s) to ",
+                    "repo": repo
                 }
 
                 # new_event = {
@@ -78,7 +79,8 @@ class GetGitHub:
                 create_type = i["payload"]["ref_type"]
                 event = {
                     "timestamp": datetime.fromisoformat(event_timestamp),
-                    "action": f"Created {create_type} in {repo}"
+                    "action": f"Created {create_type} in ",
+                    "repo": repo
                 }
 
                 # new_event = {
