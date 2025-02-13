@@ -34,7 +34,7 @@ class Dashboard:
 
     def build_feed(self, event_data):
         feed = []
-        # event_data = self.github_data.events
+
         now = datetime.now()
 
         for item in event_data:
