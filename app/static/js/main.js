@@ -12,6 +12,7 @@
   /**
    * Easy selector helper function
    */
+  console.log("bananas")
   const select = (el, all = false) => {
     el = el.trim()
     if (all) {

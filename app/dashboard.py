@@ -51,8 +51,74 @@ class Dashboard:
 
         return feed
 
+    def get_course_stats(self):
+        engine = db.get_engine()
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
+        # Query db
+        query = session.query(Course).where(Course.user_id == self.user_id)
 
+        pd.set_option("expand_frame_repr", False)
+        # df = pd.read_sql(query.statement, engine)
+        # print(f"df: {df}")
+
+        courses_df = pd.read_sql(query.statement, engine)
+        courses_df.start = pd.to_datetime(courses_df.start)
+        courses_df.complete = pd.to_datetime(courses_df.complete)
+        # print(courses_df)
+        # print(courses_df.info())
+        # print("---------------------------")
+
+        # Content Stats for ALL
+        all_courses_hr = courses_df["content_hours"].sum()
+
+        # NOT STARTED Stats
+        not_started = courses_df[courses_df["status"] == "not-started"]
+        not_started_count = not_started["name"].count()
+
+        # IN PROGRESS Stats
+        in_progress = courses_df[courses_df["status"] == "in-progress"]
+        in_progress_count = in_progress["name"].count()
+
+        # COMPLETE Stats
+        complete = courses_df[courses_df["status"] == "complete"]
+        complete_count = complete["name"].count()
+        complete_hours = complete["content_hours"].sum()
+
+        start_min = complete["start"].min()
+        start_max = complete["start"].max()
+        complete_min = complete["complete"].min()
+        complete_max = complete["complete"].max()
+
+        # Add column for days it took to complete
+        complete["days_to_complete"] = complete["complete"] - complete["start"]
+
+        # PER COURSE Average content hr complete per day (content hr / days)
+        complete["avg_daily_content"] = complete["days_to_complete"] / complete["content_hours"]
+        # print(content)
+
+        # Overall Average content covered daily
+        avg_daily = complete['avg_daily_content'].mean()
+
+        # print(complete)
+        # print(complete.info())
+
+        course_stats = {
+            "all-course-hr": all_courses_hr,
+            "not-started-count": not_started_count,
+            "in-progress-count": in_progress_count,
+            "complete-count": complete_count,
+            "complete-hours": complete_hours,
+            "start-min": start_min,
+            "start-max": start_max,
+            "complete-min": complete_min,
+            "complete-max": complete_max,
+            "avg-daily-content": avg_daily
+        }
+
+        # print(course_stats)
+        return course_stats
 
     def get_event_stats(self):
         engine = db.get_engine()
@@ -151,74 +217,6 @@ class Dashboard:
         # print(f"event_stats: {event_stats}")
         return event_stats
 
-    def get_course_stats(self):
-        engine = db.get_engine()
-        Session = sessionmaker(bind=engine)
-        session = Session()
-
-        # Query db
-        query = session.query(Course).where(Course.user_id == self.user_id)
-
-        pd.set_option("expand_frame_repr", False)
-        # df = pd.read_sql(query.statement, engine)
-        # print(f"df: {df}")
-
-        courses_df = pd.read_sql(query.statement, engine)
-        courses_df.start = pd.to_datetime(courses_df.start)
-        courses_df.complete = pd.to_datetime(courses_df.complete)
-        # print(courses_df)
-        # print(courses_df.info())
-        # print("---------------------------")
-
-        # Content Stats for ALL
-        all_courses_hr = courses_df["content_hours"].sum()
-
-        # NOT STARTED Stats
-        not_started = courses_df[courses_df["status"] == "not-started"]
-        not_started_count = not_started["name"].count()
-
-        # IN PROGRESS Stats
-        in_progress = courses_df[courses_df["status"] == "in-progress"]
-        in_progress_count = in_progress["name"].count()
-
-        # COMPLETE Stats
-        complete = courses_df[courses_df["status"] == "complete"]
-        complete_count = complete["name"].count()
-        complete_hours = complete["content_hours"].sum()
-
-        start_min = complete["start"].min()
-        start_max = complete["start"].max()
-        complete_min = complete["complete"].min()
-        complete_max = complete["complete"].max()
-
-        # Add column for days it took to complete
-        complete["days_to_complete"] = complete["complete"] - complete["start"]
-
-        # PER COURSE Average content hr complete per day (content hr / days)
-        complete["avg_daily_content"] = complete["days_to_complete"] / complete["content_hours"]
-        # print(content)
-
-        # Overall Average content covered daily
-        avg_daily = complete['avg_daily_content'].mean()
-
-        # print(complete)
-        # print(complete.info())
-
-        course_stats = {
-            "all-course-hr": all_courses_hr,
-            "not-started-count": not_started_count,
-            "in-progress-count": in_progress_count,
-            "complete-count": complete_count,
-            "complete-hours": complete_hours,
-            "start-min": start_min,
-            "start-max": start_max,
-            "complete-min": complete_min,
-            "complete-max": complete_max,
-            "avg-daily-content": avg_daily
-        }
-
-        # print(course_stats)
-        return course_stats
 
 
 
