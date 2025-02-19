@@ -76,10 +76,12 @@ class Dashboard:
         # NOT STARTED Stats
         not_started = courses_df[courses_df["status"] == "not-started"]
         not_started_count = not_started["name"].count()
+        not_started_hours = not_started["content_hours"].sum()
 
         # IN PROGRESS Stats
         in_progress = courses_df[courses_df["status"] == "in-progress"]
         in_progress_count = in_progress["name"].count()
+        in_progress_hours = in_progress["content_hours"].sum()
 
         # COMPLETE Stats
         complete = courses_df[courses_df["status"] == "complete"]
@@ -104,10 +106,35 @@ class Dashboard:
         # print(complete)
         # print(complete.info())
 
+        course_stats = [
+            {
+                "all-courses": {
+                    "hours": all_courses_hr,
+                    "start-min": start_min,
+                    "start-max": start_max,
+                    "avg-daily-content": avg_daily,
+                },
+                "not-started": {
+                    "count": not_started_count,
+                    "hours": not_started_hours,
+                },
+                "in-progress": {
+                    "count": in_progress_count,
+                    "hours": in_progress_hours,
+                },
+                "complete": {
+                    "count": complete_count,
+                    "hours": complete_hours,
+                }
+            }
+        ]
+
         course_stats = {
             "all-course-hr": all_courses_hr,
             "not-started-count": not_started_count,
+            "not_started_hours": not_started_hours,
             "in-progress-count": in_progress_count,
+            "in_progress_hours": in_progress_hours,
             "complete-count": complete_count,
             "complete-hours": complete_hours,
             "start-min": start_min,
