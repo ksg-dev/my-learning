@@ -4,7 +4,7 @@ import numpy as np
 from app import app, db
 from app.models import Event, Course, Project, Concept, Repository
 from app.events import GetGitHub, validate_id
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from sqlalchemy.orm import sessionmaker
 
 
@@ -15,6 +15,7 @@ class Dashboard:
         self.github_data = GetGitHub(user)
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
+
 
 
     # Format timedelta into string for feed
@@ -106,7 +107,7 @@ class Dashboard:
         # print(complete)
         # print(complete.info())
 
-        course_stats = [
+        course_progress = [
             {
                 "all-courses": {
                     "hours": all_courses_hr,
@@ -129,6 +130,7 @@ class Dashboard:
             }
         ]
 
+
         course_stats = {
             "all-course-hr": all_courses_hr,
             "not-started-count": not_started_count,
@@ -146,6 +148,52 @@ class Dashboard:
 
         # print(course_stats)
         return course_stats
+
+    def event_stats(self):
+        events = self.github_data.events
+
+        all_commits = 0
+        last_mo_commits = 0
+        mo_commits = 0
+        last_wk_commits = 0
+        wk_commits = 0
+
+        today = date.today()
+        # t = today.timetuple()
+        # for i in t:
+        #     print(i)
+
+        iso = today.isocalendar()
+        # for i in iso:
+        #     print(i)
+
+
+        for event in events:
+            action = event["action"].split()
+            iso_stamp = event["timestamp"].isocalendar()
+            # for i in iso_stamp:
+            #     print(i)
+
+        #     # date_diff = today - event["timestamp"]
+        #
+        #     print(f"action: {action}")
+            # print(f"datediff: {date_diff}")
+            # print(date.fromtimestamp(event["timestamp"]))
+
+            if "Pushed" in action[0]:
+                all_commits += int(action[1])
+
+                if iso[1] == iso_stamp[1]:
+                    wk_commits += int(action[1])
+                elif iso[1] == iso_stamp[1] - 1:
+                    last_wk_commits += int(action[1])
+
+        print(wk_commits)
+        print(last_wk_commits)
+        print(all_commits)
+
+
+
 
     def get_event_stats(self):
         engine = db.get_engine()
@@ -243,6 +291,10 @@ class Dashboard:
             }
         # print(f"event_stats: {event_stats}")
         return event_stats
+
+    def get_stats_by_time(self):
+
+        pass
 
 
 

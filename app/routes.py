@@ -202,6 +202,9 @@ def home():
     # Get event stats dict
     my_events = dashboard.get_event_stats()
 
+    # Test new events
+    new_events = dashboard.event_stats()
+
     # Get course stats dict
     my_courses = dashboard.get_course_stats()
 
