@@ -191,8 +191,8 @@ def home():
     dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
     now = datetime.utcnow()
 
-    # Structure events feed
-    feed = dashboard.feed
+    # Structure events feed, take only first 20
+    feed = dashboard.feed[:21]
 
     # Query db for repo activity, convert to python list
     get_repos = db.session.execute(db.select(Repository).filter_by(user_id=current_user.id)).scalars().all()
@@ -202,8 +202,8 @@ def home():
     # Get event stats dict
     my_events = dashboard.get_event_stats()
 
-    # Test new events
-    new_events = dashboard.event_stats()
+    # Test new stats
+    my_stats = dashboard.stats
 
     # Get course stats dict
     my_courses = dashboard.get_course_stats()
@@ -221,6 +221,7 @@ def home():
 
     return render_template('index.html',
                            my_events=my_events,
+                           my_stats=my_stats,
                            now=now,
                            activity=feed,
                            my_repos=repos,

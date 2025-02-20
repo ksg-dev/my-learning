@@ -15,6 +15,8 @@ class Dashboard:
         self.github_data = GetGitHub(user)
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
+        self.stats = self.event_stats(self.github_data.events)
+
 
 
 
@@ -149,8 +151,8 @@ class Dashboard:
         # print(course_stats)
         return course_stats
 
-    def event_stats(self):
-        events = self.github_data.events
+    def event_stats(self, events):
+        # events = self.github_data.events
 
         all_commits = 0
         last_mo_commits = 0
@@ -159,11 +161,10 @@ class Dashboard:
         wk_commits = 0
 
         today = date.today()
-        # t = today.timetuple()
-        # for i in t:
-        #     print(i)
 
         iso = today.isocalendar()
+        last_wk = iso.week - 1
+        last_mo = today.month - 1
         # for i in iso:
         #     print(i)
 
@@ -182,16 +183,55 @@ class Dashboard:
 
             if "Pushed" in action[0]:
                 all_commits += int(action[1])
+                # print("-------------------")
+                # print(f"action: {action}")
+                # print(f"iso_stamp: {iso_stamp}")
+                # print(f"date stamp: {event['timestamp']}")
 
-                if iso[1] == iso_stamp[1]:
+                # Check weekly
+                # If iso timestamp for week == this week
+                if iso_stamp[1] == iso[1]:
                     wk_commits += int(action[1])
-                elif iso[1] == iso_stamp[1] - 1:
+                    print("This week")
+
+                # else if iso timestamp week == last week
+                elif iso_stamp[1] == last_wk:
                     last_wk_commits += int(action[1])
+                    print("Last week")
 
-        print(wk_commits)
-        print(last_wk_commits)
-        print(all_commits)
+                # Check Monthly
+                # If timestamp month == this month
+                if event["timestamp"].month == today.month:
+                    mo_commits += int(action[1])
+                    print("This month")
 
+                # else if timestamp month == last month
+                elif event["timestamp"].month == last_mo:
+                    last_mo_commits += int(action[1])
+                    print("Last Month")
+
+        month_diff = mo_commits - last_mo_commits
+        mon_percent = (month_diff / mo_commits) * 100
+
+        wk_diff = wk_commits - last_wk_commits
+        wk_percent = (wk_diff / last_wk_commits) * 100
+
+        stats = {
+            "all-commits": all_commits,
+            "this-week": wk_commits,
+            "last-week": last_wk_commits,
+            "this-month": mo_commits,
+            "last-month": last_mo_commits,
+            "mo-change": mon_percent,
+            "wk-change": wk_percent
+        }
+        # print("------TOTALS-------")
+        # print(f"This week: {wk_commits}")
+        # print(f"Last week: {last_wk_commits}")
+        # print(f"This Month: {mo_commits}")
+        # print(f"Last Month: {last_mo_commits}")
+        # print(f"Total Commits: {all_commits}")
+        return stats
 
 
 

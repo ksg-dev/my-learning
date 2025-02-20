@@ -93,7 +93,7 @@
 							  			<i class="bi bi-github"></i>
 									</div>
 									<div class="ps-3">
-							  			<h6>{{ my_events["all_commits"] }}</h6>
+							  			<h6>{{ my_stats["all-commits"] }}</h6>
 							  			<span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 									</div>
 						  		</div>
@@ -152,8 +152,8 @@
 							  			<i class="bi bi-github"></i>
 									</div>
 									<div class="ps-3">
-							  			<h6>{{ my_events["all_commits"] }}</h6>
-							  			<span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+							  			<h6>{{ my_stats["this-month"] }}</h6>
+							  			<span class="text-success small pt-1 fw-bold">{{ my_stats["mo-change"]|round }}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 									</div>
 						  		</div>
 							</div>
@@ -211,8 +211,8 @@
 							  			<i class="bi bi-github"></i>
 									</div>
 									<div class="ps-3">
-							  			<h6>{{ my_events["all_commits"] }}</h6>
-							  			<span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+							  			<h6>{{ my_stats["this-week"] }}</h6>
+							  			<span class="text-success small pt-1 fw-bold">{{ my_stats["wk-change"]|round }}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 									</div>
 						  		</div>
 							</div>

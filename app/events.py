@@ -18,35 +18,31 @@ GH_USERNAME = os.environ["GITHUB_USERNAME"]
 GH_API_URL = "https://api.github.com"
 
 class GetGitHub:
-    def __init__(self, user, bulk=False):
+    def __init__(self, user):
         self.user = user
         self.token = GH_TOKEN
-        self.bulk = bulk
-        self.events = self.get_events(user, bulk)
-        self.repos = self.get_repos(user, bulk)
+        self.events = self.get_events(user)
+        self.repos = self.get_repos(user)
 
 
-    def get_events(self, user, bulk):
+
+    def get_events(self, user):
         headers = {
             "accept": "application/vnd.github+json",
             "authorization": f"Bearer {self.token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-        if bulk is True:
-            params = {
+        params = {
                 "per_page": 100
-            }
-        else:
-            params = {
-                "per_page": 50
             }
 
         user_events = f"{GH_API_URL}/users/{user}/events"
 
-        response = requests.get(url=user_events, headers=headers, params=params)
+        response = requests.get(url=user_events, headers=headers, params={"per_page": 100})
         response.raise_for_status()
         events = response.json()
+        print(f"events-raw: {events}")
 
         all_events = []
 
@@ -95,11 +91,11 @@ class GetGitHub:
 
             all_events.append(event)
 
-        # print(f"all_events: {all_events}")
+        print(f"all_events: {len(all_events)}")
         return all_events
 
 
-    def get_repos(self, user, bulk):
+    def get_repos(self, user, bulk=False):
         headers = {
             "accept": "application/vnd.github+json",
             "authorization": f"Bearer {self.token}",
