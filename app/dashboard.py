@@ -192,23 +192,23 @@ class Dashboard:
                 # If iso timestamp for week == this week
                 if iso_stamp[1] == iso[1]:
                     wk_commits += int(action[1])
-                    print("This week")
+                    # print("This week")
 
                 # else if iso timestamp week == last week
                 elif iso_stamp[1] == last_wk:
                     last_wk_commits += int(action[1])
-                    print("Last week")
+                    # print("Last week")
 
                 # Check Monthly
                 # If timestamp month == this month
                 if event["timestamp"].month == today.month:
                     mo_commits += int(action[1])
-                    print("This month")
+                    # print("This month")
 
                 # else if timestamp month == last month
                 elif event["timestamp"].month == last_mo:
                     last_mo_commits += int(action[1])
-                    print("Last Month")
+                    # print("Last Month")
 
         month_diff = mo_commits - last_mo_commits
         mon_percent = (month_diff / mo_commits) * 100

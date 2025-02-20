@@ -13,7 +13,7 @@ from pprint import pprint
 load_dotenv()
 
 GH_TOKEN = os.environ["GITHUB_TOKEN"]
-GH_USERNAME = os.environ["GITHUB_USERNAME"]
+# GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
 GH_API_URL = "https://api.github.com"
 
@@ -39,10 +39,10 @@ class GetGitHub:
 
         user_events = f"{GH_API_URL}/users/{user}/events"
 
-        response = requests.get(url=user_events, headers=headers, params={"per_page": 100})
+        response = requests.get(url=user_events, headers=headers, params=params)
         response.raise_for_status()
         events = response.json()
-        print(f"events-raw: {events}")
+        # print(f"events-raw: {events}")
 
         all_events = []
 
@@ -91,7 +91,7 @@ class GetGitHub:
 
             all_events.append(event)
 
-        print(f"all_events: {len(all_events)}")
+        # print(f"all_events: {len(all_events)}")
         return all_events
 
 
