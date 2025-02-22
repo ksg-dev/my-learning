@@ -34,6 +34,7 @@ class GetGitHub:
         }
 
         params = {
+                "page": 1,
                 "per_page": 100
             }
 
@@ -41,6 +42,8 @@ class GetGitHub:
 
         response = requests.get(url=user_events, headers=headers, params=params)
         response.raise_for_status()
+        # print(f"headers: {response.headers}")
+        # print(f"my headers: {response.request.headers}")
         events = response.json()
         # print(f"events-raw: {events}")
 
@@ -91,7 +94,7 @@ class GetGitHub:
 
             all_events.append(event)
 
-        # print(f"all_events: {len(all_events)}")
+        print(f"all_events: {len(all_events)}")
         return all_events
 
 

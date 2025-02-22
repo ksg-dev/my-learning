@@ -1,0 +1,857 @@
+[
+  [
+    {
+      "id": "46793469312",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22772097714,
+        "size": 2,
+        "distinct_size": 2,
+        "ref": "refs/heads/events-feed",
+        "head": "74b52cf08c22ab7fc6706f0bcb22db466b25ab65",
+        "before": "19bead0a10f5448d2df32f185289bd66b27b92a6",
+        "commits": [
+          {
+            "sha": "97f3e38c1ec485436879d86b2ee7aac91a60c74f",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "commits data parsing for dashboard",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/97f3e38c1ec485436879d86b2ee7aac91a60c74f"
+          },
+          {
+            "sha": "74b52cf08c22ab7fc6706f0bcb22db466b25ab65",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "clean up print statements",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/74b52cf08c22ab7fc6706f0bcb22db466b25ab65"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-20T20:26:05Z"
+    },
+    {
+      "id": "46751091672",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22750943300,
+        "size": 3,
+        "distinct_size": 3,
+        "ref": "refs/heads/events-feed",
+        "head": "19bead0a10f5448d2df32f185289bd66b27b92a6",
+        "before": "1b691cba3a797945941e1bb746f0d604c696b00d",
+        "commits": [
+          {
+            "sha": "395ed39d17cd352d4fb46f0c8cbc07bf381c2a88",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "filter card with buttons on dashboard",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/395ed39d17cd352d4fb46f0c8cbc07bf381c2a88"
+          },
+          {
+            "sha": "63a513bfec63f7058e0eca453fbe1c99349e177f",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "stats via nav tabs working",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/63a513bfec63f7058e0eca453fbe1c99349e177f"
+          },
+          {
+            "sha": "19bead0a10f5448d2df32f185289bd66b27b92a6",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "still tweaking commit event data from gh api",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/19bead0a10f5448d2df32f185289bd66b27b92a6"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-19T21:30:42Z"
+    },
+    {
+      "id": "46610043662",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22676796992,
+        "size": 2,
+        "distinct_size": 2,
+        "ref": "refs/heads/events-feed",
+        "head": "1b691cba3a797945941e1bb746f0d604c696b00d",
+        "before": "2175eacf7b55925d40487d088dcfc7485718a113",
+        "commits": [
+          {
+            "sha": "4722a863382863b23eea85e61c8db8dad0616222",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "clean up dashboard.py",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/4722a863382863b23eea85e61c8db8dad0616222"
+          },
+          {
+            "sha": "1b691cba3a797945941e1bb746f0d604c696b00d",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "fixed dropdowns for nav and filters",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/1b691cba3a797945941e1bb746f0d604c696b00d"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-15T19:06:15Z"
+    },
+    {
+      "id": "46352049482",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22539822291,
+        "size": 1,
+        "distinct_size": 1,
+        "ref": "refs/heads/events-feed",
+        "head": "2175eacf7b55925d40487d088dcfc7485718a113",
+        "before": "c60594f60f8f82ade8eed5519ea71db051c8c167",
+        "commits": [
+          {
+            "sha": "2175eacf7b55925d40487d088dcfc7485718a113",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "bold repo name and add link to repo in feed",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/2175eacf7b55925d40487d088dcfc7485718a113"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-07T20:01:43Z"
+    },
+    {
+      "id": "46271558778",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "ref": "events-feed",
+        "ref_type": "branch",
+        "master_branch": "main",
+        "description": "hub to use locally for tracking learning concepts",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-05T20:15:23Z"
+    },
+    {
+      "id": "46192002756",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22459578610,
+        "size": 1,
+        "distinct_size": 1,
+        "ref": "refs/heads/main",
+        "head": "a67595679a872bb51fe46014253db02c7b5e2dfe",
+        "before": "2882059ad365943174d8005c6802d507a9cfdbac",
+        "commits": [
+          {
+            "sha": "a67595679a872bb51fe46014253db02c7b5e2dfe",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "testing w stats approaches",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/a67595679a872bb51fe46014253db02c7b5e2dfe"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-03T23:38:21Z"
+    },
+    {
+      "id": "46087551165",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22403218619,
+        "size": 1,
+        "distinct_size": 1,
+        "ref": "refs/heads/main",
+        "head": "2882059ad365943174d8005c6802d507a9cfdbac",
+        "before": "202115fc1101e26ee41b60674ec439264239efb2",
+        "commits": [
+          {
+            "sha": "2882059ad365943174d8005c6802d507a9cfdbac",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "upload project error handling",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/2882059ad365943174d8005c6802d507a9cfdbac"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-01-30T23:24:55Z"
+    },
+    {
+      "id": "45966236396",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22342798765,
+        "size": 3,
+        "distinct_size": 3,
+        "ref": "refs/heads/main",
+        "head": "202115fc1101e26ee41b60674ec439264239efb2",
+        "before": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0",
+        "commits": [
+          {
+            "sha": "fffb34fa8423b0bb3ac50ec5bcc81c688588dee5",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "secret reset password route, correct og tester admin",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/fffb34fa8423b0bb3ac50ec5bcc81c688588dee5"
+          },
+          {
+            "sha": "53b0dfdde5f342934cf65b35a737ce978d4a821e",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "course upload flashed messages",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/53b0dfdde5f342934cf65b35a737ce978d4a821e"
+          },
+          {
+            "sha": "202115fc1101e26ee41b60674ec439264239efb2",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "trim whitespace",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/202115fc1101e26ee41b60674ec439264239efb2"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-01-27T22:26:33Z"
+    },
+    {
+      "id": "45963018487",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22341215092,
+        "size": 5,
+        "distinct_size": 5,
+        "ref": "refs/heads/main",
+        "head": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0",
+        "before": "e9cba51143ed4b948f4a036cefb362042218f447",
+        "commits": [
+          {
+            "sha": "8ac9c831c2c03295f743160ce558619f6c1d1a65",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "bug fix recent activity timeline looked at day only",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/8ac9c831c2c03295f743160ce558619f6c1d1a65"
+          },
+          {
+            "sha": "f16770e1c7257652d955a5a24e40ca56545eaf47",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "404 and 500 error handling",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/f16770e1c7257652d955a5a24e40ca56545eaf47"
+          },
+          {
+            "sha": "d47d5607d4a862dca9ced02d8690b0352938375d",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "smtphandler for error logging",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/d47d5607d4a862dca9ced02d8690b0352938375d"
+          },
+          {
+            "sha": "c86407e30c49ddb97f72fbbbf09b929d01f6dc92",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "edit user name and display name",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/c86407e30c49ddb97f72fbbbf09b929d01f6dc92"
+          },
+          {
+            "sha": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "change password w keyword",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/8a8abc64fc38a346e47cd9742aa2fe11832ea1d0"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-01-27T20:29:22Z"
+    },
+    {
+      "id": "45957557156",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 863590166,
+        "name": "ksg-dev/my-learning",
+        "url": "https://api.github.com/repos/ksg-dev/my-learning"
+      },
+      "payload": {
+        "repository_id": 863590166,
+        "push_id": 22338553182,
+        "size": 1,
+        "distinct_size": 1,
+        "ref": "refs/heads/main",
+        "head": "e9cba51143ed4b948f4a036cefb362042218f447",
+        "before": "d5120aa04aa0a2b7ab16c6ce196ae45210e980f4",
+        "commits": [
+          {
+            "sha": "e9cba51143ed4b948f4a036cefb362042218f447",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "dust off",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/e9cba51143ed4b948f4a036cefb362042218f447"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-01-27T17:34:37Z"
+    }
+  ],
+  [
+    {
+      "id": "46626134011",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 933882271,
+        "name": "ksg-dev/my-rise",
+        "url": "https://api.github.com/repos/ksg-dev/my-rise"
+      },
+      "payload": {
+        "ref": "main",
+        "ref_type": "branch",
+        "master_branch": "main",
+        "description": "my learning rework with flask, bootstrap, new flask-friendly template",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-16T22:22:25Z"
+    },
+    {
+      "id": "46626123911",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 933882271,
+        "name": "ksg-dev/my-rise",
+        "url": "https://api.github.com/repos/ksg-dev/my-rise"
+      },
+      "payload": {
+        "ref": null,
+        "ref_type": "repository",
+        "master_branch": "main",
+        "description": "my learning rework with flask, bootstrap, new flask-friendly template",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-16T22:21:36Z"
+    }
+  ],
+  [],
+  [
+    {
+      "id": "46192011618",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 926778754,
+        "name": "ksg-dev/interactive-charting-flask",
+        "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"
+      },
+      "payload": {
+        "repository_id": 926778754,
+        "push_id": 22459583200,
+        "size": 1,
+        "distinct_size": 1,
+        "ref": "refs/heads/main",
+        "head": "174e3ca28d51b3660fc6b917bfde296712197686",
+        "before": "4da8350763887777f1c659a8701436bbc2d8899e",
+        "commits": [
+          {
+            "sha": "174e3ca28d51b3660fc6b917bfde296712197686",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "chartjs testing",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask/commits/174e3ca28d51b3660fc6b917bfde296712197686"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-03T23:38:50Z"
+    },
+    {
+      "id": "46188150600",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 926778754,
+        "name": "ksg-dev/interactive-charting-flask",
+        "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"
+      },
+      "payload": {
+        "ref": "main",
+        "ref_type": "branch",
+        "master_branch": "main",
+        "description": "testing different interactive charting methods within flask app, bokeh, matplotlib, dash, plotly",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-03T21:03:49Z"
+    },
+    {
+      "id": "46187949693",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 926778754,
+        "name": "ksg-dev/interactive-charting-flask",
+        "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"
+      },
+      "payload": {
+        "ref": null,
+        "ref_type": "repository",
+        "master_branch": "main",
+        "description": "testing different interactive charting methods within flask app, bokeh, matplotlib, dash, plotly",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-03T20:56:59Z"
+    }
+  ],
+  [
+    {
+      "id": "46187513706",
+      "type": "PushEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 926700869,
+        "name": "ksg-dev/avocado-analytics-dash",
+        "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"
+      },
+      "payload": {
+        "repository_id": 926700869,
+        "push_id": 22457338384,
+        "size": 8,
+        "distinct_size": 8,
+        "ref": "refs/heads/main",
+        "head": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa",
+        "before": "ae4569105bfb584ce2ff4956d7f956e5af9d3d57",
+        "commits": [
+          {
+            "sha": "5fb8aa42e179865fccf12a5312ff905304bc9788",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "foundation - first run",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/5fb8aa42e179865fccf12a5312ff905304bc9788"
+          },
+          {
+            "sha": "4f9caf61e47ab39a259571c92d6a33809532069e",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "add assets folder, styles",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/4f9caf61e47ab39a259571c92d6a33809532069e"
+          },
+          {
+            "sha": "0c831de8ca06f724377034bc06da15068637a73b",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "tweak for external stylesheet",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/0c831de8ca06f724377034bc06da15068637a73b"
+          },
+          {
+            "sha": "c2148be8b2ea825634699e8808a50ac91214bf20",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "update title, header styling",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/c2148be8b2ea825634699e8808a50ac91214bf20"
+          },
+          {
+            "sha": "26da78a7a820df038fc102080f94c06e612c857a",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "style graphs with divs and cards",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/26da78a7a820df038fc102080f94c06e612c857a"
+          },
+          {
+            "sha": "46182b6a9dc219fa1ecd7ebec83481c119b7cb48",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "rework app.py to add filters and filter function",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/46182b6a9dc219fa1ecd7ebec83481c119b7cb48"
+          },
+          {
+            "sha": "fba0fb81dccb0211dc43798a553c6eb5f96a0f98",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "add styling for filter menus",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/fba0fb81dccb0211dc43798a553c6eb5f96a0f98"
+          },
+          {
+            "sha": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa",
+            "author": {
+              "email": "ksg.dev.data@gmail.com",
+              "name": "ksg-dev"
+            },
+            "message": "fix filter menu container",
+            "distinct": true,
+            "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/aa498a3b00bb38fd71b4b1648e6061cb3bf719fa"
+          }
+        ]
+      },
+      "public": true,
+      "created_at": "2025-02-03T20:41:39Z"
+    },
+    {
+      "id": "46182783522",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 926700869,
+        "name": "ksg-dev/avocado-analytics-dash",
+        "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"
+      },
+      "payload": {
+        "ref": "main",
+        "ref_type": "branch",
+        "master_branch": "main",
+        "description": "intro to using dash",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-03T18:07:04Z"
+    },
+    {
+      "id": "46182632697",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 926700869,
+        "name": "ksg-dev/avocado-analytics-dash",
+        "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"
+      },
+      "payload": {
+        "ref": null,
+        "ref_type": "repository",
+        "master_branch": "main",
+        "description": "intro to using dash",
+        "pusher_type": "user"
+      },
+      "public": true,
+      "created_at": "2025-02-03T18:02:23Z"
+    }
+  ],
+  [
+    {
+      "id": "45995729846",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 923643947,
+        "name": "ksg-dev/health-data",
+        "url": "https://api.github.com/repos/ksg-dev/health-data"
+      },
+      "payload": {
+        "ref": "main",
+        "ref_type": "branch",
+        "master_branch": "main",
+        "description": "tracking glucose, ketones, gki through 8wk insulin resistance improvement plan",
+        "pusher_type": "user"
+      },
+      "public": false,
+      "created_at": "2025-01-28T16:24:53Z"
+    },
+    {
+      "id": "45994966013",
+      "type": "CreateEvent",
+      "actor": {
+        "id": 119773615,
+        "login": "ksg-dev",
+        "display_login": "ksg-dev",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ksg-dev",
+        "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"
+      },
+      "repo": {
+        "id": 923643947,
+        "name": "ksg-dev/health-data",
+        "url": "https://api.github.com/repos/ksg-dev/health-data"
+      },
+      "payload": {
+        "ref": null,
+        "ref_type": "repository",
+        "master_branch": "main",
+        "description": "tracking glucose, ketones, gki through 8wk insulin resistance improvement plan",
+        "pusher_type": "user"
+      },
+      "public": false,
+      "created_at": "2025-01-28T16:05:50Z"
+    }
+  ]
+][[{"id": "46793469312", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22772097714, "size": 2, "distinct_size": 2, "ref": "refs/heads/events-feed", "head": "74b52cf08c22ab7fc6706f0bcb22db466b25ab65", "before": "19bead0a10f5448d2df32f185289bd66b27b92a6", "commits": [{"sha": "97f3e38c1ec485436879d86b2ee7aac91a60c74f", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "commits data parsing for dashboard", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/97f3e38c1ec485436879d86b2ee7aac91a60c74f"}, {"sha": "74b52cf08c22ab7fc6706f0bcb22db466b25ab65", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "clean up print statements", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/74b52cf08c22ab7fc6706f0bcb22db466b25ab65"}]}, "public": true, "created_at": "2025-02-20T20:26:05Z"}, {"id": "46751091672", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22750943300, "size": 3, "distinct_size": 3, "ref": "refs/heads/events-feed", "head": "19bead0a10f5448d2df32f185289bd66b27b92a6", "before": "1b691cba3a797945941e1bb746f0d604c696b00d", "commits": [{"sha": "395ed39d17cd352d4fb46f0c8cbc07bf381c2a88", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "filter card with buttons on dashboard", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/395ed39d17cd352d4fb46f0c8cbc07bf381c2a88"}, {"sha": "63a513bfec63f7058e0eca453fbe1c99349e177f", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "stats via nav tabs working", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/63a513bfec63f7058e0eca453fbe1c99349e177f"}, {"sha": "19bead0a10f5448d2df32f185289bd66b27b92a6", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "still tweaking commit event data from gh api", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/19bead0a10f5448d2df32f185289bd66b27b92a6"}]}, "public": true, "created_at": "2025-02-19T21:30:42Z"}, {"id": "46610043662", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22676796992, "size": 2, "distinct_size": 2, "ref": "refs/heads/events-feed", "head": "1b691cba3a797945941e1bb746f0d604c696b00d", "before": "2175eacf7b55925d40487d088dcfc7485718a113", "commits": [{"sha": "4722a863382863b23eea85e61c8db8dad0616222", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "clean up dashboard.py", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/4722a863382863b23eea85e61c8db8dad0616222"}, {"sha": "1b691cba3a797945941e1bb746f0d604c696b00d", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "fixed dropdowns for nav and filters", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/1b691cba3a797945941e1bb746f0d604c696b00d"}]}, "public": true, "created_at": "2025-02-15T19:06:15Z"}, {"id": "46352049482", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22539822291, "size": 1, "distinct_size": 1, "ref": "refs/heads/events-feed", "head": "2175eacf7b55925d40487d088dcfc7485718a113", "before": "c60594f60f8f82ade8eed5519ea71db051c8c167", "commits": [{"sha": "2175eacf7b55925d40487d088dcfc7485718a113", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "bold repo name and add link to repo in feed", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/2175eacf7b55925d40487d088dcfc7485718a113"}]}, "public": true, "created_at": "2025-02-07T20:01:43Z"}, {"id": "46271558778", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"ref": "events-feed", "ref_type": "branch", "master_branch": "main", "description": "hub to use locally for tracking learning concepts", "pusher_type": "user"}, "public": true, "created_at": "2025-02-05T20:15:23Z"}, {"id": "46192002756", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22459578610, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "a67595679a872bb51fe46014253db02c7b5e2dfe", "before": "2882059ad365943174d8005c6802d507a9cfdbac", "commits": [{"sha": "a67595679a872bb51fe46014253db02c7b5e2dfe", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "testing w stats approaches", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/a67595679a872bb51fe46014253db02c7b5e2dfe"}]}, "public": true, "created_at": "2025-02-03T23:38:21Z"}, {"id": "46087551165", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22403218619, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "2882059ad365943174d8005c6802d507a9cfdbac", "before": "202115fc1101e26ee41b60674ec439264239efb2", "commits": [{"sha": "2882059ad365943174d8005c6802d507a9cfdbac", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "upload project error handling", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/2882059ad365943174d8005c6802d507a9cfdbac"}]}, "public": true, "created_at": "2025-01-30T23:24:55Z"}, {"id": "45966236396", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22342798765, "size": 3, "distinct_size": 3, "ref": "refs/heads/main", "head": "202115fc1101e26ee41b60674ec439264239efb2", "before": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0", "commits": [{"sha": "fffb34fa8423b0bb3ac50ec5bcc81c688588dee5", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "secret reset password route, correct og tester admin", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/fffb34fa8423b0bb3ac50ec5bcc81c688588dee5"}, {"sha": "53b0dfdde5f342934cf65b35a737ce978d4a821e", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "course upload flashed messages", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/53b0dfdde5f342934cf65b35a737ce978d4a821e"}, {"sha": "202115fc1101e26ee41b60674ec439264239efb2", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "trim whitespace", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/202115fc1101e26ee41b60674ec439264239efb2"}]}, "public": true, "created_at": "2025-01-27T22:26:33Z"}, {"id": "45963018487", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22341215092, "size": 5, "distinct_size": 5, "ref": "refs/heads/main", "head": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0", "before": "e9cba51143ed4b948f4a036cefb362042218f447", "commits": [{"sha": "8ac9c831c2c03295f743160ce558619f6c1d1a65", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "bug fix recent activity timeline looked at day only", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/8ac9c831c2c03295f743160ce558619f6c1d1a65"}, {"sha": "f16770e1c7257652d955a5a24e40ca56545eaf47", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "404 and 500 error handling", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/f16770e1c7257652d955a5a24e40ca56545eaf47"}, {"sha": "d47d5607d4a862dca9ced02d8690b0352938375d", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "smtphandler for error logging", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/d47d5607d4a862dca9ced02d8690b0352938375d"}, {"sha": "c86407e30c49ddb97f72fbbbf09b929d01f6dc92", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "edit user name and display name", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/c86407e30c49ddb97f72fbbbf09b929d01f6dc92"}, {"sha": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "change password w keyword", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/8a8abc64fc38a346e47cd9742aa2fe11832ea1d0"}]}, "public": true, "created_at": "2025-01-27T20:29:22Z"}, {"id": "45957557156", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22338553182, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "e9cba51143ed4b948f4a036cefb362042218f447", "before": "d5120aa04aa0a2b7ab16c6ce196ae45210e980f4", "commits": [{"sha": "e9cba51143ed4b948f4a036cefb362042218f447", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "dust off", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/e9cba51143ed4b948f4a036cefb362042218f447"}]}, "public": true, "created_at": "2025-01-27T17:34:37Z"}], [{"id": "46626134011", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 933882271, "name": "ksg-dev/my-rise", "url": "https://api.github.com/repos/ksg-dev/my-rise"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "my learning rework with flask, bootstrap, new flask-friendly template", "pusher_type": "user"}, "public": true, "created_at": "2025-02-16T22:22:25Z"}, {"id": "46626123911", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 933882271, "name": "ksg-dev/my-rise", "url": "https://api.github.com/repos/ksg-dev/my-rise"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "my learning rework with flask, bootstrap, new flask-friendly template", "pusher_type": "user"}, "public": true, "created_at": "2025-02-16T22:21:36Z"}], [], [{"id": "46192011618", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926778754, "name": "ksg-dev/interactive-charting-flask", "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"}, "payload": {"repository_id": 926778754, "push_id": 22459583200, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "174e3ca28d51b3660fc6b917bfde296712197686", "before": "4da8350763887777f1c659a8701436bbc2d8899e", "commits": [{"sha": "174e3ca28d51b3660fc6b917bfde296712197686", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "chartjs testing", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask/commits/174e3ca28d51b3660fc6b917bfde296712197686"}]}, "public": true, "created_at": "2025-02-03T23:38:50Z"}, {"id": "46188150600", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926778754, "name": "ksg-dev/interactive-charting-flask", "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "testing different interactive charting methods within flask app, bokeh, matplotlib, dash, plotly", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T21:03:49Z"}, {"id": "46187949693", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926778754, "name": "ksg-dev/interactive-charting-flask", "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "testing different interactive charting methods within flask app, bokeh, matplotlib, dash, plotly", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T20:56:59Z"}], [{"id": "46187513706", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926700869, "name": "ksg-dev/avocado-analytics-dash", "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"}, "payload": {"repository_id": 926700869, "push_id": 22457338384, "size": 8, "distinct_size": 8, "ref": "refs/heads/main", "head": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa", "before": "ae4569105bfb584ce2ff4956d7f956e5af9d3d57", "commits": [{"sha": "5fb8aa42e179865fccf12a5312ff905304bc9788", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "foundation - first run", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/5fb8aa42e179865fccf12a5312ff905304bc9788"}, {"sha": "4f9caf61e47ab39a259571c92d6a33809532069e", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "add assets folder, styles", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/4f9caf61e47ab39a259571c92d6a33809532069e"}, {"sha": "0c831de8ca06f724377034bc06da15068637a73b", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "tweak for external stylesheet", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/0c831de8ca06f724377034bc06da15068637a73b"}, {"sha": "c2148be8b2ea825634699e8808a50ac91214bf20", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "update title, header styling", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/c2148be8b2ea825634699e8808a50ac91214bf20"}, {"sha": "26da78a7a820df038fc102080f94c06e612c857a", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "style graphs with divs and cards", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/26da78a7a820df038fc102080f94c06e612c857a"}, {"sha": "46182b6a9dc219fa1ecd7ebec83481c119b7cb48", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "rework app.py to add filters and filter function", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/46182b6a9dc219fa1ecd7ebec83481c119b7cb48"}, {"sha": "fba0fb81dccb0211dc43798a553c6eb5f96a0f98", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "add styling for filter menus", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/fba0fb81dccb0211dc43798a553c6eb5f96a0f98"}, {"sha": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "fix filter menu container", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/aa498a3b00bb38fd71b4b1648e6061cb3bf719fa"}]}, "public": true, "created_at": "2025-02-03T20:41:39Z"}, {"id": "46182783522", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926700869, "name": "ksg-dev/avocado-analytics-dash", "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "intro to using dash", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T18:07:04Z"}, {"id": "46182632697", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926700869, "name": "ksg-dev/avocado-analytics-dash", "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "intro to using dash", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T18:02:23Z"}], [{"id": "45995729846", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 923643947, "name": "ksg-dev/health-data", "url": "https://api.github.com/repos/ksg-dev/health-data"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "tracking glucose, ketones, gki through 8wk insulin resistance improvement plan", "pusher_type": "user"}, "public": false, "created_at": "2025-01-28T16:24:53Z"}, {"id": "45994966013", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 923643947, "name": "ksg-dev/health-data", "url": "https://api.github.com/repos/ksg-dev/health-data"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "tracking glucose, ketones, gki through 8wk insulin resistance improvement plan", "pusher_type": "user"}, "public": false, "created_at": "2025-01-28T16:05:50Z"}]][[{"id": "46793469312", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22772097714, "size": 2, "distinct_size": 2, "ref": "refs/heads/events-feed", "head": "74b52cf08c22ab7fc6706f0bcb22db466b25ab65", "before": "19bead0a10f5448d2df32f185289bd66b27b92a6", "commits": [{"sha": "97f3e38c1ec485436879d86b2ee7aac91a60c74f", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "commits data parsing for dashboard", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/97f3e38c1ec485436879d86b2ee7aac91a60c74f"}, {"sha": "74b52cf08c22ab7fc6706f0bcb22db466b25ab65", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "clean up print statements", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/74b52cf08c22ab7fc6706f0bcb22db466b25ab65"}]}, "public": true, "created_at": "2025-02-20T20:26:05Z"}, {"id": "46751091672", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22750943300, "size": 3, "distinct_size": 3, "ref": "refs/heads/events-feed", "head": "19bead0a10f5448d2df32f185289bd66b27b92a6", "before": "1b691cba3a797945941e1bb746f0d604c696b00d", "commits": [{"sha": "395ed39d17cd352d4fb46f0c8cbc07bf381c2a88", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "filter card with buttons on dashboard", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/395ed39d17cd352d4fb46f0c8cbc07bf381c2a88"}, {"sha": "63a513bfec63f7058e0eca453fbe1c99349e177f", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "stats via nav tabs working", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/63a513bfec63f7058e0eca453fbe1c99349e177f"}, {"sha": "19bead0a10f5448d2df32f185289bd66b27b92a6", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "still tweaking commit event data from gh api", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/19bead0a10f5448d2df32f185289bd66b27b92a6"}]}, "public": true, "created_at": "2025-02-19T21:30:42Z"}, {"id": "46610043662", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22676796992, "size": 2, "distinct_size": 2, "ref": "refs/heads/events-feed", "head": "1b691cba3a797945941e1bb746f0d604c696b00d", "before": "2175eacf7b55925d40487d088dcfc7485718a113", "commits": [{"sha": "4722a863382863b23eea85e61c8db8dad0616222", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "clean up dashboard.py", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/4722a863382863b23eea85e61c8db8dad0616222"}, {"sha": "1b691cba3a797945941e1bb746f0d604c696b00d", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "fixed dropdowns for nav and filters", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/1b691cba3a797945941e1bb746f0d604c696b00d"}]}, "public": true, "created_at": "2025-02-15T19:06:15Z"}, {"id": "46352049482", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22539822291, "size": 1, "distinct_size": 1, "ref": "refs/heads/events-feed", "head": "2175eacf7b55925d40487d088dcfc7485718a113", "before": "c60594f60f8f82ade8eed5519ea71db051c8c167", "commits": [{"sha": "2175eacf7b55925d40487d088dcfc7485718a113", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "bold repo name and add link to repo in feed", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/2175eacf7b55925d40487d088dcfc7485718a113"}]}, "public": true, "created_at": "2025-02-07T20:01:43Z"}, {"id": "46271558778", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"ref": "events-feed", "ref_type": "branch", "master_branch": "main", "description": "hub to use locally for tracking learning concepts", "pusher_type": "user"}, "public": true, "created_at": "2025-02-05T20:15:23Z"}, {"id": "46192002756", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22459578610, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "a67595679a872bb51fe46014253db02c7b5e2dfe", "before": "2882059ad365943174d8005c6802d507a9cfdbac", "commits": [{"sha": "a67595679a872bb51fe46014253db02c7b5e2dfe", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "testing w stats approaches", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/a67595679a872bb51fe46014253db02c7b5e2dfe"}]}, "public": true, "created_at": "2025-02-03T23:38:21Z"}, {"id": "46087551165", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22403218619, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "2882059ad365943174d8005c6802d507a9cfdbac", "before": "202115fc1101e26ee41b60674ec439264239efb2", "commits": [{"sha": "2882059ad365943174d8005c6802d507a9cfdbac", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "upload project error handling", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/2882059ad365943174d8005c6802d507a9cfdbac"}]}, "public": true, "created_at": "2025-01-30T23:24:55Z"}, {"id": "45966236396", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22342798765, "size": 3, "distinct_size": 3, "ref": "refs/heads/main", "head": "202115fc1101e26ee41b60674ec439264239efb2", "before": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0", "commits": [{"sha": "fffb34fa8423b0bb3ac50ec5bcc81c688588dee5", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "secret reset password route, correct og tester admin", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/fffb34fa8423b0bb3ac50ec5bcc81c688588dee5"}, {"sha": "53b0dfdde5f342934cf65b35a737ce978d4a821e", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "course upload flashed messages", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/53b0dfdde5f342934cf65b35a737ce978d4a821e"}, {"sha": "202115fc1101e26ee41b60674ec439264239efb2", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "trim whitespace", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/202115fc1101e26ee41b60674ec439264239efb2"}]}, "public": true, "created_at": "2025-01-27T22:26:33Z"}, {"id": "45963018487", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22341215092, "size": 5, "distinct_size": 5, "ref": "refs/heads/main", "head": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0", "before": "e9cba51143ed4b948f4a036cefb362042218f447", "commits": [{"sha": "8ac9c831c2c03295f743160ce558619f6c1d1a65", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "bug fix recent activity timeline looked at day only", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/8ac9c831c2c03295f743160ce558619f6c1d1a65"}, {"sha": "f16770e1c7257652d955a5a24e40ca56545eaf47", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "404 and 500 error handling", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/f16770e1c7257652d955a5a24e40ca56545eaf47"}, {"sha": "d47d5607d4a862dca9ced02d8690b0352938375d", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "smtphandler for error logging", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/d47d5607d4a862dca9ced02d8690b0352938375d"}, {"sha": "c86407e30c49ddb97f72fbbbf09b929d01f6dc92", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "edit user name and display name", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/c86407e30c49ddb97f72fbbbf09b929d01f6dc92"}, {"sha": "8a8abc64fc38a346e47cd9742aa2fe11832ea1d0", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "change password w keyword", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/8a8abc64fc38a346e47cd9742aa2fe11832ea1d0"}]}, "public": true, "created_at": "2025-01-27T20:29:22Z"}, {"id": "45957557156", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 863590166, "name": "ksg-dev/my-learning", "url": "https://api.github.com/repos/ksg-dev/my-learning"}, "payload": {"repository_id": 863590166, "push_id": 22338553182, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "e9cba51143ed4b948f4a036cefb362042218f447", "before": "d5120aa04aa0a2b7ab16c6ce196ae45210e980f4", "commits": [{"sha": "e9cba51143ed4b948f4a036cefb362042218f447", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "dust off", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/my-learning/commits/e9cba51143ed4b948f4a036cefb362042218f447"}]}, "public": true, "created_at": "2025-01-27T17:34:37Z"}], [{"id": "46626134011", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 933882271, "name": "ksg-dev/my-rise", "url": "https://api.github.com/repos/ksg-dev/my-rise"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "my learning rework with flask, bootstrap, new flask-friendly template", "pusher_type": "user"}, "public": true, "created_at": "2025-02-16T22:22:25Z"}, {"id": "46626123911", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 933882271, "name": "ksg-dev/my-rise", "url": "https://api.github.com/repos/ksg-dev/my-rise"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "my learning rework with flask, bootstrap, new flask-friendly template", "pusher_type": "user"}, "public": true, "created_at": "2025-02-16T22:21:36Z"}], [], [{"id": "46192011618", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926778754, "name": "ksg-dev/interactive-charting-flask", "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"}, "payload": {"repository_id": 926778754, "push_id": 22459583200, "size": 1, "distinct_size": 1, "ref": "refs/heads/main", "head": "174e3ca28d51b3660fc6b917bfde296712197686", "before": "4da8350763887777f1c659a8701436bbc2d8899e", "commits": [{"sha": "174e3ca28d51b3660fc6b917bfde296712197686", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "chartjs testing", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask/commits/174e3ca28d51b3660fc6b917bfde296712197686"}]}, "public": true, "created_at": "2025-02-03T23:38:50Z"}, {"id": "46188150600", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926778754, "name": "ksg-dev/interactive-charting-flask", "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "testing different interactive charting methods within flask app, bokeh, matplotlib, dash, plotly", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T21:03:49Z"}, {"id": "46187949693", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926778754, "name": "ksg-dev/interactive-charting-flask", "url": "https://api.github.com/repos/ksg-dev/interactive-charting-flask"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "testing different interactive charting methods within flask app, bokeh, matplotlib, dash, plotly", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T20:56:59Z"}], [{"id": "46187513706", "type": "PushEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926700869, "name": "ksg-dev/avocado-analytics-dash", "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"}, "payload": {"repository_id": 926700869, "push_id": 22457338384, "size": 8, "distinct_size": 8, "ref": "refs/heads/main", "head": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa", "before": "ae4569105bfb584ce2ff4956d7f956e5af9d3d57", "commits": [{"sha": "5fb8aa42e179865fccf12a5312ff905304bc9788", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "foundation - first run", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/5fb8aa42e179865fccf12a5312ff905304bc9788"}, {"sha": "4f9caf61e47ab39a259571c92d6a33809532069e", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "add assets folder, styles", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/4f9caf61e47ab39a259571c92d6a33809532069e"}, {"sha": "0c831de8ca06f724377034bc06da15068637a73b", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "tweak for external stylesheet", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/0c831de8ca06f724377034bc06da15068637a73b"}, {"sha": "c2148be8b2ea825634699e8808a50ac91214bf20", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "update title, header styling", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/c2148be8b2ea825634699e8808a50ac91214bf20"}, {"sha": "26da78a7a820df038fc102080f94c06e612c857a", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "style graphs with divs and cards", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/26da78a7a820df038fc102080f94c06e612c857a"}, {"sha": "46182b6a9dc219fa1ecd7ebec83481c119b7cb48", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "rework app.py to add filters and filter function", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/46182b6a9dc219fa1ecd7ebec83481c119b7cb48"}, {"sha": "fba0fb81dccb0211dc43798a553c6eb5f96a0f98", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "add styling for filter menus", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/fba0fb81dccb0211dc43798a553c6eb5f96a0f98"}, {"sha": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa", "author": {"email": "ksg.dev.data@gmail.com", "name": "ksg-dev"}, "message": "fix filter menu container", "distinct": true, "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash/commits/aa498a3b00bb38fd71b4b1648e6061cb3bf719fa"}]}, "public": true, "created_at": "2025-02-03T20:41:39Z"}, {"id": "46182783522", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926700869, "name": "ksg-dev/avocado-analytics-dash", "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "intro to using dash", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T18:07:04Z"}, {"id": "46182632697", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 926700869, "name": "ksg-dev/avocado-analytics-dash", "url": "https://api.github.com/repos/ksg-dev/avocado-analytics-dash"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "intro to using dash", "pusher_type": "user"}, "public": true, "created_at": "2025-02-03T18:02:23Z"}], [{"id": "45995729846", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 923643947, "name": "ksg-dev/health-data", "url": "https://api.github.com/repos/ksg-dev/health-data"}, "payload": {"ref": "main", "ref_type": "branch", "master_branch": "main", "description": "tracking glucose, ketones, gki through 8wk insulin resistance improvement plan", "pusher_type": "user"}, "public": false, "created_at": "2025-01-28T16:24:53Z"}, {"id": "45994966013", "type": "CreateEvent", "actor": {"id": 119773615, "login": "ksg-dev", "display_login": "ksg-dev", "gravatar_id": "", "url": "https://api.github.com/users/ksg-dev", "avatar_url": "https://avatars.githubusercontent.com/u/119773615?"}, "repo": {"id": 923643947, "name": "ksg-dev/health-data", "url": "https://api.github.com/repos/ksg-dev/health-data"}, "payload": {"ref": null, "ref_type": "repository", "master_branch": "main", "description": "tracking glucose, ketones, gki through 8wk insulin resistance improvement plan", "pusher_type": "user"}, "public": false, "created_at": "2025-01-28T16:05:50Z"}]]

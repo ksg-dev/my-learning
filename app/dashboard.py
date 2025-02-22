@@ -3,9 +3,10 @@ import pandas as pd
 import numpy as np
 from app import app, db
 from app.models import Event, Course, Project, Concept, Repository
-from app.events import GetGitHub, validate_id
+# from app.events import GetGitHub, validate_id
 from datetime import datetime, timedelta, date
 from sqlalchemy.orm import sessionmaker
+from app.github import GetGitHub
 
 
 class Dashboard:
@@ -16,8 +17,6 @@ class Dashboard:
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
         self.stats = self.event_stats(self.github_data.events)
-
-
 
 
     # Format timedelta into string for feed
@@ -233,7 +232,19 @@ class Dashboard:
         # print(f"Total Commits: {all_commits}")
         return stats
 
+    def repo_activity(self) -> dict:
 
+
+
+        # needs to return in format:
+        """
+        chart_data = {
+            'categories': ['Jan', 'Feb', 'Mar', etc],
+            'series': [23, 34, 89, etc]
+        }
+        :return:
+        """
+        pass
 
     def get_event_stats(self):
         engine = db.get_engine()
