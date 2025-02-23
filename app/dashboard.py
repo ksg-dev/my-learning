@@ -17,6 +17,7 @@ class Dashboard:
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
         self.stats = self.event_stats(self.github_data.events)
+        self.repo_events = self.repo_activity(self.github_data.repo_activity)
 
 
     # Format timedelta into string for feed
@@ -232,15 +233,67 @@ class Dashboard:
         # print(f"Total Commits: {all_commits}")
         return stats
 
-    def repo_activity(self) -> dict:
+    def repo_activity(self, repo_events) -> dict:
+        # test = repo_events[0]["my-learning"]
+        # print(test)
+        # print(repo_events)
+
+        # dates = pd.date_range(end=pd.Timestamp.now(), freq='D', periods=10)
+        repo_names = [i["repo"] for i in repo_events]
+
+        # get current date
+        today = date.today()
+        iso_today = today.isocalendar()
+
+        # Calculate start date for 10 weeks ago
+        start_week = today - timedelta(weeks=10)
+        iso_start = start_week.isocalendar()
+
+        print(f"today iso: {iso_today}")
+        # Output:
+        # today iso: datetime.IsoCalendarDate(year=2025, week=8, weekday=6)
+        print(f"start iso: {iso_start}")
+        # Output:
+        # start iso: datetime.IsoCalendarDate(year=2024, week=50, weekday=6)
+
+
+        for i in repo_events:
+            iso_event = i["timestamp"]
+            print(f"event:{iso_event} {type(iso_event)}")
+            # Output:
+            # event:['2025-02-20', '2025-02-19', '2025-02-15', '2025-02-07', '2025-02-03', '2025-01-30', '2025-01-27', '2025-01-27', '2025-01-27'] <class 'list'>
+            # event:[] <class 'list'>
+            # event:[] <class 'list'>
+            # event:['2025-02-03'] <class 'list'>
+            # event:['2025-02-03'] <class 'list'>
+            # event:[] <class 'list'>
+
+        # frames = []
+        #
+        # for i in repo_events:
+        #     formatted_date = pd.to_datetime(i["timestamp"])
+        #     data = {
+        #         'date': formatted_date,
+        #         i["repo"]: i["values"]
+        #     }
+        #
+        #     df = pd.DataFrame(data)
+        #
+        #     frames.append(df)
+        #
+        # result = pd.concat(frames)
+        # print(result)
+
+
+
 
 
 
         # needs to return in format:
         """
         chart_data = {
-            'categories': ['Jan', 'Feb', 'Mar', etc],
-            'series': [23, 34, 89, etc]
+            'categories': ['Jan', 'Feb', 'Mar', etc],   # x-axis
+            'series': [23, 34, 89, etc]                 # y-axis data
         }
         :return:
         """

@@ -170,38 +170,31 @@ class GetGitHub:
                 response.raise_for_status()
                 data = response.json()
 
-                repo_events = []
+                repo_events = {
+                    "repo": repo,
+                    "timestamp": [],
+                    "values": []
+                }
 
                 # parse events data per repo
                 for event in data:
                     event_type = event["type"]
-                    timestamp = event["created_at"].strip("Z")
+                    created = event["created_at"].strip("Z")
+                    date = created.split("T")[0]
 
                     if event_type == "PushEvent":
+                        repo_events["timestamp"].append(date)
+                        # repo_events["type"].append(event_type)
                         commits = int(event["payload"]["size"])
-                        event = {
-                            "timestamp": datetime.fromisoformat(timestamp),
-                            "type": "push",
-                            "payload_target": commits
-                        }
+                        repo_events["values"].append(commits)
 
-                    elif event_type == "CreateEvent":
-                        create_type = event["payload"]["ref_type"]
-                        event = {
-                            "timestamp": datetime.fromisoformat(timestamp),
-                            "type": "create",
-                            "payload_target": create_type
-                        }
+                    # elif event_type == "CreateEvent":
+                        # create_type = event["payload"]["ref_type"]
+                        # repo_events["payload_target"].append(create_type)
 
-                    repo_events.append(event)
+                all_repo_events.append(repo_events)
 
-                add_activity = {
-                    repo: repo_events
-                }
-
-                all_repo_events.append(add_activity)
-
-            print(f"all repo events: {all_repo_events}")
+            # print(f"all repo events: {all_repo_events}")
             return all_repo_events
             # # dump output to file for testing
             # with open("recent-repo-events.json", "a") as file:
