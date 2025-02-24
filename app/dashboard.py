@@ -16,8 +16,9 @@ class Dashboard:
         self.github_data = GetGitHub(user)
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
-        self.stats = self.event_stats(self.github_data.events)
-        self.repo_events = self.repo_activity(self.github_data.repo_activity)
+        self.event_stats = self.get_event_stats(self.github_data.events)
+        self.recent_repos = self.github_data.recent_repos
+        self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
 
 
     # Format timedelta into string for feed
@@ -151,7 +152,7 @@ class Dashboard:
         # print(course_stats)
         return course_stats
 
-    def event_stats(self, events):
+    def get_event_stats(self, events):
         # events = self.github_data.events
 
         all_commits = 0
@@ -233,11 +234,10 @@ class Dashboard:
         # print(f"Total Commits: {all_commits}")
         return stats
 
-    def repo_activity(self, repo_events) -> dict:
-        pass
-
-
-
+    def repo_activity_stats(self, repo_events) -> dict:
+        today = date.today()
+        iso_today = today.isocalendar()
+        print(f"today iso: {iso_today}")
 
 
         # needs to return in format:
@@ -250,106 +250,106 @@ class Dashboard:
         """
         pass
 
-    def get_event_stats(self):
-        engine = db.get_engine()
-        Session = sessionmaker(bind=engine)
-        session = Session()
-
-        # Query db
-        query = session.query(Event).join(Repository)
-
-        pd.set_option("expand_frame_repr", False)
-        # df = pd.read_sql(query.statement, engine)
-        # print(f"df: {df}")
-
-        try:
-            # events_df = pd.read_sql("events", db.get_engine())
-            events_df = pd.read_sql(query.statement, engine)
-            # print(events_df)
-            # print("---------------------------")
-
-            # Stats for ALL
-            all_commits = int(events_df["commits"].sum())
-            all_commits_by_repo = events_df.groupby("repo_id")["commits"].sum()
-            # print(f"all_by_repo: {all_commits_by_repo}")
-
-            # Stats for TODAY
-            today = events_df[events_df.timestamp == datetime.today()]
-            # print(f"today_df: {today}")
-            yesterday = events_df[events_df.timestamp == (datetime.today() - timedelta(days=1))]
-            # print(f"yest_df: {yesterday}")
-            yest_count = int(yesterday["commits"].sum())
-            today_count = int(today["commits"].sum())
-            today_by_repo = today.groupby("repo_id")["commits"].sum()
-
-            if yest_count != 0:
-                day_change = (today_count - yest_count) / yest_count * 100
-            else:
-                day_change = 0
-
-            # Stats for MONTH
-            month = events_df[events_df.timestamp.dt.month == datetime.today().month]
-            last_mo = events_df[events_df.timestamp.dt.month == datetime.today().month - 1]
-            ltmo_count = int(last_mo["commits"].sum())
-            month_count = int(month["commits"].sum())
-            month_by_repo = month.groupby("repo_id")["commits"].sum()
-
-            if ltmo_count != 0:
-                mo_change = (month_count - ltmo_count) / ltmo_count * 100
-            else:
-                mo_change = 0
-
-            # Stats for YEAR
-            year = events_df[events_df.timestamp.dt.year == datetime.today().year]
-            last_yr = events_df[events_df.timestamp.dt.year == datetime.today().year - 1]
-            ltyr_count = int(last_yr["commits"].sum())
-            year_count = int(year["commits"].sum())
-            year_by_repo = year.groupby("repo_id")["commits"].sum()
-
-            if ltyr_count != 0:
-                yr_change = (year_count - ltyr_count) / ltyr_count * 100
-            else:
-                yr_change = 0
-
-            event_stats = {
-                "all_commits": all_commits,
-                "all_by_repo": all_commits_by_repo,
-                "yest_commits": yest_count,
-                "today_commits": today_count,
-                "day_change": day_change,
-                "today_by_repo": today_by_repo,
-                "ltmo_commits": ltmo_count,
-                "month_commits": month_count,
-                "mo_change": mo_change,
-                "month_by_repo": month_by_repo,
-                "ltyr_commits": ltyr_count,
-                "year_commits": year_count,
-                "yr_change": yr_change,
-                "year_by_repo": year_by_repo
-            }
-        except KeyError:
-            event_stats = {
-                "all_commits": 0,
-                "all_by_repo": 0,
-                "yest_commits": 0,
-                "today_commits": 0,
-                "day_change": 0,
-                "today_by_repo": 0,
-                "ltmo_commits": 0,
-                "month_commits": 0,
-                "mo_change": 0,
-                "month_by_repo": 0,
-                "ltyr_commits": 0,
-                "year_commits": 0,
-                "yr_change": 0,
-                "year_by_repo": 0
-            }
-        # print(f"event_stats: {event_stats}")
-        return event_stats
-
-    def get_stats_by_time(self):
-
-        pass
+    # def get_event_stats(self):
+    #     engine = db.get_engine()
+    #     Session = sessionmaker(bind=engine)
+    #     session = Session()
+    #
+    #     # Query db
+    #     query = session.query(Event).join(Repository)
+    #
+    #     pd.set_option("expand_frame_repr", False)
+    #     # df = pd.read_sql(query.statement, engine)
+    #     # print(f"df: {df}")
+    #
+    #     try:
+    #         # events_df = pd.read_sql("events", db.get_engine())
+    #         events_df = pd.read_sql(query.statement, engine)
+    #         # print(events_df)
+    #         # print("---------------------------")
+    #
+    #         # Stats for ALL
+    #         all_commits = int(events_df["commits"].sum())
+    #         all_commits_by_repo = events_df.groupby("repo_id")["commits"].sum()
+    #         # print(f"all_by_repo: {all_commits_by_repo}")
+    #
+    #         # Stats for TODAY
+    #         today = events_df[events_df.timestamp == datetime.today()]
+    #         # print(f"today_df: {today}")
+    #         yesterday = events_df[events_df.timestamp == (datetime.today() - timedelta(days=1))]
+    #         # print(f"yest_df: {yesterday}")
+    #         yest_count = int(yesterday["commits"].sum())
+    #         today_count = int(today["commits"].sum())
+    #         today_by_repo = today.groupby("repo_id")["commits"].sum()
+    #
+    #         if yest_count != 0:
+    #             day_change = (today_count - yest_count) / yest_count * 100
+    #         else:
+    #             day_change = 0
+    #
+    #         # Stats for MONTH
+    #         month = events_df[events_df.timestamp.dt.month == datetime.today().month]
+    #         last_mo = events_df[events_df.timestamp.dt.month == datetime.today().month - 1]
+    #         ltmo_count = int(last_mo["commits"].sum())
+    #         month_count = int(month["commits"].sum())
+    #         month_by_repo = month.groupby("repo_id")["commits"].sum()
+    #
+    #         if ltmo_count != 0:
+    #             mo_change = (month_count - ltmo_count) / ltmo_count * 100
+    #         else:
+    #             mo_change = 0
+    #
+    #         # Stats for YEAR
+    #         year = events_df[events_df.timestamp.dt.year == datetime.today().year]
+    #         last_yr = events_df[events_df.timestamp.dt.year == datetime.today().year - 1]
+    #         ltyr_count = int(last_yr["commits"].sum())
+    #         year_count = int(year["commits"].sum())
+    #         year_by_repo = year.groupby("repo_id")["commits"].sum()
+    #
+    #         if ltyr_count != 0:
+    #             yr_change = (year_count - ltyr_count) / ltyr_count * 100
+    #         else:
+    #             yr_change = 0
+    #
+    #         event_stats = {
+    #             "all_commits": all_commits,
+    #             "all_by_repo": all_commits_by_repo,
+    #             "yest_commits": yest_count,
+    #             "today_commits": today_count,
+    #             "day_change": day_change,
+    #             "today_by_repo": today_by_repo,
+    #             "ltmo_commits": ltmo_count,
+    #             "month_commits": month_count,
+    #             "mo_change": mo_change,
+    #             "month_by_repo": month_by_repo,
+    #             "ltyr_commits": ltyr_count,
+    #             "year_commits": year_count,
+    #             "yr_change": yr_change,
+    #             "year_by_repo": year_by_repo
+    #         }
+    #     except KeyError:
+    #         event_stats = {
+    #             "all_commits": 0,
+    #             "all_by_repo": 0,
+    #             "yest_commits": 0,
+    #             "today_commits": 0,
+    #             "day_change": 0,
+    #             "today_by_repo": 0,
+    #             "ltmo_commits": 0,
+    #             "month_commits": 0,
+    #             "mo_change": 0,
+    #             "month_by_repo": 0,
+    #             "ltyr_commits": 0,
+    #             "year_commits": 0,
+    #             "yr_change": 0,
+    #             "year_by_repo": 0
+    #         }
+    #     # print(f"event_stats: {event_stats}")
+    #     return event_stats
+    #
+    # def get_stats_by_time(self):
+    #
+    #     pass
 
 
 

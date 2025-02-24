@@ -203,7 +203,7 @@ def home():
     my_events = dashboard.get_event_stats()
 
     # Test new stats
-    my_stats = dashboard.stats
+    my_stats = dashboard.event_stats
 
     # Get course stats dict
     my_courses = dashboard.get_course_stats()

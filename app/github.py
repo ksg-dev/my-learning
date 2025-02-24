@@ -6,7 +6,7 @@ from requests import HTTPError
 from github import Github, Auth
 
 from app import app, db
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from pprint import pprint
 import json
 
@@ -20,8 +20,9 @@ class GetGitHub:
         self._user = user
         self._token = os.environ["GITHUB_TOKEN"]
         self.events = self.get_events(user=self._user, token=self._token)
-        self.commits = self.commit_activity(user=self._user, token=self._token)
-        self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
+        self.recent_repos = self.get_recent_repos(token=self._token)
+        # self.commits = self.commit_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
+        self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
 
     def get_events(self, user, token):
@@ -39,9 +40,6 @@ class GetGitHub:
 
         response = requests.get(url=user_events, headers=headers, params=payload)
         response.raise_for_status()
-        # print(f"url: {response.url}")
-        # print(f"headers: {response.headers}")
-        # print(f"my headers: {response.request.headers}")
 
         events = response.json()
 
@@ -75,19 +73,15 @@ class GetGitHub:
         # print(f"all_events: {len(all_events)}")
         return all_events
 
-    def recent_repos(self):
-        recent = []
-        for i in self.events:
-            if i["repo"] not in recent:
-                recent.append(i["repo"])
-        # print(f"recent repos: {recent}")
-        # print(f"len: {len(recent)}")
-        return recent
+    def get_recent_repos(self, token):
 
-    def commit_activity(self, user, token):
-        repo_list = self.recent_repos()
-        weekly_commits = []
-        # print(len(repo_list))
+        # Get today's date
+        today = date.today()
+
+        # Calculate date 1 year prior - can change to fit scope
+        since_date = today - timedelta(days=365)
+        # Convert to iso for api
+        iso_date = since_date.isoformat()
 
         headers = {
             "accept": "application/vnd.github+json",
@@ -95,26 +89,68 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-        # make sure list is not empty
-        if len(repo_list) > 0:
-            for repo in repo_list:
-                # Endpoint to get weekly commit count as list, with index 0 being 52 weeks ago
-                # Problem with this is only counts commits on default branches
-                weekly_count = f"{GH_API_URL}/repos/{user}/{repo}/stats/participation"
+        # Only want repos updated in last year
+        params = {
+            "per_page": 100,
+            "sort": "updated",
+            "since": iso_date
+        }
 
-                response = requests.get(url=weekly_count, headers=headers)
-                response.raise_for_status()
-                data = response.json()
+        # Endpoint to get repos for authenticated user
+        repos_url = f"{GH_API_URL}/user/repos"
 
-                add_activity = {
-                    repo: data
-                }
+        response = requests.get(url=repos_url, headers=headers, params=params)
+        response.raise_for_status()
 
-                weekly_commits.append(add_activity)
-        # print(f"weekly commits: {weekly_commits}")
-        # Sample output with weekly commits numbers
-        # weekly commits: [{'my-learning': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 42, 10, 29, 32, 34, 19, 6, 7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 10, 1, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 42, 10, 29, 32, 34, 19, 6, 7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 10, 1, 0, 0]}}, {'my-rise': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]}}, {'dashboard': {'all': [], 'owner': []}}, {'interactive-charting-flask': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0]}}, {'avocado-analytics-dash': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0]}}, {'health-data': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0]}}]
-        return weekly_commits
+        repo_data = response.json()
+
+        # Empty dict where we'll get names of repos within params,
+        # also get languages for radial chart since in same call
+        # can add any other params as empty list we want to use later
+        recent = {
+            "repo": [],
+            "language": []
+        }
+
+        # Loop through repos in json
+        for repo in repo_data:
+            # Check repo is not empty, not archived
+            if repo["archived"] == "false" and repo["size"] > 0:
+                recent["repo"].append(repo["name"])
+                recent["language"].append(repo["language"])
+
+        return recent
+
+    # def commit_activity(self, user, token, repo_list):
+    #     weekly_commits = []
+    #     # print(len(repo_list))
+    #
+    #     headers = {
+    #         "accept": "application/vnd.github+json",
+    #         "authorization": f"Bearer {token}",
+    #         "X-GitHub-Api-Version": "2022-11-28"
+    #     }
+    #
+    #     # make sure list is not empty
+    #     if len(repo_list) > 0:
+    #         for repo in repo_list:
+    #             # Endpoint to get weekly commit count as list, with index 0 being 52 weeks ago
+    #             # Problem with this is only counts commits on default branches
+    #             weekly_count = f"{GH_API_URL}/repos/{user}/{repo}/stats/participation"
+    #
+    #             response = requests.get(url=weekly_count, headers=headers)
+    #             response.raise_for_status()
+    #             data = response.json()
+    #
+    #             add_activity = {
+    #                 repo: data
+    #             }
+    #
+    #             weekly_commits.append(add_activity)
+    #     # print(f"weekly commits: {weekly_commits}")
+    #     # Sample output with weekly commits numbers
+    #     # weekly commits: [{'my-learning': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 42, 10, 29, 32, 34, 19, 6, 7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 10, 1, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 42, 10, 29, 32, 34, 19, 6, 7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 10, 1, 0, 0]}}, {'my-rise': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]}}, {'dashboard': {'all': [], 'owner': []}}, {'interactive-charting-flask': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0]}}, {'avocado-analytics-dash': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0]}}, {'health-data': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0]}}]
+    #     return weekly_commits
     # def recent_repo_activity(self, user, token):
     #     repo_list = self.recent_repos()
     #     repo_activity = []
@@ -148,8 +184,7 @@ class GetGitHub:
     #         with open("recent-repo-activity.json", "a") as file:
     #             json.dump(repo_activity, file)
 
-    def recent_repo_activity(self, user, token):
-        repo_list = self.recent_repos()
+    def recent_repo_activity(self, user, token, repo_list):
         all_repo_events = []
 
         headers = {
@@ -186,16 +221,16 @@ class GetGitHub:
                 for event in data:
                     event_type = event["type"]
                     date_str = event["created_at"].strip("Z")
-                    date = date_str.split("T")[0]
+                    event_date = date_str.split("T")[0]
                     created = datetime.fromisoformat(date_str)
                     iso_date = created.isocalendar()
-                    print(f"created: {created} type: {type(created)}")
-                    print(f"date: {date} type: {type(date)}")
+                    # print(f"created: {created} type: {type(created)}")
+                    # print(f"date: {date} type: {type(date)}")
 
 
 
                     if event_type == "PushEvent":
-                        repo_events["date"].append(date)
+                        repo_events["date"].append(event_date)
                         repo_events["year"].append(iso_date.year)
                         repo_events["week"].append(iso_date.week)
                         repo_events["month"].append(created.month)
