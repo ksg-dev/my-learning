@@ -10,6 +10,7 @@ from datetime import datetime
 from pprint import pprint
 import json
 
+
 load_dotenv()
 
 GH_API_URL = "https://api.github.com"
@@ -21,6 +22,7 @@ class GetGitHub:
         self.events = self.get_events(user=self._user, token=self._token)
         self.commits = self.commit_activity(user=self._user, token=self._token)
         self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
+        # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
 
     def get_events(self, user, token):
         headers = {
@@ -172,18 +174,33 @@ class GetGitHub:
 
                 repo_events = {
                     "repo": repo,
-                    "timestamp": [],
+                    "ref": [],
+                    "date": [],
+                    "year": [],
+                    "week": [],
+                    "month": [],
                     "values": []
                 }
 
                 # parse events data per repo
                 for event in data:
                     event_type = event["type"]
-                    created = event["created_at"].strip("Z")
-                    date = created.split("T")[0]
+                    date_str = event["created_at"].strip("Z")
+                    date = date_str.split("T")[0]
+                    created = datetime.fromisoformat(date_str)
+                    iso_date = created.isocalendar()
+                    print(f"created: {created} type: {type(created)}")
+                    print(f"date: {date} type: {type(date)}")
+
+
 
                     if event_type == "PushEvent":
-                        repo_events["timestamp"].append(date)
+                        repo_events["date"].append(date)
+                        repo_events["year"].append(iso_date.year)
+                        repo_events["week"].append(iso_date.week)
+                        repo_events["month"].append(created.month)
+                        git_ref = event["payload"]["ref"].split("/")[-1]
+                        repo_events["ref"].append(git_ref)
                         # repo_events["type"].append(event_type)
                         commits = int(event["payload"]["size"])
                         repo_events["values"].append(commits)
@@ -194,8 +211,11 @@ class GetGitHub:
 
                 all_repo_events.append(repo_events)
 
-            # print(f"all repo events: {all_repo_events}")
+            print(f"all repo events: {all_repo_events}")
             return all_repo_events
             # # dump output to file for testing
             # with open("recent-repo-events.json", "a") as file:
             #     json.dump(repo_events, file)
+
+
+
