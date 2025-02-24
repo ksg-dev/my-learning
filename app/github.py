@@ -189,7 +189,7 @@ class GetGitHub:
 
     def recent_repo_activity(self, user, token):
         repo_list = self.recent_repos["repo-name"]
-        # print(f"repo list: {repo_list} type: {type(repo_list)}")
+        print(f"repo list: {repo_list} type: {type(repo_list)}")
         all_repo_events = []
 
         headers = {
@@ -202,13 +202,16 @@ class GetGitHub:
             "per_page": 100
         }
 
+        # TODO: Need to change this to instead look at activity endpoint
+        # because even repo by repo only fetches last 90 days
+        # TODO: Have to tweak how to get from activity feed bc just says push, no payload count, may hav to fetch this separately
         # make sure list is not empty
         if len(repo_list) > 0:
             for repo in repo_list:
-                # Endpoint to get repo events
-                events_url = f"{GH_API_URL}/repos/{user}/{repo}/events"
+                # Endpoint to get repo activity
+                activity_url = f"{GH_API_URL}/repos/{user}/{repo}/activity"
 
-                response = requests.get(url=events_url, headers=headers, params=params)
+                response = requests.get(url=activity_url, headers=headers, params=params)
                 response.raise_for_status()
                 data = response.json()
 

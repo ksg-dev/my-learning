@@ -237,7 +237,18 @@ class Dashboard:
     def repo_activity_stats(self, repo_events) -> dict:
         today = date.today()
         iso_today = today.isocalendar()
-        print(f"today iso: {iso_today}")
+        # print(f"today iso: {iso_today}")
+
+        # First take all repo events and group by date components instead of repo name
+        list_of_dates = []
+        list_of_values = []
+
+        for repo in repo_events:
+            list_of_dates.extend(repo["date"])
+            list_of_values.extend(repo["values"])
+
+        print(f"list of dates: {list_of_dates} - length: {len(list_of_dates)}")
+        print(f"list of values: {list_of_values} - length: {len(list_of_values)}")
 
 
         # needs to return in format:
@@ -248,7 +259,7 @@ class Dashboard:
         }
         :return:
         """
-        pass
+
 
     # def get_event_stats(self):
     #     engine = db.get_engine()
