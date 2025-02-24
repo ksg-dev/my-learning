@@ -200,7 +200,7 @@ def home():
 
 
     # Get event stats dict
-    my_events = dashboard.get_event_stats()
+    # my_events = dashboard.get_event_stats()
 
     # Test new stats
     my_stats = dashboard.event_stats
@@ -220,7 +220,7 @@ def home():
 
 
     return render_template('index.html',
-                           my_events=my_events,
+                           # my_events=my_events,
                            my_stats=my_stats,
                            now=now,
                            activity=feed,

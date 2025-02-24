@@ -22,7 +22,7 @@ class GetGitHub:
         self.events = self.get_events(user=self._user, token=self._token)
         self.recent_repos = self.get_recent_repos(token=self._token)
         # self.commits = self.commit_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
-        self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
+        self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
 
     def get_events(self, user, token):
@@ -108,17 +108,20 @@ class GetGitHub:
         # also get languages for radial chart since in same call
         # can add any other params as empty list we want to use later
         recent = {
-            "repo": [],
+            "repo-name": [],
             "language": []
         }
 
         # Loop through repos in json
         for repo in repo_data:
+            # print(f"archived: {repo['archived']} {type(repo['archived'])}")
+            # print(f"size: {repo['size']} {type(repo['size'])}")
             # Check repo is not empty, not archived
-            if repo["archived"] == "false" and repo["size"] > 0:
-                recent["repo"].append(repo["name"])
+            if not repo["archived"] and repo["size"] > 0:
+                recent["repo-name"].append(repo["name"])
                 recent["language"].append(repo["language"])
 
+        # print(f"recent: {recent}")
         return recent
 
     # def commit_activity(self, user, token, repo_list):
@@ -184,7 +187,9 @@ class GetGitHub:
     #         with open("recent-repo-activity.json", "a") as file:
     #             json.dump(repo_activity, file)
 
-    def recent_repo_activity(self, user, token, repo_list):
+    def recent_repo_activity(self, user, token):
+        repo_list = self.recent_repos["repo-name"]
+        # print(f"repo list: {repo_list} type: {type(repo_list)}")
         all_repo_events = []
 
         headers = {
@@ -243,8 +248,9 @@ class GetGitHub:
                     # elif event_type == "CreateEvent":
                         # create_type = event["payload"]["ref_type"]
                         # repo_events["payload_target"].append(create_type)
-
-                all_repo_events.append(repo_events)
+                # Check some push event exists before returning
+                if len(repo_events["ref"]) > 0:
+                    all_repo_events.append(repo_events)
 
             print(f"all repo events: {all_repo_events}")
             return all_repo_events
