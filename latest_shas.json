@@ -1,0 +1,38 @@
+[
+  {
+    "repo": "my-rise",
+    "sha": "c6859a4945c545841aa32a75794788808eaf90fb"
+  },
+  {
+    "repo": "interactive-charting-flask",
+    "sha": "2ca8233216873ad071d0f409a4b7315cee812485"
+  },
+  {
+    "repo": "data-entry-automation",
+    "sha": "fcd8263e9fe1268e1b325a8b909e7298dc9dba76"
+  },
+  {
+    "repo": "instagram-bot",
+    "sha": "6c9bfe89ae3c5773b38acf10174af5e25452e6ab"
+  },
+  {
+    "repo": "linkedin-easy-apply",
+    "sha": "7cd4cb14dc8c7cc3056d29e2503fcf5fce68c7a6"
+  },
+  {
+    "repo": "cookie-clicker-bot",
+    "sha": "46548b564ad4630c5f2a6ae1dae3e296defea9cb"
+  },
+  {
+    "repo": "selenium-intro",
+    "sha": "175c63c00c277e4a28181cfd16921fa9eb90eeba"
+  },
+  {
+    "repo": "my-learning",
+    "sha": "ee963d2685fdacab3a84eaf89db7476b5811cc79"
+  },
+  {
+    "repo": "avocado-analytics-dash",
+    "sha": "aa498a3b00bb38fd71b4b1648e6061cb3bf719fa"
+  }
+]

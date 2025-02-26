@@ -21,29 +21,31 @@ class GetGitHub:
         self._token = os.environ["GITHUB_TOKEN"]
         self.events = self.get_events(user=self._user, token=self._token)
         self.recent_repos_data = self.get_recent_repos_list(token=self._token)
-        self.get_commits = self.get_recent_repo_commits()
+        # Just testing getting latest sha output
+        self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
+        # self.get_commits = self.get_recent_repo_commits()
         # self.commits = self.commit_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
         # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
-"""
-For recent repos commits....
-
-STEP 1: 
-    List all repos for auth user using since param to only show those updated in last year/whatever time period.
+    """
+    For recent repos commits....
     
-STEP 2: 
-    Take output json from list all repos, loop through response data -- for each repo-name, make call to List Repo Activity
-    endpoint, limit activity with per_page=1 so it will only return latest activity. Get "after" value (latest sha). 
+    STEP 1: 
+        List all repos for auth user using since param to only show those updated in last year/whatever time period.
+        
+    STEP 2: 
+        Take output json from list all repos, loop through response data -- for each repo-name, make call to List Repo Activity
+        endpoint, limit activity with per_page=1 so it will only return latest activity. Get "after" value (latest sha). 
+        
+    STEP 3:
+        Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
+        This will give a list of all commits from your latest commit sha (even if not on main branch) going backwards 
+        (so will include other branches as it follows sha refs backwards)
     
-STEP 3:
-    Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
-    This will give a list of all commits from your latest commit sha (even if not on main branch) going backwards 
-    (so will include other branches as it follows sha refs backwards)
-
-STEP 4:
-    Now can take that commit data for each repo and get date of commits and group however
-
-"""
+    STEP 4:
+        Now can take that commit data for each repo and get date of commits and group however
+    
+    """
     def get_events(self, user, token):
         headers = {
             "accept": "application/vnd.github+json",
@@ -92,7 +94,7 @@ STEP 4:
         # print(f"all_events: {len(all_events)}")
         return all_events
 
-    # Make API call to endpoint for list of repos for authenticated user updated in the last year
+    # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year
     def get_recent_repos_list(self, token):
 
         # Get today's date
@@ -127,6 +129,92 @@ STEP 4:
         # Returns json of list of repos updated in last year
         return repo_data
 
+    # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha
+    def get_latest_activity_sha(self, user, token):
+        latest_shas = []
+
+        headers = {
+                "accept": "application/vnd.github+json",
+                "authorization": f"Bearer {token}",
+                "X-GitHub-Api-Version": "2022-11-28"
+            }
+
+        # Limit to only single most recent activity for repo
+        params = {
+            "per_page": 1
+        }
+
+        # Check for data
+        if self.recent_repos_data:
+            # Loop through each repo in recent repo data
+            for repo in self.recent_repos_data:
+                # Get repo name
+                repo_name = repo["name"]
+
+                # Endpoint to get detailed repo activity
+                activity_url = f"{GH_API_URL}/repos/{user}/{repo_name}/activity"
+
+                response = requests.get(url=activity_url, headers=headers, params=params)
+                response.raise_for_status()
+                data = response.json()
+
+                # print(f"type: {type(data)}")
+                # print(f"len: {len(data)}")
+
+                if len(data) > 0:
+                    add_sha = {
+                        "repo": repo_name,
+                        "sha": data[0]["after"]
+                    }
+
+
+                    # print(f"repo_name: {repo_name}")
+                    # print(f"sha: {data[0]['after']}")
+                    # Output Example:
+                    # repo_name: selenium-intro
+                    # sha: 175c63c00c277e4a28181cfd16921fa9eb90eeba
+
+                    latest_shas.append(add_sha)
+
+            # dump output to file for testing
+            with open("latest_shas.json", "a") as file:
+                json.dump(latest_shas, file)
+
+
+#   def recent_repo_activity(self, user, token):
+    #     repo_list = self.recent_repos()
+    #     repo_activity = []
+    #
+    #     headers = {
+    #         "accept": "application/vnd.github+json",
+    #         "authorization": f"Bearer {token}",
+    #         "X-GitHub-Api-Version": "2022-11-28"
+    #     }
+    #     # Limit activity to 3 months
+    #     params = {
+    #         "time_period": "quarter"
+    #     }
+    #
+    #     # make sure list is not empty
+    #     if len(repo_list) > 0:
+    #         for repo in repo_list:
+    #             # Endpoint to get detailed repo activity
+    #             activity_url = f"{GH_API_URL}/repos/{user}/{repo}/activity"
+    #
+    #             response = requests.get(url=activity_url, headers=headers, params=params)
+    #             response.raise_for_status()
+    #             data = response.json()
+
+    # Problem with this, shows push but not payload/commits count
+    #
+    #             add_activity = {
+    #                 repo: data
+    #             }
+    #
+    #             repo_activity.append(add_activity)
+    #         # dump output to file for testing
+    #         with open("recent-repo-activity.json", "a") as file:
+    #             json.dump(repo_activity, file)
     def get_recent_repo_commits(self):
         repo_data = self.recent_repos_data
 
@@ -197,40 +285,7 @@ STEP 4:
     #     # Sample output with weekly commits numbers
     #     # weekly commits: [{'my-learning': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 42, 10, 29, 32, 34, 19, 6, 7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 10, 1, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 42, 10, 29, 32, 34, 19, 6, 7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 10, 1, 0, 0]}}, {'my-rise': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]}}, {'dashboard': {'all': [], 'owner': []}}, {'interactive-charting-flask': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0]}}, {'avocado-analytics-dash': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0]}}, {'health-data': {'all': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0], 'owner': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0]}}]
     #     return weekly_commits
-    # def recent_repo_activity(self, user, token):
-    #     repo_list = self.recent_repos()
-    #     repo_activity = []
     #
-    #     headers = {
-    #         "accept": "application/vnd.github+json",
-    #         "authorization": f"Bearer {token}",
-    #         "X-GitHub-Api-Version": "2022-11-28"
-    #     }
-    #     # Limit activity to 3 months
-    #     params = {
-    #         "time_period": "quarter"
-    #     }
-    #
-    #     # make sure list is not empty
-    #     if len(repo_list) > 0:
-    #         for repo in repo_list:
-    #             # Endpoint to get detailed repo activity
-    #             activity_url = f"{GH_API_URL}/repos/{user}/{repo}/activity"
-    #
-    #             response = requests.get(url=activity_url, headers=headers, params=params)
-    #             response.raise_for_status()
-    #             data = response.json()
-
-    # Problem with this, shows push but not payload/commits count
-    #
-    #             add_activity = {
-    #                 repo: data
-    #             }
-    #
-    #             repo_activity.append(add_activity)
-    #         # dump output to file for testing
-    #         with open("recent-repo-activity.json", "a") as file:
-    #             json.dump(repo_activity, file)
 
     def recent_repo_activity(self, user, token):
         repo_list = self.recent_repos["repo-name"]
