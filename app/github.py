@@ -20,11 +20,30 @@ class GetGitHub:
         self._user = user
         self._token = os.environ["GITHUB_TOKEN"]
         self.events = self.get_events(user=self._user, token=self._token)
-        self.recent_repos = self.get_recent_repos(token=self._token)
+        self.recent_repos_data = self.get_recent_repos_list(token=self._token)
+        self.get_commits = self.get_recent_repo_commits()
         # self.commits = self.commit_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
-        self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
+        # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
+"""
+For recent repos commits....
 
+STEP 1: 
+    List all repos for auth user using since param to only show those updated in last year/whatever time period.
+    
+STEP 2: 
+    Take output json from list all repos, loop through response data -- for each repo-name, make call to List Repo Activity
+    endpoint, limit activity with per_page=1 so it will only return latest activity. Get "after" value (latest sha). 
+    
+STEP 3:
+    Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
+    This will give a list of all commits from your latest commit sha (even if not on main branch) going backwards 
+    (so will include other branches as it follows sha refs backwards)
+
+STEP 4:
+    Now can take that commit data for each repo and get date of commits and group however
+
+"""
     def get_events(self, user, token):
         headers = {
             "accept": "application/vnd.github+json",
@@ -73,7 +92,8 @@ class GetGitHub:
         # print(f"all_events: {len(all_events)}")
         return all_events
 
-    def get_recent_repos(self, token):
+    # Make API call to endpoint for list of repos for authenticated user updated in the last year
+    def get_recent_repos_list(self, token):
 
         # Get today's date
         today = date.today()
@@ -89,9 +109,9 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-        # Only want repos updated in last year
+        # Only want repos updated in last year - changed to 10 for testing
         params = {
-            "per_page": 100,
+            "per_page": 10,
             "sort": "updated",
             "since": iso_date
         }
@@ -104,9 +124,30 @@ class GetGitHub:
 
         repo_data = response.json()
 
+        # Returns json of list of repos updated in last year
+        return repo_data
+
+    def get_recent_repo_commits(self):
+        repo_data = self.recent_repos_data
+
+        for i in repo_data:
+            commit_url = i["commits_url"]
+
+            response = requests.get(commit_url)
+            response.raise_for_status()
+            data = response.json()
+
+            # dump output to file for testing
+            with open("repo_to_commit_url.json", "a") as file:
+                json.dump(data, file)
+
+    def get_repo_names_lang(self):
+
+        """
         # Empty dict where we'll get names of repos within params,
         # also get languages for radial chart since in same call
         # can add any other params as empty list we want to use later
+
         recent = {
             "repo-name": [],
             "language": []
@@ -123,6 +164,8 @@ class GetGitHub:
 
         # print(f"recent: {recent}")
         return recent
+        """
+        pass
 
     # def commit_activity(self, user, token, repo_list):
     #     weekly_commits = []
@@ -177,6 +220,8 @@ class GetGitHub:
     #             response = requests.get(url=activity_url, headers=headers, params=params)
     #             response.raise_for_status()
     #             data = response.json()
+
+    # Problem with this, shows push but not payload/commits count
     #
     #             add_activity = {
     #                 repo: data

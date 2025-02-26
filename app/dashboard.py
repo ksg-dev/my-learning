@@ -17,8 +17,8 @@ class Dashboard:
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
         self.event_stats = self.get_event_stats(self.github_data.events)
-        self.recent_repos = self.github_data.recent_repos
-        self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
+        # self.recent_repos = self.github_data.recent_repos
+        # self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
 
 
     # Format timedelta into string for feed
