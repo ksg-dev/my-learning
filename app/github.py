@@ -176,7 +176,7 @@ class GetGitHub:
 
                     latest_shas.append(add_sha)
 
-            # dump output to file for testing
+            # dump output to file for testing - remember changed max repos to 10 for testing
             with open("latest_shas.json", "a") as file:
                 json.dump(latest_shas, file)
 
