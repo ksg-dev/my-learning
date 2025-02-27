@@ -24,7 +24,8 @@ class GetGitHub:
         # Just testing getting latest sha output
         self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
         # self.get_commits = self.get_recent_repo_commits()
-        # self.commits = self.commit_activity(user=self._user, token=self._token, repo_list=self.recent_repos["repo"])
+        # Testing new commits func using sha output
+        self.commits = self.get_commits_from_sha(user=self._user, token=self._token)
         # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
     """
@@ -177,11 +178,57 @@ class GetGitHub:
                     latest_shas.append(add_sha)
 
             # dump output to file for testing - remember changed max repos to 10 for testing
-            with open("latest_shas.json", "a") as file:
-                json.dump(latest_shas, file)
+            # with open("latest_shas.json", "a") as file:
+            #     json.dump(latest_shas, file)
+            return latest_shas
+
+    #   STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
+    def get_commits_from_sha(self, user, token):
+        commits = []
+
+        headers = {
+            "accept": "application/vnd.github+json",
+            "authorization": f"Bearer {token}",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
 
 
-#   def recent_repo_activity(self, user, token):
+        # Check for data
+        if self.my_latest_shas:
+            # Loop through each repo/sha in latest shas
+            for repo in self.my_latest_shas:
+                # Get repo name
+                repo_name = repo["repo"]
+                latest_sha = repo["sha"]
+
+                # Expand per_page param to 100, and pass latest sha as param so doesn't just use default branch
+                # Setting per page to 10 for testing
+                params = {
+                    "per_page": 10,
+                    "sha": latest_sha
+                }
+
+                # Endpoint to get commits w sha to start listing from
+                commits_url = f"{GH_API_URL}/repos/{user}/{repo_name}/commits"
+
+                response = requests.get(url=commits_url, headers=headers, params=params)
+                response.raise_for_status()
+                data = response.json()
+
+                # Check for commit data, let's just record the dates for now
+                if len(data) > 0:
+                    add_commit = {
+                        repo_name: data
+                    }
+
+                    commits.append(add_commit)
+
+            with open("commits-from-sha.json", "a") as file:
+                json.dump(commits, file)
+
+        return commits
+
+    #   def recent_repo_activity(self, user, token):
     #     repo_list = self.recent_repos()
     #     repo_activity = []
     #
