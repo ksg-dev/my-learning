@@ -25,7 +25,7 @@ class GetGitHub:
         self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
         # self.get_commits = self.get_recent_repo_commits()
         # Testing new commits func using sha output
-        self.commits = self.get_commits_from_sha(user=self._user, token=self._token)
+        self.commits_data = self.get_commits_from_sha(user=self._user, token=self._token)
         # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
     """
@@ -192,7 +192,6 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-
         # Check for data
         if self.my_latest_shas:
             # Loop through each repo/sha in latest shas
@@ -215,18 +214,40 @@ class GetGitHub:
                 response.raise_for_status()
                 data = response.json()
 
-                # Check for commit data, let's just record the dates for now
+                dates = []
+
+                # Check for commit data, think it'll be easier to loop here for just the data we need - date, repo, commit
                 if len(data) > 0:
-                    add_commit = {
-                        repo_name: data
+                    for i in data:
+                        timestamp = i["commit"]["author"]["date"]
+
+                        dates.append(timestamp)
+
+
+                    add_commits = {
+                        repo_name: dates
                     }
 
-                    commits.append(add_commit)
+                    commits.append(add_commits)
+            # This was dump with repo: data for testing
+            # with open("commits-from-sha.json", "a") as file:
+            #     json.dump(commits, file)
 
-            with open("commits-from-sha.json", "a") as file:
+            with open("commits_clean.json", "a") as file:
                 json.dump(commits, file)
 
         return commits
+
+
+    # STEP 4: Take commit data, create pandas df with date range as index so can resample and add data however
+    def create_commits_df(self):
+        commit_data = self.commits_data
+        pass
+        # # loop through commits data
+        # for i in commit_data:
+        #     pass
+
+
 
     #   def recent_repo_activity(self, user, token):
     #     repo_list = self.recent_repos()
