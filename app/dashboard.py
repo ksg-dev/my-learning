@@ -244,6 +244,9 @@ class Dashboard:
 
         daily = df.resample('M', origin='start').count()
 
+        # TODO: I think can add column for month or whatever grouping, then use that as a categorical value to pass in json to chart
+        # JSON doesn't like timestamp or datetime formats
+
         # daily = df.["repo"].resample("D", origin="start").count()
 
         return daily
