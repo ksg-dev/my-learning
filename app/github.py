@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import requests
 from requests import HTTPError
 from github import Github, Auth
+import pandas as pd
 
 from app import app, db
 from datetime import datetime, date, timedelta
@@ -184,7 +185,10 @@ class GetGitHub:
 
     #   STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
     def get_commits_from_sha(self, user, token):
-        commits = []
+        commits = {
+            'timestamps': [],
+            'repo': []
+        }
 
         headers = {
             "accept": "application/vnd.github+json",
@@ -219,33 +223,28 @@ class GetGitHub:
                 # Check for commit data, think it'll be easier to loop here for just the data we need - date, repo, commit
                 if len(data) > 0:
                     for i in data:
-                        timestamp = i["commit"]["author"]["date"]
+                        # date_str = i["commit"]["author"]["date"].strip("Z")
+                        # timestamp = datetime.fromisoformat(date_str)
 
-                        dates.append(timestamp)
+                        timestamp = date_str = i["commit"]["author"]["date"]
+
+                        # dates.append(timestamp)
+
+                        commits["timestamps"].append(timestamp)
+                        commits["repo"].append(repo_name)
 
 
-                    add_commits = {
-                        repo_name: dates
-                    }
+                    # commits[repo_name] = pd.Series(dates)
 
-                    commits.append(add_commits)
+                    # commits.append(add_commits)
             # This was dump with repo: data for testing
             # with open("commits-from-sha.json", "a") as file:
             #     json.dump(commits, file)
 
-            with open("commits_clean.json", "a") as file:
-                json.dump(commits, file)
-
+            # with open("commits_clean.json", "a") as file:
+            #     json.dump(commits, file)
+        print(commits)
         return commits
-
-
-    # STEP 4: Take commit data, create pandas df with date range as index so can resample and add data however
-    def create_commits_df(self):
-        commit_data = self.commits_data
-        pass
-        # # loop through commits data
-        # for i in commit_data:
-        #     pass
 
 
 

@@ -17,6 +17,7 @@ class Dashboard:
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
         self.event_stats = self.get_event_stats(self.github_data.events)
+        self.daily_commit_stats = self.get_daily_commit_count(self.github_data.commits_data)
         # self.recent_repos = self.github_data.recent_repos
         # self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
 
@@ -233,6 +234,20 @@ class Dashboard:
         # print(f"Last Month: {last_mo_commits}")
         # print(f"Total Commits: {all_commits}")
         return stats
+
+
+    # Take commit data and convert to pd df to get commit count on all branches, resample by day
+    def get_daily_commit_count(self, commit_data):
+        df = pd.DataFrame(commit_data)
+        df["timestamps"] = pd.to_datetime(df["timestamps"])
+        df.set_index("timestamps", inplace=True)
+
+        daily = df.resample('M', origin='start').count()
+
+        # daily = df.["repo"].resample("D", origin="start").count()
+
+        return daily
+        # return df
 
     def repo_activity_stats(self, repo_events) -> dict:
         today = date.today()

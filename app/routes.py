@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap5
@@ -205,6 +206,32 @@ def home():
     # Test new stats
     my_stats = dashboard.event_stats
 
+    # Test daily commit stats
+    daily_commits = dashboard.daily_commit_stats
+    print(f"daily_commits routes: {daily_commits}")
+    # print(f"daily commits type: {type(daily_commits)}")
+
+    # months = daily_commits.index.month
+    # print(f"months: {months} {type(months)}")
+
+    # chart_data = {
+    #     'month': months.tolist(),
+    #     'series': [{'name': 'Data', 'data': daily_commits['repo'].tolist()}]
+    # }
+    # # Apex config
+    # chart_options = {
+    #     'chart': {'type': 'bar', 'height': 350},
+    #     'xaxis': {'categories': chart_data['month']},
+    #     'series': chart_data['series']
+    # }
+    # print(f"chart options: {chart_options}")
+
+    # Convert to dict
+    chart_data = daily_commits.to_dict(orient='index')
+    print(f"chart_data: {chart_data}")
+    # Convert to JSON
+    chart_json = json.dumps(chart_data, indent=2, default=str)
+
     # Get course stats dict
     my_courses = dashboard.get_course_stats()
 
@@ -221,6 +248,7 @@ def home():
 
     return render_template('index.html',
                            # my_events=my_events,
+                           chart_options_json=chart_json,
                            my_stats=my_stats,
                            now=now,
                            activity=feed,
