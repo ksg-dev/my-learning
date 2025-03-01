@@ -250,9 +250,9 @@ class Dashboard:
         df["month"] = df.timestamps.dt.month
         # Get value counts for each month - returns series w month number as index
         monthly = df.month.value_counts()
-        # Get today, and last 12 mo, convert to month number only for xaxis
+        # Get today, and last 11 mo, convert to month number only for xaxis
         today = date.today().month
-        month_ends = pd.date_range(end=date.today(), freq="ME", periods=12)
+        month_ends = pd.date_range(end=date.today(), freq="ME", periods=11)
         month_index = month_ends.month
         # Reindex monthly value counts w last 6 months
         by_month = monthly.reindex(month_index).fillna(0)
