@@ -21,12 +21,14 @@ class GetGitHub:
         self._user = user
         self._token = os.environ["GITHUB_TOKEN"]
         self.events = self.get_events(user=self._user, token=self._token)
+        # TODO: Need to cache this list, I think all we're getting is repo names for other feeds, too expensive
         self.recent_repos_data = self.get_recent_repos_list(token=self._token)
         # Just testing getting latest sha output
         self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
         # self.get_commits = self.get_recent_repo_commits()
         # Testing new commits func using sha output
         self.commits_data = self.get_commits_from_sha(user=self._user, token=self._token)
+        self.languages = self.get_repo_languages(user=self._user, token=self._token)
         # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
     """
@@ -235,6 +237,40 @@ class GetGitHub:
             #     json.dump(commits, file)
         # print(commits)
         return commits
+
+    def get_repo_languages(self, user, token):
+        all_langs = []
+
+        headers = {
+            "accept": "application/vnd.github+json",
+            "authorization": f"Bearer {token}",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        # Check for data
+        if self.recent_repos_data:
+            # Loop through each repo in recent repo data
+            for repo in self.recent_repos_data:
+                # Get repo name
+                repo_name = repo["name"]
+
+                # Endpoint to get detailed repo language breakdown
+                lang_url = f"{GH_API_URL}/repos/{user}/{repo_name}/languages"
+
+                response = requests.get(url=lang_url, headers=headers)
+                response.raise_for_status()
+                data = response.json()
+
+                all_langs.append(data)
+
+            # dump to json for testing
+            with open("repo-languages.json", "a") as file:
+                json.dump(all_langs, file)
+
+        return all_langs
+
+
+
 
 
 

@@ -209,6 +209,7 @@ def home():
 
     # Test commit stats chart
     get_chart_data = dashboard.commit_stats_chart
+    language_chart_data = dashboard.language_chart
     # daily_commits = dashboard.daily_commit_stats
     # print(f"daily_commits routes: {daily_commits}")
     # print(f"daily commits type: {type(daily_commits)}")
@@ -248,6 +249,7 @@ def home():
                            # my_events=my_events,
                            labels=labels,
                            data=data,
+                           lang_data=language_chart_data,
                            my_stats=my_stats,
                            now=now,
                            activity=feed,

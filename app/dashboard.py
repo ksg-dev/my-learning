@@ -18,6 +18,7 @@ class Dashboard:
         self.course_data = self.get_course_stats()
         self.event_stats = self.get_event_stats(self.github_data.events)
         self.commit_stats_chart = self.get_commit_chart_data(self.github_data.commits_data)
+        self.language_chart = self.get_lang_chart(self.github_data.languages)
         # self.recent_repos = self.github_data.recent_repos
         # self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
 
@@ -155,6 +156,7 @@ class Dashboard:
 
     def get_event_stats(self, events):
         # events = self.github_data.events
+        # TODO: get these numbers from commit data used for chart, events not as reliable
 
         all_commits = 0
         last_mo_commits = 0
@@ -260,6 +262,28 @@ class Dashboard:
 
         return by_month
 
+
+    def get_lang_chart(self, lang_data):
+        totals = {}
+        lang_formatted = []
+
+        if len(lang_data) > 0:
+            for i in lang_data:
+                for k, v in i.items():
+                    if k in totals.keys():
+                        totals[k] += v
+                    else:
+                        totals[k] = v
+
+            for k, v in totals.items():
+                new_item = {
+                    "name": k,
+                    "value": v
+                }
+
+                lang_formatted.append(new_item)
+
+        return lang_formatted
 
 
 
