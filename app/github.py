@@ -243,7 +243,7 @@ class GetGitHub:
 
             # with open("commits_clean.json", "a") as file:
             #     json.dump(commits, file)
-        print(commits)
+        # print(commits)
         return commits
 
 

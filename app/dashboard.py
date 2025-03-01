@@ -17,7 +17,7 @@ class Dashboard:
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
         self.event_stats = self.get_event_stats(self.github_data.events)
-        self.daily_commit_stats = self.get_daily_commit_count(self.github_data.commits_data)
+        self.commit_stats_chart = self.get_commit_chart_data(self.github_data.commits_data)
         # self.recent_repos = self.github_data.recent_repos
         # self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
 
@@ -213,10 +213,17 @@ class Dashboard:
                     # print("Last Month")
 
         month_diff = mo_commits - last_mo_commits
-        mon_percent = (month_diff / mo_commits) * 100
-
         wk_diff = wk_commits - last_wk_commits
-        wk_percent = (wk_diff / last_wk_commits) * 100
+
+        if mo_commits != 0:
+            mon_percent = (month_diff / mo_commits) * 100
+        else:
+            mon_percent = 100
+
+        if last_wk_commits != 0:
+            wk_percent = (wk_diff / last_wk_commits) * 100
+        else:
+            wk_percent = 100
 
         stats = {
             "all-commits": all_commits,
@@ -236,20 +243,45 @@ class Dashboard:
         return stats
 
 
-    # Take commit data and convert to pd df to get commit count on all branches, resample by day
-    def get_daily_commit_count(self, commit_data):
+    # Take commit data and convert to pd df to get commit count on all branches
+    def get_commit_chart_data(self, commit_data):
+
+        # needs to return in format:
+        """
+        chart_data = {
+            'categories': ['Jan', 'Feb', 'Mar', etc.],   # x-axis - list of last 6 months in reverse order
+            'series': [23, 34, 89, etc.]                 # y-axis data - commit count per month
+        }
+        :return:
+        """
+
         df = pd.DataFrame(commit_data)
         df["timestamps"] = pd.to_datetime(df["timestamps"])
-        df.set_index("timestamps", inplace=True)
+        # Add column for months
+        df["month"] = df.timestamps.dt.month
+        # Get value counts for each month - returns series w month number as index
+        monthly = df.month.value_counts()
+        # Get today, and last 6 mo, convert to month number only for xaxis
+        today = date.today().month
+        month_ends = pd.date_range(end=date.today(), freq="ME", periods=6)
+        month_index = month_ends.month
+        # Reindex monthly value counts w last 6 months
+        by_month = monthly.reindex(month_index).fillna(0)
+        print(by_month)
 
-        daily = df.resample('M', origin='start').count()
+        return by_month
+
+
+        # df.set_index("timestamps", inplace=True)
+
+        # daily = df.resample('M', origin='start').count()
 
         # TODO: I think can add column for month or whatever grouping, then use that as a categorical value to pass in json to chart
         # JSON doesn't like timestamp or datetime formats
 
         # daily = df.["repo"].resample("D", origin="start").count()
 
-        return daily
+        # return daily
         # return df
 
     def repo_activity_stats(self, repo_events) -> dict:

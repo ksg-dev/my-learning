@@ -251,15 +251,14 @@
 
 			  	<script>
 
-					var chartData = JSON.parse('{{ chart_options_json|safe }}');
 
 					document.addEventListener("DOMContentLoaded", () => {
 				  		new ApexCharts(document.querySelector("#reportsChart"), {
 							series: [{
 						  		name: 'Commits',
-							  	data: chartData.map(item => item.repo),
+							  	data: {{ data|tojson }},
 							}, {
-							  	name: 'Commits',
+							  	name: 'Courses',
 							  	data: [11, 32, 45, 32, 34, 52, 41]
 							}, {
 							  	name: 'Projects',
@@ -267,8 +266,7 @@
 							}],
 							chart: {
 							  	height: 350,
-								type: 'line',
-								stacked: true,
+								type: 'area',
 							  	toolbar: {
 									show: false
 							  	},
@@ -294,8 +292,7 @@
 							  	width: 2
 							},
 							xaxis: {
-							  	type: 'datetime',
-							  	categories: chartData.map(item => item.timestamps)
+							  	categories: {{ labels|tojson }}
 							},
 							tooltip: {
 								  x: {
