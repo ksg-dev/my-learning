@@ -242,19 +242,8 @@ class Dashboard:
         # print(f"Total Commits: {all_commits}")
         return stats
 
-
     # Take commit data and convert to pd df to get commit count on all branches
     def get_commit_chart_data(self, commit_data):
-
-        # needs to return in format:
-        """
-        chart_data = {
-            'categories': ['Jan', 'Feb', 'Mar', etc.],   # x-axis - list of last 6 months in reverse order
-            'series': [23, 34, 89, etc.]                 # y-axis data - commit count per month
-        }
-        :return:
-        """
-
         df = pd.DataFrame(commit_data)
         df["timestamps"] = pd.to_datetime(df["timestamps"])
         # Add column for months
@@ -267,48 +256,12 @@ class Dashboard:
         month_index = month_ends.month
         # Reindex monthly value counts w last 6 months
         by_month = monthly.reindex(month_index).fillna(0)
-        print(by_month)
+        # print(by_month)
 
         return by_month
 
 
-        # df.set_index("timestamps", inplace=True)
 
-        # daily = df.resample('M', origin='start').count()
-
-        # TODO: I think can add column for month or whatever grouping, then use that as a categorical value to pass in json to chart
-        # JSON doesn't like timestamp or datetime formats
-
-        # daily = df.["repo"].resample("D", origin="start").count()
-
-        # return daily
-        # return df
-
-    def repo_activity_stats(self, repo_events) -> dict:
-        today = date.today()
-        iso_today = today.isocalendar()
-        # print(f"today iso: {iso_today}")
-
-        # First take all repo events and group by date components instead of repo name
-        list_of_dates = []
-        list_of_values = []
-
-        for repo in repo_events:
-            list_of_dates.extend(repo["date"])
-            list_of_values.extend(repo["values"])
-
-        print(f"list of dates: {list_of_dates} - length: {len(list_of_dates)}")
-        print(f"list of values: {list_of_values} - length: {len(list_of_values)}")
-
-
-        # needs to return in format:
-        """
-        chart_data = {
-            'categories': ['Jan', 'Feb', 'Mar', etc],   # x-axis
-            'series': [23, 34, 89, etc]                 # y-axis data
-        }
-        :return:
-        """
 
 
     # def get_event_stats(self):

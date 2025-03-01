@@ -93,7 +93,6 @@ class GetGitHub:
 
             all_events.append(event)
 
-        # print(f"all_events: {len(all_events)}")
         return all_events
 
     # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year
@@ -115,7 +114,7 @@ class GetGitHub:
 
         # Only want repos updated in last year - changed to 10 for testing
         params = {
-            "per_page": 10,
+            "per_page": 100,
             "sort": "updated",
             "since": iso_date
         }
@@ -160,21 +159,12 @@ class GetGitHub:
                 response.raise_for_status()
                 data = response.json()
 
-                # print(f"type: {type(data)}")
-                # print(f"len: {len(data)}")
 
                 if len(data) > 0:
                     add_sha = {
                         "repo": repo_name,
                         "sha": data[0]["after"]
                     }
-
-
-                    # print(f"repo_name: {repo_name}")
-                    # print(f"sha: {data[0]['after']}")
-                    # Output Example:
-                    # repo_name: selenium-intro
-                    # sha: 175c63c00c277e4a28181cfd16921fa9eb90eeba
 
                     latest_shas.append(add_sha)
 
@@ -207,7 +197,7 @@ class GetGitHub:
                 # Expand per_page param to 100, and pass latest sha as param so doesn't just use default branch
                 # Setting per page to 10 for testing
                 params = {
-                    "per_page": 10,
+                    "per_page": 100,
                     "sha": latest_sha
                 }
 
