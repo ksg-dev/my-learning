@@ -94,7 +94,6 @@
 									</div>
 									<div class="ps-3">
 							  			<h6>{{ my_stats["all-commits"] }}</h6>
-							  			<span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 									</div>
 						  		</div>
 							</div>
@@ -153,7 +152,11 @@
 									</div>
 									<div class="ps-3">
 							  			<h6>{{ my_stats["this-month"] }}</h6>
+										{% if my_stats["mo-change"] is lt 0 %}
+										<span class="text-danger small pt-1 fw-bold">{{ my_stats["mo-change"]|round|abs }}%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+										{% elif my_stats["mo-change"] is gt 0 %}
 							  			<span class="text-success small pt-1 fw-bold">{{ my_stats["mo-change"]|round }}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+										{% endif %}
 									</div>
 						  		</div>
 							</div>
@@ -212,7 +215,11 @@
 									</div>
 									<div class="ps-3">
 							  			<h6>{{ my_stats["this-week"] }}</h6>
+										{% if my_stats["wk-change"] is lt 0 %}
+										<span class="text-danger small pt-1 fw-bold">{{ my_stats["wk-change"]|round|abs }}%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+										{% elif my_stats["wk-change"] is gt 0 %}
 							  			<span class="text-success small pt-1 fw-bold">{{ my_stats["wk-change"]|round }}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+										{% endif %}
 									</div>
 						  		</div>
 							</div>

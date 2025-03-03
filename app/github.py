@@ -114,9 +114,9 @@ class GetGitHub:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
-        # Only want repos updated in last year - changed to 10 for testing
+        # Only want repos updated in last year - let's cap at 75 for performance
         params = {
-            "per_page": 100,
+            "per_page": 75,
             "sort": "updated",
             "since": iso_date
         }
