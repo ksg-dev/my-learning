@@ -202,99 +202,6 @@ class Dashboard:
 
         return stats
 
-
-
-
-    # def get_event_stats(self, events):
-    #     # events = self.github_data.events
-    #     # TODO: get these numbers from commit data used for chart, events not as reliable
-    #
-    #     all_commits = 0
-    #     last_mo_commits = 0
-    #     mo_commits = 0
-    #     last_wk_commits = 0
-    #     wk_commits = 0
-    #
-    #     today = date.today()
-    #
-    #     iso = today.isocalendar()
-    #     last_wk = iso.week - 1
-    #     last_mo = today.month - 1
-    #     # for i in iso:
-    #     #     print(i)
-    #
-    #
-    #     for event in events:
-    #         action = event["action"].split()
-    #         iso_stamp = event["timestamp"].isocalendar()
-    #         # for i in iso_stamp:
-    #         #     print(i)
-    #
-    #     #     # date_diff = today - event["timestamp"]
-    #     #
-    #     #     print(f"action: {action}")
-    #         # print(f"datediff: {date_diff}")
-    #         # print(date.fromtimestamp(event["timestamp"]))
-    #
-    #         if "Pushed" in action[0]:
-    #             all_commits += int(action[1])
-    #             # print("-------------------")
-    #             # print(f"action: {action}")
-    #             # print(f"iso_stamp: {iso_stamp}")
-    #             # print(f"date stamp: {event['timestamp']}")
-    #
-    #             # Check weekly
-    #             # If iso timestamp for week == this week
-    #             if iso_stamp[1] == iso[1]:
-    #                 wk_commits += int(action[1])
-    #                 # print("This week")
-    #
-    #             # else if iso timestamp week == last week
-    #             elif iso_stamp[1] == last_wk:
-    #                 last_wk_commits += int(action[1])
-    #                 # print("Last week")
-    #
-    #             # Check Monthly
-    #             # If timestamp month == this month
-    #             if event["timestamp"].month == today.month:
-    #                 mo_commits += int(action[1])
-    #                 # print("This month")
-    #
-    #             # else if timestamp month == last month
-    #             elif event["timestamp"].month == last_mo:
-    #                 last_mo_commits += int(action[1])
-    #                 # print("Last Month")
-    #
-    #     month_diff = mo_commits - last_mo_commits
-    #     wk_diff = wk_commits - last_wk_commits
-    #
-    #     if mo_commits != 0:
-    #         mon_percent = (month_diff / mo_commits) * 100
-    #     else:
-    #         mon_percent = 100
-    #
-    #     if last_wk_commits != 0:
-    #         wk_percent = (wk_diff / last_wk_commits) * 100
-    #     else:
-    #         wk_percent = 100
-    #
-    #     stats = {
-    #         "all-commits": all_commits,
-    #         "this-week": wk_commits,
-    #         "last-week": last_wk_commits,
-    #         "this-month": mo_commits,
-    #         "last-month": last_mo_commits,
-    #         "mo-change": mon_percent,
-    #         "wk-change": wk_percent
-    #     }
-    #     # print("------TOTALS-------")
-    #     # print(f"This week: {wk_commits}")
-    #     # print(f"Last week: {last_wk_commits}")
-    #     # print(f"This Month: {mo_commits}")
-    #     # print(f"Last Month: {last_mo_commits}")
-    #     # print(f"Total Commits: {all_commits}")
-    #     return stats
-
     # Take commit data and convert to pd df to get commit count on all branches
     def get_commit_chart_data(self, commit_data):
         df = pd.DataFrame(commit_data)
@@ -312,7 +219,6 @@ class Dashboard:
         # print(by_month)
 
         return by_month
-
 
     def get_lang_chart(self, lang_data):
         totals = {}
