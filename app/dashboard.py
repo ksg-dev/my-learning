@@ -55,7 +55,10 @@ class Dashboard:
 
             feed.append(event)
 
-        return feed
+        if len(feed) > 20:
+            return feed[:21]
+        else:
+            return feed
 
     def get_course_stats(self):
         engine = db.get_engine()
@@ -193,12 +196,12 @@ class Dashboard:
             "mo-change": mon_percent,
             "wk-change": wk_percent
         }
-        print("------TOTALS-------")
-        print(f"This week: {wk_commits}")
-        print(f"Last week: {last_wk_commits}")
-        print(f"This Month: {mo_commits}")
-        print(f"Last Month: {last_mo_commits}")
-        print(f"Total Commits: {all_commits}")
+        # print("------TOTALS-------")
+        # print(f"This week: {wk_commits}")
+        # print(f"Last week: {last_wk_commits}")
+        # print(f"This Month: {mo_commits}")
+        # print(f"Last Month: {last_mo_commits}")
+        # print(f"Total Commits: {all_commits}")
 
         return stats
 

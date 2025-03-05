@@ -22,8 +22,8 @@ class GetGitHub:
         self._token = os.environ["GITHUB_TOKEN"]
         self.events = self.get_events(user=self._user, token=self._token)
         # TODO: Need to cache this list, I think all we're getting is repo names for other feeds, too expensive
+        # TODO: Maybe store repo list, just check response headers for last modified to trigger more expensive ops
         self.recent_repos_data = self.get_recent_repos_list(token=self._token)
-        # Just testing getting latest sha output
         self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
         # self.get_commits = self.get_recent_repo_commits()
         # Testing new commits func using sha output
@@ -35,9 +35,11 @@ class GetGitHub:
     For recent repos commits....
     
     STEP 1: 
+    >>Store etag of last call in user table for if-none-match header
         List all repos for auth user using since param to only show those updated in last year/whatever time period.
         
     STEP 2: 
+    >>Store E-tag and latest sha for each repo in repo table
         Take output json from list all repos, loop through response data -- for each repo-name, make call to List Repo Activity
         endpoint, limit activity with per_page=1 so it will only return latest activity. Get "after" value (latest sha). 
         
@@ -71,6 +73,7 @@ class GetGitHub:
         all_events = []
 
         for i in events:
+            event = {}
             event_id = i["id"]
             event_type = i["type"]
             repo = i["repo"]["name"].split("/")[1]

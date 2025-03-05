@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Dashboard - myRise
+{% endblock %}
+
+
+{% block content %}
+
+<main id="main" class="main">
+<div class="pagetitle">
+  <h1>Dashboard</h1>
+  <nav>
+	<ol class="breadcrumb">
+	  <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+	  <li class="breadcrumb-item active">Dashboard</li>
+	</ol>
+  </nav>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+  <div class="row">
+
+	<!-- Left side columns -->
+	<div class="col-lg-8">
+	  <div class="row">
+
+<!--	Start Pill Tabs -->
+		<div class="col-sm-12">
+		  <div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Stats</h5>
+
+			  <!-- Pills Tabs -->
+			  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+				<li class="nav-item" role="presentation">
+				  <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+				</li>
+				<li class="nav-item" role="presentation">
+				  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Monthly</button>
+				</li>
+				<li class="nav-item" role="presentation">
+				  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Weekly</button>
+				</li>
+			  </ul>
+			  <div class="tab-content pt-2" id="myTabContent">
+<!--				  All Stats Tab-->
+				<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="home-tab">
+					<div class="row">
+					<!-- Courses Card -->
+            		<div class="col-xxl-4 col-lg-6 col-md-12">
+						<div class="card info-card sales-card">
+							<div class="card-body">
+							  <h5 class="card-title">Courses <span>| Complete</span></h5>
+							  <div class="d-flex align-items-center">
+								<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+								  <i class="bi bi-book"></i>
+								</div>
+								<div class="ps-3">
+								  <h6>{{ dashboard.course_data["complete-count"] }}</h6>
+								  <span class="text-success small pt-1 fw-bold">{{ dashboard.course_data["complete-hours"] }}</span> <span class="text-muted small pt-2 ps-1"> hrs</span>
+								</div>
+							  </div>
+							</div>
+              			</div>
+            		</div><!-- End Courses Card -->
+
+					<!-- Projects Card -->
+					<div class="col-xxl-4 col-lg-6 col-md-12">
+					  	<div class="card info-card customers-card">
+							<div class="card-body">
+						  		<h5 class="card-title">Projects <span>| Total</span></h5>
+								<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+									  <i class="bi bi-journal-code"></i>
+									</div>
+									<div class="ps-3">
+									  <h6>34</h6>
+									  <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+									</div>
+						  		</div>
+							</div>
+					  	</div>
+					</div><!-- End Projects Card -->
+
+					<!-- Commits Card ALL-->
+					<div class="col-xxl-4 col-lg-6 col-md-12">
+					  	<div class="card info-card revenue-card">
+							<div class="card-body">
+						  		<h5 class="card-title">Commits <span>| All</span></h5>
+						  		<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+							  			<i class="bi bi-github"></i>
+									</div>
+									<div class="ps-3">
+							  			<h6>{{ dashboard.event_stats["all-commits"] }}</h6>
+									</div>
+						  		</div>
+							</div>
+					  	</div>
+					</div><!-- End Commits - ALL Card -->
+				</div>
+				</div><!-- End All Stats Tab -->
+
+				</div>
+				</div><!-- End Monthly Tab -->
+
+			</div>
+            </div>
+          </div>
+
+
+<!--            Reports-->
+            <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Reports <span>/Today</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="reportsChart"></div>
+
+			  	<script>
+
+
+					document.addEventListener("DOMContentLoaded", () => {
+				  		new ApexCharts(document.querySelector("#reportsChart"), {
+							series: [{
+						  		name: 'Commits',
+							  	data: [11, 32, 45, 32, 34, 52, 41],
+							}, {
+							  	name: 'Placeholder',
+							  	data: [11, 32, 45, 32, 34, 52, 41]
+							}, {
+							  	name: 'Another Placeholder',
+							  	data: [15, 11, 32, 18, 9, 24, 11]
+							}],
+							chart: {
+							  	height: 350,
+								type: 'area',
+							  	toolbar: {
+									show: false
+							  	},
+							},
+							markers: {
+							  	size: 4
+							},
+							colors: ['#4154f1', '#2eca6a', '#ff771d'],
+							fill: {
+							  	type: "gradient",
+							  	gradient: {
+									shadeIntensity: 1,
+									opacityFrom: 0.3,
+									opacityTo: 0.4,
+									stops: [0, 90, 100]
+							  	}
+							},
+							dataLabels: {
+							  	enabled: false
+							},
+							stroke: {
+							  	curve: 'smooth',
+							  	width: 2
+							},
+							xaxis: {
+							  	categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+							},
+							tooltip: {
+								  x: {
+									format: 'MM/dd/yy'
+								  },
+							}
+						  }).render();
+						});
+					  </script>
+					  <!-- End Line Chart -->
+
+                </div>
+
+              </div>
+            </div><!-- End Reports -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- Recent Activity -->
+          <div class="card">
+
+            <div class="card-body">
+              <h5 class="card-title">Recent Activity</h5>
+
+              <div class="activity">
+
+			  {% for event in dashboard.feed %}
+                <div class="activity-item d-flex">
+					<div class="activite-label">{{ event['delta'] }}</div>
+					{% if 'Pushed' in event['action'] %}
+                  		<i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                  		<div class="activity-content">{{ event['action'] }} <a href="https://github.com/{{ current_user.name }}/{{ event['repo'] }}" class="fw-bold text-dark" target="_blank">{{ event["repo"] }}</a></div>
+				  	{% elif 'Created' in event['action'] %}
+						<i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+						<div class="activity-content">{{ event['action'] }} <a href="https://github.com/{{ current_user.name }}/{{ event['repo'] }}" class="fw-bold text-dark" target="_blank">{{ event["repo"] }}</a></div>
+					{% else %}
+						<i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+						<div class="activity-content">
+                    		{{ event['action'] }}</div>
+					{% endif %}
+                </div><!-- End activity item-->
+			  {% endfor %}
+              </div>
+
+            </div>
+          </div><!-- End Recent Activity -->
+
+        </div><!-- End Right side columns -->
+
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 import datetime
 import json
 
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_bootstrap import Bootstrap5
 from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -193,29 +193,13 @@ def home():
     dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
     now = datetime.utcnow()
 
-    # Structure events feed, take only first 20
-    feed = dashboard.feed[:21]
-
     # Query db for repo activity, convert to python list
     get_repos = db.session.execute(db.select(Repository).filter_by(user_id=current_user.id)).scalars().all()
     repos = [repo for repo in get_repos]
 
-
-    # Get event stats dict
-    # my_events = dashboard.get_event_stats()
-
-    # Test new stats
-    my_stats = dashboard.event_stats
-
     # Test commit stats chart
     get_chart_data = dashboard.commit_stats_chart
     language_chart_data = dashboard.language_chart
-    # daily_commits = dashboard.daily_commit_stats
-    # print(f"daily_commits routes: {daily_commits}")
-    # print(f"daily commits type: {type(daily_commits)}")
-
-    # months = daily_commits.index.month
-    # print(f"months: {months} {type(months)}")
 
     months = get_chart_data.index.tolist()
     values = get_chart_data.values.tolist()
@@ -223,40 +207,33 @@ def home():
     labels = [calendar.month_abbr[i] for i in months]
     data = [int(i) for i in values]
 
-    # chart_data = {
-    #     'month': get_chart_data.index.tolist(),
-    #     'series': get_chart_data.values.tolist()
-    # }
-    # print(chart_data)
-
-    # chart_json = json.dumps(chart_data, indent=2, default=str)
-
-    # Get course stats dict
-    my_courses = dashboard.get_course_stats()
-
-    # # Query db for all courses. Convert to python list
-    # get_courses = db.session.execute(db.select(Course)).scalars().all()
-    # courses = [course for course in get_courses]
 
     # Query db for all projects. Convert to python list
     get_projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
     projects = [project for project in get_projects]
     proj_count = len(projects)
 
-
-
     return render_template('index.html',
                            # my_events=my_events,
                            labels=labels,
                            data=data,
-                           lang_data=language_chart_data,
-                           my_stats=my_stats,
+                           lang_data=dashboard.language_chart,
+                           my_stats=dashboard.event_stats,
                            now=now,
-                           activity=feed,
+                           activity=dashboard.feed,
                            my_repos=repos,
-                           my_courses=my_courses,
+                           my_courses=dashboard.course_data,
                            my_projects=projects,
                            project_count=proj_count)
+
+
+# def home():
+#     if 'dashboard' not in session:
+#         session['dashboard'] = build_dashboard()
+#
+#     return render_template('test_index.html',
+#                            dashboard=session['dashboard'],
+#                         )
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')

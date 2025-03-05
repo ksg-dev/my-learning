@@ -4,6 +4,7 @@ from app import app, db, login_manager
 import datetime
 from typing import List
 from flask_login import UserMixin
+from typing import Optional
 import sqlalchemy as sa
 
 # Flask-Login user loader
@@ -72,6 +73,13 @@ class User(UserMixin, db.Model):
     password: Mapped[str] = mapped_column(String(250))
     name: Mapped[str] = mapped_column(String(1000))
     display_name: Mapped[str] = mapped_column(String(1000))
+    # Log Latest Outgoing API calls, E-tag headers at user level
+    # List all repos for auth user
+    # Timestamp w last outgoing API call
+    last_called_repos: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
+    # E-tag from response headers
+    latest_etag_repos: Mapped[str] = mapped_column(String(250), nullable=True)
+
     # This will act like a List of Project/Course/Lib.etc objects attached to each User.
     # The "user" refers to the user property in the Project/Course/Lib. etc class.
     # Link to Projects
@@ -96,12 +104,28 @@ class User(UserMixin, db.Model):
     concepts: Mapped[List["Concept"]] = relationship('Concept', secondary=user_concept, backref='user')
 
 
-# Create Repository model to being together events, projects data
+# Create Repository model to store data from steps of GH API chain
 class Repository(db.Model):
     __tablename__ = "repos"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(250), nullable=False)
+    # Log Latest API calls, E-Tag headers for activity
+    # Timestamp w last outgoing API call
+    last_called_activity: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
+    # E-tag from response headers
+    latest_etag_activity: Mapped[str] = mapped_column(String(250), nullable=True)
+    #### Data populated by API calls to GitHub
+    # LATEST ACTIVITY CALL
+    # latest sha from 'after' param
+    latest_sha: Mapped[str] = mapped_column(String(250))
+    # timestamp from activity
+    sha_timestamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
+    # ALL RECENT REPOS CALL
+    created_at: Mapped[datetime.datetime] = mapped_column(DateTime())
+    updated_at: Mapped[datetime.datetime] = mapped_column(DateTime())
+    pushed_at: Mapped[datetime.datetime] = mapped_column(DateTime())
+
 
     # Create Foreign Key, "users.id" the users refers to the tablename of User.
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey(User.id), index=True)
