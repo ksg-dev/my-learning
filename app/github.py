@@ -2,11 +2,9 @@
 import os
 from dotenv import load_dotenv
 import requests
-from requests import HTTPError
-from github import Github, Auth
-import pandas as pd
 
 from app import app, db
+from app.data_manager import DataManager
 from datetime import datetime, date, timedelta
 from pprint import pprint
 import json
@@ -17,13 +15,15 @@ load_dotenv()
 GH_API_URL = "https://api.github.com"
 
 class GetGitHub:
-    def __init__(self, user):
+    def __init__(self, user, user_id):
         self._user = user
         self._token = os.environ["GITHUB_TOKEN"]
+        self.user_id = user_id
+        self.data_manager = DataManager(self._user, self.user_id)
         self.events = self.get_events(user=self._user, token=self._token)
         # TODO: Need to cache this list, I think all we're getting is repo names for other feeds, too expensive
         # TODO: Maybe store repo list, just check response headers for last modified to trigger more expensive ops
-        self.recent_repos_data = self.get_recent_repos_list(token=self._token)
+        self.recent_repos_data = self.get_recent_repos_list()
         self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
         # self.get_commits = self.get_recent_repo_commits()
         # Testing new commits func using sha output
@@ -100,8 +100,11 @@ class GetGitHub:
 
         return all_events
 
-    # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year
-    def get_recent_repos_list(self, token):
+    # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year, conditional header for if none match etag
+    def get_recent_repos_list(self):
+        print(f"Calling Recent Repos....")
+        etag = self.data_manager.etag
+
 
         # Get today's date
         today = date.today()
@@ -113,13 +116,16 @@ class GetGitHub:
 
         headers = {
             "accept": "application/vnd.github+json",
-            "authorization": f"Bearer {token}",
+            "authorization": f"Bearer {self._token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+        if etag:
+            headers["if-none-match"] = etag
+
         # Only want repos updated in last year - let's cap at 75 for performance
         params = {
-            "per_page": 75,
+            "per_page": 5,
             "sort": "updated",
             "since": iso_date
         }
@@ -130,10 +136,21 @@ class GetGitHub:
         response = requests.get(url=repos_url, headers=headers, params=params)
         response.raise_for_status()
 
-        repo_data = response.json()
+        print(f"Recent repos response returned: {response.status_code}")
+
+        if response.status_code == 200:
+            new_etag = response.headers["etag"]
+            new_date = datetime.now()
+            self.recent_repos_data = response.json()
+            print(f"new_etag: {new_etag} - {type(new_etag)}")
+            print(f"new_date: {new_date} - {type(new_date)}")
+            self.data_manager.set_user_etag(etag=new_etag, timestamp=new_date)
+            return self.recent_repos_data
+        elif response.status_code == 304:
+            print(f"Not Modified: {response.headers}")
 
         # Returns json of list of repos updated in last year
-        return repo_data
+        # return self.recent_repos_data
 
     # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha
     def get_latest_activity_sha(self, user, token):

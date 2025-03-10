@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from app import app, db
 from app.models import Event, Course, Project, Concept, Repository
+from app.data_manager import DataManager
 # from app.events import GetGitHub, validate_id
 from datetime import datetime, timedelta, date
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +14,8 @@ class Dashboard:
     def __init__(self, user_id, user):
         self.user = user
         self.user_id = user_id
-        self.github_data = GetGitHub(user)
+        # self.data_manager = DataManager(user, user_id)
+        self.github_data = GetGitHub(user=user, user_id=user_id)
         self.feed = self.build_feed(self.github_data.events)
         self.course_data = self.get_course_stats()
         self.event_stats = self.get_commit_stats(self.github_data.commits_data)
@@ -42,23 +44,26 @@ class Dashboard:
         feed = []
 
         now = datetime.now()
+        if event_data:
+            for item in event_data:
+                try:
+                    timestamp = item['timestamp']
+                    delta = now - timestamp
+                    formatted_delta = self.format_timedelta(delta)
+                    event = {
+                        "delta": formatted_delta,
+                        "action": item["action"],
+                        "repo": item["repo"]
+                    }
 
-        for item in event_data:
-            timestamp = item['timestamp']
-            delta = now - timestamp
-            formatted_delta = self.format_timedelta(delta)
-            event = {
-                "delta": formatted_delta,
-                "action": item["action"],
-                "repo": item["repo"]
-            }
+                    feed.append(event)
+                except KeyError:
+                    continue
 
-            feed.append(event)
-
-        if len(feed) > 20:
-            return feed[:21]
-        else:
-            return feed
+            if len(feed) > 20:
+                return feed[:21]
+            else:
+                return feed
 
     def get_course_stats(self):
         engine = db.get_engine()
