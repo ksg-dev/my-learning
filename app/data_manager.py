@@ -56,8 +56,17 @@ class DataManager:
 
             db.session.commit()
 
-    def get_repository_data(self):
+    # TODO: If ALL REPOS call gets 304 Not Modified, return this data for other api calls
+    # Need to populate after sha for all repos, next call is to get this sha
+    def get_summary_repository_data(self):
         pass
+        # get_repos = db.session.execute(db.select(Repository)
+        #                                .where(
+        #                                     and_(
+        #                                         Repository.user_id == self.user_id)
+        #                                .order_by(Repository.updated_at)
+        #                                .limit()).scalars().all()
+
 
     # If ALL REPOS call gets 200, parse json and store necessary data
     def update_summary_repository_data(self, data):

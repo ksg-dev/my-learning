@@ -137,19 +137,23 @@ class GetGitHub:
         response = requests.get(url=repos_url, headers=headers, params=params)
         response.raise_for_status()
 
+        # Even if etag stays the same, need to update last called date
+        new_etag = response.headers["etag"]
+        new_date = datetime.now()
+
         print(f"Recent repos response returned: {response.status_code}")
 
         if response.status_code == 200:
-            new_etag = response.headers["etag"]
-            new_date = datetime.now()
             self.recent_repos_data = response.json()
-            self.data_manager.update_summary_repository_data(self.recent_repos_data)
-            print(f"new_etag: {new_etag} - {type(new_etag)}")
-            print(f"new_date: {new_date} - {type(new_date)}")
+            self.data_manager.update_summary_repository_data(response.json())
+            # print(f"new_etag: {new_etag} - {type(new_etag)}")
+            # print(f"new_date: {new_date} - {type(new_date)}")
             self.data_manager.set_user_etag(etag=new_etag, timestamp=new_date)
-            return self.recent_repos_data
+            # return self.recent_repos_data
         elif response.status_code == 304:
             print(f"Not Modified: {response.headers}")
+            # if no changes, get formatted repo data from data manager get function and return that for other api calls
+
 
         # Returns json of list of repos updated in last year
         # return self.recent_repos_data
