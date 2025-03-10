@@ -118,13 +118,13 @@ class Repository(db.Model):
     #### Data populated by API calls to GitHub
     # LATEST ACTIVITY CALL
     # latest sha from 'after' param
-    latest_sha: Mapped[str] = mapped_column(String(250))
+    latest_sha: Mapped[str] = mapped_column(String(250), nullable=True)
     # timestamp from activity
     sha_timestamp: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
     # ALL RECENT REPOS CALL
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime())
-    updated_at: Mapped[datetime.datetime] = mapped_column(DateTime())
-    pushed_at: Mapped[datetime.datetime] = mapped_column(DateTime())
+    created_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
+    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
+    pushed_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
 
 
     # Create Foreign Key, "users.id" the users refers to the tablename of User.
