@@ -56,6 +56,49 @@ class DataManager:
 
             db.session.commit()
 
+    def get_repository_data(self):
+        pass
 
+    # If ALL REPOS call gets 200, parse json and store necessary data
+    def update_summary_repository_data(self, data):
+        if data:
+            for repo in data:
+                # Necessary data from json
+                repo_id = repo["id"]
+                repo_name = repo["name"]
+                repo_created = repo["created_at"].strip("Z")
+                repo_updated = repo["updated_at"].strip("Z")
+                repo_pushed = repo["pushed_at"].strip("Z")
 
+                # first check if repo needs to be added
+                check_exists = validate_id(Repository, repo_id)
 
+                if check_exists is None:
+                    new_repo = Repository(
+                        id=repo_id,
+                        name=repo_name,
+                        created_at=datetime.fromisoformat(repo_created),
+                        updated_at=datetime.fromisoformat(repo_updated),
+                        pushed_at=datetime.fromisoformat(repo_pushed),
+                        user_id=self.user_id
+                    )
+
+                    db.session.add(new_repo)
+                    db.session.commit()
+
+                # If repo exists in db, check if any data needs to be updated
+                else:
+                    target_repo = db.get_or_404(Repository, repo_id)
+
+                    if not target_repo.created_at:
+                        target_repo.created_at = datetime.fromisoformat(repo_created)
+                    if target_repo.updated_at != datetime.fromisoformat(repo_updated):
+                        target_repo.updated_at = datetime.fromisoformat(repo_updated)
+                    if target_repo.pushed_at != datetime.fromisoformat(repo_pushed):
+                        target_repo.pushed_at = datetime.fromisoformat(repo_pushed)
+
+                    db.session.commit()
+
+def validate_id(model, ref_id):
+    check = db.session.execute(db.select(model).filter_by(id=ref_id)).first()
+    return check

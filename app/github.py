@@ -21,8 +21,7 @@ class GetGitHub:
         self.user_id = user_id
         self.data_manager = DataManager(self._user, self.user_id)
         self.events = self.get_events(user=self._user, token=self._token)
-        # TODO: Need to cache this list, I think all we're getting is repo names for other feeds, too expensive
-        # TODO: Maybe store repo list, just check response headers for last modified to trigger more expensive ops
+        # If recent_repos call receives data, json stored
         self.recent_repos_data = self.get_recent_repos_list()
         self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
         # self.get_commits = self.get_recent_repo_commits()
@@ -103,7 +102,9 @@ class GetGitHub:
     # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year, conditional header for if none match etag
     def get_recent_repos_list(self):
         print(f"Calling Recent Repos....")
-        etag = self.data_manager.etag
+        # call with no etag to start to populate...
+        etag = None
+        # etag = self.data_manager.etag
 
 
         # Get today's date
@@ -142,6 +143,7 @@ class GetGitHub:
             new_etag = response.headers["etag"]
             new_date = datetime.now()
             self.recent_repos_data = response.json()
+            self.data_manager.update_summary_repository_data(self.recent_repos_data)
             print(f"new_etag: {new_etag} - {type(new_etag)}")
             print(f"new_date: {new_date} - {type(new_date)}")
             self.data_manager.set_user_etag(etag=new_etag, timestamp=new_date)
