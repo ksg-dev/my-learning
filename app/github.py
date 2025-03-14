@@ -103,8 +103,8 @@ class GetGitHub:
     def get_recent_repos_list(self):
         print(f"Calling Recent Repos....")
         # call with no etag to start to populate...
-        etag = None
-        # etag = self.data_manager.etag
+        # etag = None
+        etag = self.data_manager.etag
 
 
         # Get today's date
@@ -184,10 +184,9 @@ class GetGitHub:
                 # Repo Name
                 repo_name = repo["name"]
                 # Latest Activity ETag
-                etag = repo["latest_activity_etag"]
 
-                if etag:
-                    headers["if-none-match"] = etag
+                if repo["last_activity_etag"]:
+                    headers["if-none-match"] = repo["last_activity_etag"]
 
                 # Endpoint to get detailed repo activity
                 activity_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/activity"
@@ -196,19 +195,31 @@ class GetGitHub:
                 response.raise_for_status()
                 data = response.json()
 
+                # Even if etag stays the same, need to update last called date
+                new_etag = response.headers["etag"]
+                new_date = datetime.now()
 
-                if len(data) > 0:
-                    add_sha = {
-                        "repo": repo_name,
-                        "sha": data[0]["after"]
-                    }
+                print(f"activity call for {repo_name} returned: {response.status_code}")
 
-                    latest_shas.append(add_sha)
+                # If successful, want to update repo data in db first
+                if response.status_code == 200:
+                    if len(data) > 0:
+                        add_sha = {
+                            "repo": repo_name,
+                            "sha": data[0]["after"],
+                            "timestamp": data[0]["timestamp"],
+                            "etag": new_etag,
+                            "date": new_date
+                        }
 
-            # dump output to file for testing - remember changed max repos to 10 for testing
-            # with open("latest_shas.json", "a") as file:
-            #     json.dump(latest_shas, file)
-            return latest_shas
+                        latest_shas.append(add_sha)
+
+            # Call to update repo detail w Data Manager
+            print(f"Calling update details...")
+            self.data_manager.update_detail_repo_data(data=latest_shas)
+
+            print(f"All Done!")
+
 
     #   STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
     def get_commits_from_sha(self, user, token):

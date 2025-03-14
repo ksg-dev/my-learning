@@ -78,7 +78,6 @@ class DataManager:
 
         return summary_data
 
-
     # If ALL REPOS call gets 200, parse json and store necessary data
     def update_summary_repository_data(self, data):
         if data:
@@ -118,6 +117,29 @@ class DataManager:
                         target_repo.pushed_at = datetime.fromisoformat(repo_pushed)
 
                     db.session.commit()
+
+    def update_detail_repo_data(self, data: list[dict]):
+        if data:
+            for repo in data:
+                # Necessary data from latest_shas dict, cleaner to iterate before passing here
+                repo_name = repo["repo"]
+                after_sha = repo["sha"]
+                af_timestamp = repo["timestamp"].strip("Z")
+                new_etag = repo["etag"]
+                new_timestamp = repo["date"]
+
+                print(f"updating details for: {repo_name}")
+
+                target_repo = db.session.execute(db.select(Repository).where(Repository.name == repo_name)).scalar()
+
+                target_repo.last_called_activity = new_timestamp
+                target_repo.latest_etag_activity = new_etag
+                target_repo.latest_sha = after_sha
+                target_repo.sha_timestamp = datetime.fromisoformat(af_timestamp)
+
+                db.session.commit()
+
+
 
 def validate_id(model, ref_id):
     check = db.session.execute(db.select(model).filter_by(id=ref_id)).first()
