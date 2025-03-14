@@ -213,6 +213,9 @@ class GetGitHub:
                         }
 
                         latest_shas.append(add_sha)
+                #TODO: write datamanager function to get recent sha from db on 304, needs to continue loop to other dbs even if gets a 304 for one.
+                elif response.status_code == 304:
+                    pass
 
             # Call to update repo detail w Data Manager
             print(f"Calling update details...")
