@@ -58,14 +58,25 @@ class DataManager:
 
     # TODO: If ALL REPOS call gets 304 Not Modified, return this data for other api calls
     # Need to populate after sha for all repos, next call is to get this sha
-    def get_summary_repository_data(self):
-        pass
-        # get_repos = db.session.execute(db.select(Repository)
-        #                                .where(
-        #                                     and_(
-        #                                         Repository.user_id == self.user_id)
-        #                                .order_by(Repository.updated_at)
-        #                                .limit()).scalars().all()
+    def get_summary_repository_data(self, since_date) -> list[dict]:
+        summary_data = []
+
+        select_repos = db.session.execute(db.select(Repository)
+                                          .where(Repository.user_id == self.user_id)
+                                          .where(Repository.updated_at > since_date)
+                                          .order_by(Repository.updated_at.desc())
+                                          .limit(10)).scalars().all()
+
+        # Only need repo name and latest activity call etag for outgoing
+        for item in select_repos:
+            add_repo = {
+                "name": item.name,
+                "last_activity_etag": item.latest_etag_activity
+            }
+
+            summary_data.append(add_repo)
+
+        return summary_data
 
 
     # If ALL REPOS call gets 200, parse json and store necessary data

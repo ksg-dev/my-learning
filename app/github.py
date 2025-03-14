@@ -22,8 +22,8 @@ class GetGitHub:
         self.data_manager = DataManager(self._user, self.user_id)
         self.events = self.get_events(user=self._user, token=self._token)
         # If recent_repos call receives data, json stored
-        self.recent_repos_data = self.get_recent_repos_list()
-        self.my_latest_shas = self.get_latest_activity_sha(user=self._user, token=self._token)
+        self.recent_repos_data: list[dict] = self.get_recent_repos_list()
+        self.my_latest_shas = self.get_latest_activity_sha()
         # self.get_commits = self.get_recent_repo_commits()
         # Testing new commits func using sha output
         self.commits_data = self.get_commits_from_sha(user=self._user, token=self._token)
@@ -143,28 +143,32 @@ class GetGitHub:
 
         print(f"Recent repos response returned: {response.status_code}")
 
+        # If successful, want to update repo data in db first
         if response.status_code == 200:
-            self.recent_repos_data = response.json()
+            # self.recent_repos_data = response.json()
             self.data_manager.update_summary_repository_data(response.json())
-            # print(f"new_etag: {new_etag} - {type(new_etag)}")
-            # print(f"new_date: {new_date} - {type(new_date)}")
-            self.data_manager.set_user_etag(etag=new_etag, timestamp=new_date)
-            # return self.recent_repos_data
+        # just for testing, may be able to eliminate
         elif response.status_code == 304:
             print(f"Not Modified: {response.headers}")
-            # if no changes, get formatted repo data from data manager get function and return that for other api calls
+
+        # After updating db with any new repo data, update etag, timestamp for user
+        self.data_manager.set_user_etag(etag=new_etag, timestamp=new_date)
+
+        # Now that db is updated, retrieve recent repos via DataManager
+        repo_summary_data = self.data_manager.get_summary_repository_data(since_date=since_date)
+        # for i in repo_summary_data:
+        #     for k, v in i.items():
+        #         print(f"{k} - {v}")
+        return repo_summary_data
 
 
-        # Returns json of list of repos updated in last year
-        # return self.recent_repos_data
-
-    # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha
-    def get_latest_activity_sha(self, user, token):
+    # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha, conditional etag header
+    def get_latest_activity_sha(self):
         latest_shas = []
 
         headers = {
                 "accept": "application/vnd.github+json",
-                "authorization": f"Bearer {token}",
+                "authorization": f"Bearer {self._token}",
                 "X-GitHub-Api-Version": "2022-11-28"
             }
 
@@ -177,11 +181,16 @@ class GetGitHub:
         if self.recent_repos_data:
             # Loop through each repo in recent repo data
             for repo in self.recent_repos_data:
-                # Get repo name
+                # Repo Name
                 repo_name = repo["name"]
+                # Latest Activity ETag
+                etag = repo["latest_activity_etag"]
+
+                if etag:
+                    headers["if-none-match"] = etag
 
                 # Endpoint to get detailed repo activity
-                activity_url = f"{GH_API_URL}/repos/{user}/{repo_name}/activity"
+                activity_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/activity"
 
                 response = requests.get(url=activity_url, headers=headers, params=params)
                 response.raise_for_status()
