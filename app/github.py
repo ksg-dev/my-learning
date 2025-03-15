@@ -26,7 +26,7 @@ class GetGitHub:
         self.my_latest_shas = self.get_latest_activity_sha()
         # self.get_commits = self.get_recent_repo_commits()
         # Testing new commits func using sha output
-        self.commits_data = self.get_commits_from_sha(user=self._user, token=self._token)
+        self.commits_data = self.get_commits_from_sha()
         self.languages = self.get_repo_languages(user=self._user, token=self._token)
         # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
         # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
@@ -249,9 +249,9 @@ class GetGitHub:
 
             # print(f"All Done!")
 
-
     #   STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
-    def get_commits_from_sha(self, user, token):
+    def get_commits_from_sha(self):
+        print("Getting commits...")
         commits = {
             'timestamps': [],
             'repo': []
@@ -259,7 +259,7 @@ class GetGitHub:
 
         headers = {
             "accept": "application/vnd.github+json",
-            "authorization": f"Bearer {token}",
+            "authorization": f"Bearer {self._token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
@@ -268,7 +268,7 @@ class GetGitHub:
             # Loop through each repo/sha in latest shas
             for repo in self.my_latest_shas:
                 # Get repo name
-                repo_name = repo["repo"]
+                repo_name = repo["name"]
                 latest_sha = repo["sha"]
 
                 # Expand per_page param to 100, and pass latest sha as param so doesn't just use default branch
@@ -279,7 +279,7 @@ class GetGitHub:
                 }
 
                 # Endpoint to get commits w sha to start listing from
-                commits_url = f"{GH_API_URL}/repos/{user}/{repo_name}/commits"
+                commits_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/commits"
 
                 response = requests.get(url=commits_url, headers=headers, params=params)
                 response.raise_for_status()
