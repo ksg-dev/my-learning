@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Float, Date, DateTime
+from sqlalchemy import Integer, String, Text, ForeignKey, Boolean, Date, DateTime, JSON
 from app import app, db, login_manager
 import datetime
-from typing import List
+from typing import List, Dict
 from flask_login import UserMixin
 from typing import Optional
 import sqlalchemy as sa
@@ -125,6 +125,11 @@ class Repository(db.Model):
     created_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
     updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
     pushed_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime())
+
+    # GET COMMITS FROM SHA Call Data
+    # E-Tag from commits response header
+    commits_etag: Mapped[str] = mapped_column(String(250), nullable=True)
+    commits_data: Mapped[Dict] = mapped_column(JSON, nullable=True)
 
 
     # Create Foreign Key, "users.id" the users refers to the tablename of User.

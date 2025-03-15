@@ -251,12 +251,9 @@ class GetGitHub:
             self.data_manager.update_detail_repo_data(data=latest_shas)
 
     #  STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
-    def get_commits_from_sha(self):
+    def fetch_commits_from_sha(self):
         print("Getting commits...")
-        commits = {
-            'timestamps': [],
-            'repo': []
-        }
+        commits_data = []
 
         headers = {
             "accept": "application/vnd.github+json",
@@ -272,10 +269,14 @@ class GetGitHub:
                 repo_name = repo["name"]
                 latest_sha = repo["sha"]
 
-                # Expand per_page param to 100, and pass latest sha as param so doesn't just use default branch
+                # E-Tag for commit data currently in db, in any
+                if repo["etag"]:
+                    headers["if-none-match"] = repo["etag"]
+
+                # Pass latest sha as param so doesn't just use default branch
                 # Setting per page to 10 for testing
                 params = {
-                    "per_page": 100,
+                    "per_page": 10,
                     "sha": latest_sha
                 }
 
@@ -284,22 +285,44 @@ class GetGitHub:
 
                 response = requests.get(url=commits_url, headers=headers, params=params)
                 response.raise_for_status()
-                data = response.json()
 
-                dates = []
+                print(f"commits call for {repo_name} returned: {response.status_code}")
+
+                # If successful 200, get json data, update db
+                if response.status_code == 200:
+                    data = response.json()
+                    new_etag = response.headers["etag"]
+
+                    new_commits = {
+                        "repo": repo_name,
+                        "commits_etag": new_etag,
+                        "com_data": data
+                    }
+
+                    commits_data.append(new_commits)
+                # No need to store anything if 304, so else continue loop
+                else:
+                    continue
+
+            # Call to update commit data w Data Manager
+            self.data_manager.update_commit_data(data=commits_data)
+
+            #TODO: write get commits data function in data manager and in get github
+
+                # dates = []
 
                 # Check for commit data, think it'll be easier to loop here for just the data we need - date, repo, commit
-                if len(data) > 0:
-                    for i in data:
-                        # date_str = i["commit"]["author"]["date"].strip("Z")
-                        # timestamp = datetime.fromisoformat(date_str)
-
-                        timestamp = date_str = i["commit"]["author"]["date"]
-
-                        # dates.append(timestamp)
-
-                        commits["timestamps"].append(timestamp)
-                        commits["repo"].append(repo_name)
+                # if len(data) > 0:
+                #     for i in data:
+                #         # date_str = i["commit"]["author"]["date"].strip("Z")
+                #         # timestamp = datetime.fromisoformat(date_str)
+                #
+                #         timestamp = date_str = i["commit"]["author"]["date"]
+                #
+                #         # dates.append(timestamp)
+                #
+                #         commits["timestamps"].append(timestamp)
+                #         commits["repo"].append(repo_name)
 
 
                     # commits[repo_name] = pd.Series(dates)
@@ -312,7 +335,7 @@ class GetGitHub:
             # with open("commits_clean.json", "a") as file:
             #     json.dump(commits, file)
         # print(commits)
-        return commits
+        # return commits
 
     def get_repo_languages(self):
         all_langs = []

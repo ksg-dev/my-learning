@@ -96,11 +96,12 @@ class DataManager:
                                           .order_by(Repository.updated_at.desc())
                                           .limit(75)).scalars().all()
 
-        # Only need repo name and latest sha for outgoing to commits
+        # Only need repo name and latest sha and commits etag for outgoing to commits
         for item in select_repos:
             add_repo = {
                 "name": item.name,
-                "sha": item.latest_sha
+                "sha": item.latest_sha,
+                "etag": item.commits_etag
             }
 
             activity_shas.append(add_repo)
@@ -151,7 +152,7 @@ class DataManager:
     def update_detail_repo_data(self, data: list[dict]):
         if data:
             for repo in data:
-                # Necessary data from latest_shas dict, cleaner to iterate before passing here
+                # Necessary data from latest_shas dict
                 # Data from 200 and 304s
                 repo_name = repo["repo"]
                 new_etag = repo["etag"]
@@ -171,6 +172,23 @@ class DataManager:
 
                     target_repo.latest_sha = after_sha
                     target_repo.sha_timestamp = datetime.fromisoformat(af_timestamp)
+
+                db.session.commit()
+
+    def update_commit_data(self, data: list[dict]):
+        if data:
+            for repo in data:
+                # Data from 200
+                repo_name = repo["repo"]
+                commits_etag = repo["commits_etag"]
+                data = repo["com_data"]
+
+                print(f"updating commits for: {repo_name}")
+
+                target_repo = db.session.execute(db.select(Repository).where(Repository.name == repo_name)).scalar()
+
+                target_repo.commits_etag = commits_etag
+                target_repo.commits_data = data
 
                 db.session.commit()
 
