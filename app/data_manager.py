@@ -56,7 +56,7 @@ class DataManager:
 
             db.session.commit()
 
-    # TODO: If ALL REPOS call gets 304 Not Modified, return this data for other api calls
+    # If ALL REPOS call gets 304 Not Modified, return this data for other api calls
     # Need to populate after sha for all repos, next call is to get this sha
     def get_summary_repository_data(self, since_date) -> list[dict]:
         summary_data = []
@@ -77,6 +77,27 @@ class DataManager:
             summary_data.append(add_repo)
 
         return summary_data
+
+    # Get latest activity shas for all repos for commit call
+    def get_repository_sha_data(self, since_date):
+        activity_shas = []
+
+        select_repos = db.session.execute(db.select(Repository)
+                                          .where(Repository.user_id == self.user_id)
+                                          .where(Repository.updated_at > since_date)
+                                          .order_by(Repository.updated_at.desc())
+                                          .limit(10)).scalars().all()
+
+        # Only need repo name and latest sha for outgoing to commits
+        for item in select_repos:
+            add_repo = {
+                "name": item.name,
+                "sha": item.latest_sha
+            }
+
+            activity_shas.append(add_repo)
+
+        return activity_shas
 
     # If ALL REPOS call gets 200, parse json and store necessary data
     def update_summary_repository_data(self, data):
@@ -118,7 +139,7 @@ class DataManager:
 
                     db.session.commit()
 
-    # If get_latest_activity returns 200 - update repo details in db
+    # If get_latest_activity returns 200 or 304 - update repo details in db
     def update_detail_repo_data(self, data: list[dict]):
         if data:
             for repo in data:

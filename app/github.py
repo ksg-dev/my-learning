@@ -99,7 +99,8 @@ class GetGitHub:
 
         return all_events
 
-    # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year, conditional header for if none match etag
+    # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year,
+    # conditional header for if none match etag
     def get_recent_repos_list(self):
         print(f"Calling Recent Repos....")
         # call with no etag to start to populate...
@@ -162,7 +163,8 @@ class GetGitHub:
         return repo_summary_data
 
 
-    # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha, conditional etag header
+    # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha,
+    # conditional etag header
     def get_latest_activity_sha(self):
         print("Getting latest activity")
         latest_shas = []
@@ -201,13 +203,10 @@ class GetGitHub:
                 new_etag = response.headers["etag"]
                 new_date = datetime.now()
 
-
-
                 # If successful, want to update repo data in db first
                 if response.status_code == 200:
                     data = response.json()
                     if len(data) > 0:
-                        # Think we can make this nested to accomodate 304, either way date called will need to be updated
                         sha_data = {
                             "repo": repo_name,
                             "etag": new_etag,
@@ -236,23 +235,19 @@ class GetGitHub:
                 else:
                     continue
 
-                        # add_sha = {
-                        #     "repo": repo_name,
-                        #     "sha": data[0]["after"],
-                        #     "timestamp": data[0]["timestamp"],
-                        #     "etag": new_etag,
-                        #     "date": new_date
-                        # }
-
-                        # latest_shas.append(add_sha)
-                #TODO: write datamanager function to get recent sha from db on 304, needs to continue loop to other dbs even if gets a 304 for one.
-
-
             # Call to update repo detail w Data Manager
             print(f"Calling update details...")
             self.data_manager.update_detail_repo_data(data=latest_shas)
 
-            print(f"All Done!")
+            # Now that db is updated, retrieve latest shas via DataManager
+            # Get today's date for since date
+            today = date.today()
+            since_date = today - timedelta(days=365)
+
+            repo_activity_shas = self.data_manager.get_repository_sha_data(since_date=since_date)
+            return repo_activity_shas
+
+            # print(f"All Done!")
 
 
     #   STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
