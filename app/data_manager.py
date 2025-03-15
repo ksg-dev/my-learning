@@ -13,6 +13,9 @@ load_dotenv()
 
 GH_API_URL = "https://api.github.com"
 
+#TODO: Want this class to do heavy lifting, return db data to dashboard to let it render more quickly?
+# Want this to be bridge between GH and Dashboard. Dashboard-GH objects shouldn't interact directly
+# that way Dashboard load isn't dependent on GH calls
 class DataManager:
     """
     table: users
@@ -23,6 +26,11 @@ class DataManager:
         self.user = user
         self.user_id = user_id
         self.etag = self.get_user_etag()
+
+    # Data Dashboard needs
+    def initial_dashboard(self):
+        # Data from db, before any API calls
+        pass
 
     def get_user_etag(self):
         print(f"Getting user etag....")
@@ -65,7 +73,7 @@ class DataManager:
                                           .where(Repository.user_id == self.user_id)
                                           .where(Repository.updated_at > since_date)
                                           .order_by(Repository.updated_at.desc())
-                                          .limit(10)).scalars().all()
+                                          .limit(75)).scalars().all()
 
         # Only need repo name and latest activity call etag for outgoing
         for item in select_repos:
@@ -86,7 +94,7 @@ class DataManager:
                                           .where(Repository.user_id == self.user_id)
                                           .where(Repository.updated_at > since_date)
                                           .order_by(Repository.updated_at.desc())
-                                          .limit(10)).scalars().all()
+                                          .limit(75)).scalars().all()
 
         # Only need repo name and latest sha for outgoing to commits
         for item in select_repos:

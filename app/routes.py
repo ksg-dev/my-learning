@@ -28,7 +28,7 @@ from app.forms import (RegisterForm, LoginForm,
                        NewCourseForm, NewProjectForm, NewCodeLinkForm, NewConceptForm,
                        NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm,
                        DeleteForm, UploadForm, UpdateProjectForm, PasswordReset)
-from app.events import GetGitHub, validate_id
+from app.github import GetGitHub
 # from app.stats import Dashboard
 from app.dashboard import Dashboard
 from app.upload import upload_courses, upload_projects, upload_libraries, upload_apis, upload_tools, upload_resources, upload_codelinks
@@ -140,6 +140,7 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("home"))
@@ -191,15 +192,29 @@ def contact():
 def home():
     # Create Dashboard Object - refresh events
     dashboard = Dashboard(user=current_user.name, user_id=current_user.id)
+    github = GetGitHub(user=current_user.name, user_id=current_user.id)
     now = datetime.utcnow()
+
+    # Build feed
+    feed = dashboard.build_feed(github.fetch_events())
+
+    # Get Course stats
+    course_stats = dashboard.get_course_stats()
 
     # Query db for repo activity, convert to python list
     get_repos = db.session.execute(db.select(Repository).filter_by(user_id=current_user.id)).scalars().all()
     repos = [repo for repo in get_repos]
 
-    # Test commit stats chart
-    get_chart_data = dashboard.commit_stats_chart
-    language_chart_data = dashboard.language_chart
+    # Get language data from json dumps
+    with open('repo-languages.json', 'r') as file:
+        lang_data = json.load(file)
+
+    language_chart_data = dashboard.get_lang_chart(lang_data)
+
+    # Get commit stats for two charts
+    commits = github.get_commits_from_sha()
+    get_chart_data = dashboard.get_commit_chart_data(commits)
+    get_commit_stats = dashboard.get_commit_stats(commits)
 
     months = get_chart_data.index.tolist()
     values = get_chart_data.values.tolist()
@@ -213,18 +228,20 @@ def home():
     projects = [project for project in get_projects]
     proj_count = len(projects)
 
-    return render_template('index.html',
-                           # my_events=my_events,
-                           labels=labels,
-                           data=data,
-                           lang_data=dashboard.language_chart,
-                           my_stats=dashboard.event_stats,
-                           now=now,
-                           activity=dashboard.feed,
-                           my_repos=repos,
-                           my_courses=dashboard.course_data,
-                           my_projects=projects,
-                           project_count=proj_count)
+    context = {
+        "labels": labels,
+        "data": data,
+        "lang_data": language_chart_data,
+        "my_stats": get_commit_stats,
+        "now": now,
+        "activity": feed,
+        "my_repos": repos,
+        "my_courses": course_stats,
+        "my_projects": projects,
+        "project_count": proj_count
+    }
+
+    return render_template('index.html', **context)
 
 
 # def home():

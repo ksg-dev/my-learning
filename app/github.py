@@ -15,21 +15,20 @@ load_dotenv()
 GH_API_URL = "https://api.github.com"
 
 class GetGitHub:
+    """Functions starting w FETCH call API, starting w GET pull data from db via DataManager"""
     def __init__(self, user, user_id):
         self._user = user
         self._token = os.environ["GITHUB_TOKEN"]
         self.user_id = user_id
         self.data_manager = DataManager(self._user, self.user_id)
-        self.events = self.get_events(user=self._user, token=self._token)
-        # If recent_repos call receives data, json stored
-        self.recent_repos_data: list[dict] = self.get_recent_repos_list()
-        self.my_latest_shas = self.get_latest_activity_sha()
-        # self.get_commits = self.get_recent_repo_commits()
-        # Testing new commits func using sha output
-        self.commits_data = self.get_commits_from_sha()
-        self.languages = self.get_repo_languages(user=self._user, token=self._token)
+        self.recent_repos = self.get_repos()
+        self.recent_shas = self.get_shas()
+        # self.events: json = self.get_events()
+        # self.recent_repos_data: list[dict] = self.get_recent_repos_list()
+        # self.my_latest_shas: list[dict] = self.get_latest_activity_sha()
+        # self.commits_data = self.get_commits_from_sha()
+        # self.languages = self.get_repo_languages(user=self._user, token=self._token)
         # self.repo_activity = self.recent_repo_activity(user=self._user, token=self._token)
-        # self.py_data = self.pygithub_get_commits(token = self._token, user=self._user)
     """
     For recent repos commits....
     
@@ -51,10 +50,31 @@ class GetGitHub:
         Now can take that commit data for each repo and get date of commits and group however
     
     """
-    def get_events(self, user, token):
+
+    def get_repos(self):
+        # Get today's date
+        today = date.today()
+
+        # Calculate date 1 year prior - can change to fit scope
+        since_date = today - timedelta(days=365)
+
+        # Retrieve recent repos from db via DataManager
+        repo_summary_data = self.data_manager.get_summary_repository_data(since_date=since_date)
+
+        return repo_summary_data
+
+    def get_shas(self):
+        # Get today's date
+        today = date.today()
+        since_date = today - timedelta(days=365)
+
+        repo_activity_shas = self.data_manager.get_repository_sha_data(since_date=since_date)
+        return repo_activity_shas
+
+    def fetch_events(self):
         headers = {
             "accept": "application/vnd.github+json",
-            "authorization": f"Bearer {token}",
+            "authorization": f"Bearer {self._token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
@@ -62,7 +82,7 @@ class GetGitHub:
                 "per_page": 100
             }
 
-        user_events = f"{GH_API_URL}/users/{user}/events"
+        user_events = f"{GH_API_URL}/users/{self._user}/events"
 
         response = requests.get(url=user_events, headers=headers, params=payload)
         response.raise_for_status()
@@ -101,12 +121,11 @@ class GetGitHub:
 
     # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year,
     # conditional header for if none match etag
-    def get_recent_repos_list(self):
+    def fetch_recent_repos_(self):
         print(f"Calling Recent Repos....")
         # call with no etag to start to populate...
         # etag = None
         etag = self.data_manager.etag
-
 
         # Get today's date
         today = date.today()
@@ -127,7 +146,7 @@ class GetGitHub:
 
         # Only want repos updated in last year - let's cap at 75 for performance
         params = {
-            "per_page": 5,
+            "per_page": 75,
             "sort": "updated",
             "since": iso_date
         }
@@ -155,17 +174,9 @@ class GetGitHub:
         # After updating db with any new repo data, update etag, timestamp for user
         self.data_manager.set_user_etag(etag=new_etag, timestamp=new_date)
 
-        # Now that db is updated, retrieve recent repos via DataManager
-        repo_summary_data = self.data_manager.get_summary_repository_data(since_date=since_date)
-        # for i in repo_summary_data:
-        #     for k, v in i.items():
-        #         print(f"{k} - {v}")
-        return repo_summary_data
-
-
     # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha,
     # conditional etag header
-    def get_latest_activity_sha(self):
+    def fetch_latest_activity_sha(self):
         print("Getting latest activity")
         latest_shas = []
 
@@ -181,9 +192,9 @@ class GetGitHub:
         }
 
         # Check for data
-        if self.recent_repos_data:
+        if self.recent_repos:
             # Loop through each repo in recent repo data
-            for repo in self.recent_repos_data:
+            for repo in self.recent_repos:
                 # Repo Name
                 repo_name = repo["name"]
                 # Latest Activity ETag
@@ -239,17 +250,7 @@ class GetGitHub:
             print(f"Calling update details...")
             self.data_manager.update_detail_repo_data(data=latest_shas)
 
-            # Now that db is updated, retrieve latest shas via DataManager
-            # Get today's date for since date
-            today = date.today()
-            since_date = today - timedelta(days=365)
-
-            repo_activity_shas = self.data_manager.get_repository_sha_data(since_date=since_date)
-            return repo_activity_shas
-
-            # print(f"All Done!")
-
-    #   STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
+    #  STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint, with "sha" query param set to AFTER sha, per_page=100.
     def get_commits_from_sha(self):
         print("Getting commits...")
         commits = {
@@ -264,9 +265,9 @@ class GetGitHub:
         }
 
         # Check for data
-        if self.my_latest_shas:
+        if self.recent_shas:
             # Loop through each repo/sha in latest shas
-            for repo in self.my_latest_shas:
+            for repo in self.recent_shas:
                 # Get repo name
                 repo_name = repo["name"]
                 latest_sha = repo["sha"]
@@ -313,24 +314,24 @@ class GetGitHub:
         # print(commits)
         return commits
 
-    def get_repo_languages(self, user, token):
+    def get_repo_languages(self):
         all_langs = []
 
         headers = {
             "accept": "application/vnd.github+json",
-            "authorization": f"Bearer {token}",
+            "authorization": f"Bearer {self._token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
         # Check for data
-        if self.recent_repos_data:
+        if self.recent_repos:
             # Loop through each repo in recent repo data
-            for repo in self.recent_repos_data:
+            for repo in self.recent_repos:
                 # Get repo name
                 repo_name = repo["name"]
 
                 # Endpoint to get detailed repo language breakdown
-                lang_url = f"{GH_API_URL}/repos/{user}/{repo_name}/languages"
+                lang_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/languages"
 
                 response = requests.get(url=lang_url, headers=headers)
                 response.raise_for_status()

@@ -11,18 +11,16 @@ from app.github import GetGitHub
 
 
 class Dashboard:
-    def __init__(self, user_id, user):
+    def __init__(self, user, user_id):
         self.user = user
         self.user_id = user_id
         # self.data_manager = DataManager(user, user_id)
-        self.github_data = GetGitHub(user=user, user_id=user_id)
-        self.feed = self.build_feed(self.github_data.events)
-        self.course_data = self.get_course_stats()
-        self.event_stats = self.get_commit_stats(self.github_data.commits_data)
-        self.commit_stats_chart = self.get_commit_chart_data(self.github_data.commits_data)
-        self.language_chart = self.get_lang_chart(self.github_data.languages)
-        # self.recent_repos = self.github_data.recent_repos
-        # self.repo_stats = self.repo_activity_stats(self.github_data.repo_activity)
+        # self.github_data = GetGitHub(user=user, user_id=user_id)
+        # self.feed = self.build_feed(self.github_data.events)
+        # self.course_data = self.get_course_stats()
+        # self.event_stats = self.get_commit_stats(self.github_data.commits_data)
+        # self.commit_stats_chart = self.get_commit_chart_data(self.github_data.commits_data)
+        # self.language_chart = self.get_lang_chart(self.github_data.languages)
 
 
     # Format timedelta into string for feed
