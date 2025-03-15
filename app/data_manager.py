@@ -118,13 +118,13 @@ class DataManager:
 
                     db.session.commit()
 
+    # If get_latest_activity returns 200 - update repo details in db
     def update_detail_repo_data(self, data: list[dict]):
         if data:
             for repo in data:
                 # Necessary data from latest_shas dict, cleaner to iterate before passing here
+                # Data from 200 and 304s
                 repo_name = repo["repo"]
-                after_sha = repo["sha"]
-                af_timestamp = repo["timestamp"].strip("Z")
                 new_etag = repo["etag"]
                 new_timestamp = repo["date"]
 
@@ -134,8 +134,14 @@ class DataManager:
 
                 target_repo.last_called_activity = new_timestamp
                 target_repo.latest_etag_activity = new_etag
-                target_repo.latest_sha = after_sha
-                target_repo.sha_timestamp = datetime.fromisoformat(af_timestamp)
+
+                # Data for 200 responses
+                after_sha = repo["activity"]["sha"]
+                if after_sha:
+                    af_timestamp = repo["activity"]["timestamp"].strip("Z")
+
+                    target_repo.latest_sha = after_sha
+                    target_repo.sha_timestamp = datetime.fromisoformat(af_timestamp)
 
                 db.session.commit()
 

@@ -164,6 +164,7 @@ class GetGitHub:
 
     # STEP 2 : Loop through recent repo data, for each repo name, call activity api and get latest "after" sha, conditional etag header
     def get_latest_activity_sha(self):
+        print("Getting latest activity")
         latest_shas = []
 
         headers = {
@@ -193,29 +194,59 @@ class GetGitHub:
 
                 response = requests.get(url=activity_url, headers=headers, params=params)
                 response.raise_for_status()
-                data = response.json()
+                print(f"activity call for {repo_name} returned: {response.status_code}")
+                # data = response.json()
 
                 # Even if etag stays the same, need to update last called date
                 new_etag = response.headers["etag"]
                 new_date = datetime.now()
 
-                print(f"activity call for {repo_name} returned: {response.status_code}")
+
 
                 # If successful, want to update repo data in db first
                 if response.status_code == 200:
+                    data = response.json()
                     if len(data) > 0:
-                        add_sha = {
+                        # Think we can make this nested to accomodate 304, either way date called will need to be updated
+                        sha_data = {
                             "repo": repo_name,
-                            "sha": data[0]["after"],
-                            "timestamp": data[0]["timestamp"],
                             "etag": new_etag,
-                            "date": new_date
+                            "date": new_date,
+                            "activity": {
+                                "sha": data[0]["after"],
+                                "timestamp": data[0]["timestamp"]
+                            }
                         }
 
-                        latest_shas.append(add_sha)
-                #TODO: write datamanager function to get recent sha from db on 304, needs to continue loop to other dbs even if gets a 304 for one.
+                        latest_shas.append(sha_data)
+
                 elif response.status_code == 304:
-                    pass
+                    sha_data = {
+                        "repo": repo_name,
+                        "etag": new_etag,
+                        "date": new_date,
+                        "activity": {
+                            "sha": None,
+                            "timestamp": None
+                        }
+                    }
+
+                    latest_shas.append(sha_data)
+
+                else:
+                    continue
+
+                        # add_sha = {
+                        #     "repo": repo_name,
+                        #     "sha": data[0]["after"],
+                        #     "timestamp": data[0]["timestamp"],
+                        #     "etag": new_etag,
+                        #     "date": new_date
+                        # }
+
+                        # latest_shas.append(add_sha)
+                #TODO: write datamanager function to get recent sha from db on 304, needs to continue loop to other dbs even if gets a 304 for one.
+
 
             # Call to update repo detail w Data Manager
             print(f"Calling update details...")
