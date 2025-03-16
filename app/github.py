@@ -55,7 +55,7 @@ class GetGitHub:
     """
 
     # Method to refresh API data
-    def refresh_github_data(self, since: timedelta=timedelta(days=365), per_page=100):
+    def refresh_github_data(self, since: timedelta = timedelta(days=365), per_page=100):
         # Get todays date
         today = date.today()
         # Calculate since date, default 1 year prior
@@ -68,7 +68,7 @@ class GetGitHub:
         # fetch latest commits
         self.fetch_commits_from_sha(per_page=per_page)
 
-    def get_github_data(self, since: timedelta=timedelta(days=365), per_page=100):
+    def get_github_data(self, since: timedelta = timedelta(days=365), per_page=100):
         # Get todays date
         today = date.today()
         # Calculate since date, default 1 year prior
