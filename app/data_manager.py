@@ -13,9 +13,7 @@ load_dotenv()
 
 GH_API_URL = "https://api.github.com"
 
-#TODO: Want this class to do heavy lifting, return db data to dashboard to let it render more quickly?
-# Want this to be bridge between GH and Dashboard. Dashboard-GH objects shouldn't interact directly
-# that way Dashboard load isn't dependent on GH calls
+
 class DataManager:
     """
     table: users
@@ -26,11 +24,6 @@ class DataManager:
         self.user = user
         self.user_id = user_id
         self.etag = self.get_user_etag()
-
-    # Data Dashboard needs
-    def initial_dashboard(self):
-        # Data from db, before any API calls
-        pass
 
     def get_user_etag(self):
         print(f"Getting user etag....")
@@ -64,49 +57,93 @@ class DataManager:
 
             db.session.commit()
 
-    # If ALL REPOS call gets 304 Not Modified, return this data for other api calls
-    # Need to populate after sha for all repos, next call is to get this sha
-    def get_summary_repository_data(self, since_date) -> list[dict]:
+    # Get recent repos at once so code not repeated
+    def get_recent_repos_data(self, since_date, limit) -> list[dict]:
         summary_data = []
 
         select_repos = db.session.execute(db.select(Repository)
                                           .where(Repository.user_id == self.user_id)
                                           .where(Repository.updated_at > since_date)
                                           .order_by(Repository.updated_at.desc())
-                                          .limit(75)).scalars().all()
+                                          .limit(limit)).scalars().all()
 
-        # Only need repo name and latest activity call etag for outgoing
-        for item in select_repos:
+        for repo in select_repos:
             add_repo = {
-                "name": item.name,
-                "last_activity_etag": item.latest_etag_activity
+                "name": repo.name,
+                "last_activity_etag": repo.latest_etag_activity,
+                "sha": repo.latest_sha,
+                "etag": repo.commits_etag,
+                "data": repo.commits_data
             }
 
             summary_data.append(add_repo)
 
         return summary_data
 
-    # Get latest activity shas for all repos for commit call
-    def get_repository_sha_data(self, since_date):
-        activity_shas = []
-
-        select_repos = db.session.execute(db.select(Repository)
-                                          .where(Repository.user_id == self.user_id)
-                                          .where(Repository.updated_at > since_date)
-                                          .order_by(Repository.updated_at.desc())
-                                          .limit(75)).scalars().all()
-
-        # Only need repo name and latest sha and commits etag for outgoing to commits
-        for item in select_repos:
-            add_repo = {
-                "name": item.name,
-                "sha": item.latest_sha,
-                "etag": item.commits_etag
-            }
-
-            activity_shas.append(add_repo)
-
-        return activity_shas
+    # # If ALL REPOS call gets 304 Not Modified, return this data for other api calls
+    # # Need to populate after sha for all repos, next call is to get this sha
+    # def get_summary_repository_data(self, recent_repos) -> list[dict]:
+    #     summary_data = []
+    #
+    #     # select_repos = db.session.execute(db.select(Repository)
+    #     #                                   .where(Repository.user_id == self.user_id)
+    #     #                                   .where(Repository.updated_at > since_date)
+    #     #                                   .order_by(Repository.updated_at.desc())
+    #     #                                   .limit(75)).scalars().all()
+    #
+    #     # Only need repo name and latest activity call etag for outgoing
+    #     for item in recent_repos:
+    #         add_repo = {
+    #             "name": item.name,
+    #             "last_activity_etag": item.latest_etag_activity
+    #         }
+    #
+    #         summary_data.append(add_repo)
+    #
+    #     return summary_data
+    #
+    # # Get latest activity shas for all repos for commit call
+    # def get_repository_sha_data(self, recent_repos) -> list[dict]:
+    #     activity_shas = []
+    #
+    #     # select_repos = db.session.execute(db.select(Repository)
+    #     #                                   .where(Repository.user_id == self.user_id)
+    #     #                                   .where(Repository.updated_at > since_date)
+    #     #                                   .order_by(Repository.updated_at.desc())
+    #     #                                   .limit(75)).scalars().all()
+    #
+    #     # Only need repo name and latest sha and commits etag for outgoing to commits
+    #     for item in recent_repos:
+    #         add_repo = {
+    #             "name": item.name,
+    #             "sha": item.latest_sha,
+    #             "etag": item.commits_etag
+    #         }
+    #
+    #         activity_shas.append(add_repo)
+    #
+    #     return activity_shas
+    #
+    # # Get commits json data for all repos for dashboard stats
+    # def get_commit_data(self, recent_repos) -> list[dict]:
+    #     commits_data = []
+    #
+    #     # select_repos = db.session.execute(db.select(Repository)
+    #     #                                   .where(Repository.user_id == self.user_id)
+    #     #                                   .where(Repository.updated_at > since_date)
+    #     #                                   .order_by(Repository.updated_at.desc())
+    #     #                                   .limit(75)).scalars().all()
+    #
+    #     # Create list of dicts for Dashboard analytics
+    #     for item in select_repos:
+    #         add_data = {
+    #             "name": item.name,
+    #             "data": item.commits_data
+    #         }
+    #
+    #         commits_data.append(add_data)
+    #
+    #     return commits_data
 
     # If ALL REPOS call gets 200, parse json and store necessary data
     def update_summary_repository_data(self, data):

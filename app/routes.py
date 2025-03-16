@@ -212,7 +212,7 @@ def home():
     language_chart_data = dashboard.get_lang_chart(lang_data)
 
     # Get commit stats for two charts
-    commits = github.fetch_commits_from_sha()
+    commits = github.clean_commit_data()
     get_chart_data = dashboard.get_commit_chart_data(commits)
     get_commit_stats = dashboard.get_commit_stats(commits)
 
