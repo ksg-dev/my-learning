@@ -53,7 +53,7 @@ class GetGitHub:
         Now can take that commit data for each repo and get date of commits and group however
     
     """
-
+    # TODO: Button to refresh data as async request....want to add a progress bar for call progress
     # Method to refresh API data
     def refresh_github_data(self, since: timedelta = timedelta(days=365), per_page=100):
         # Get todays date
