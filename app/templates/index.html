@@ -25,42 +25,7 @@
 	<div class="col-lg-8">
 	  <div class="row">
 
-		  <div class="card">
-			  <div class="card-body">
-				  <h5 class="card-title">Loading Bar</h5>
-				  <div class="progress">
-                <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">10%</div>
-				  </div>
-				  <button onclick="startTask()">Start Task</button>
-
-				  <script>
-					  const start_url = {{ url_for('start_task')|tojson }}
-					  const progress_url = {{ url_for('get_progress')|tojson }}
-					  const progress_div = getElementById('progress-bar')
-
-					  function startTask() {
-						  fetch(start_url)
-						  	.then(response => response.json())
-						  	.then(data => {
-							  updateProgress();
-						  });
-					  }
-
-					  function updateProgress() {
-						  fetch(progress_url)
-						  	.then(response => response.json())
-						  	.then(data => {
-							  document.getElementById('progress-bar').style.width = data.progress + '%';
-							  document.getElementById('progress-bar').textContent = data.progress + '%';
-							  if (data.progess < 100) {
-								  setTimeout(updateProgress, 500);
-							  }
-						  });
-					  }
-				  </script>
-
-			  </div>
-		  </div>
+{% include 'progress-bar.html' %}
 
 <!--	Start Pill Tabs -->
 		<div class="col-sm-12">

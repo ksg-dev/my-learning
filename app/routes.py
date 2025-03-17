@@ -11,6 +11,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
+from flask_socketio import SocketIO
 from flask_ckeditor.utils import cleanify
 from dotenv import load_dotenv
 
@@ -80,22 +81,25 @@ course_statuses = {
 
 
 progress = 0
+progress_lock = threading.Lock()
 
 def refresh_github():
     global progress
     for i in range(10):
-        time.sleep(10)
-        progress = (i + 1) * 10
+        time.sleep(1)
+        with progress_lock:
+            progress = (i + 1) * 10
+            # yield f"data: {progress}\n\n"
 
-@app.route('/start')
+@app.route('/start_task')
 def start_task():
-    thread = threading.Thread(target=refresh_github)
-    thread.start()
+    threading.Thread(target=refresh_github).start()
     return jsonify(message="Task Started...")
 
 @app.route('/progress')
 def get_progress():
-    return jsonify(progress=progress)
+    with progress_lock:
+        return jsonify(progress=progress)
 
 
 ##################################### LOGIN/REGISTER PAGES ########################################
