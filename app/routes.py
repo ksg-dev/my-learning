@@ -1,7 +1,7 @@
 import datetime
 import json
 
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_bootstrap import Bootstrap5
 from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -13,6 +13,9 @@ from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
 from flask_ckeditor.utils import cleanify
 from dotenv import load_dotenv
+
+import time
+import threading
 import os
 import calendar
 import pandas as pd
@@ -75,6 +78,24 @@ course_statuses = {
     'complete': ['Complete', 'bg-success', 'bi-check-circle']
 }
 
+
+progress = 0
+
+def refresh_github():
+    global progress
+    for i in range(10):
+        time.sleep(10)
+        progress = (i + 1) * 10
+
+@app.route('/start')
+def start_task():
+    thread = threading.Thread(target=refresh_github)
+    thread.start()
+    return jsonify(message="Task Started...")
+
+@app.route('/progress')
+def get_progress():
+    return jsonify(progress=progress)
 
 
 ##################################### LOGIN/REGISTER PAGES ########################################
