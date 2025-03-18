@@ -57,7 +57,9 @@ class DataManager:
 
             db.session.commit()
 
-    # Get recent repos at once so code not repeated
+    # Get recent repos at once for initial get call...
+    # Will still need separate calls to exist though for separate db calls to get
+    # after each fetch so next call in chain is working with newest updated data
     def get_recent_repos_data(self, since_date, limit) -> list[dict]:
         summary_data = []
 
@@ -80,49 +82,50 @@ class DataManager:
 
         return summary_data
 
-    # # If ALL REPOS call gets 304 Not Modified, return this data for other api calls
-    # # Need to populate after sha for all repos, next call is to get this sha
-    # def get_summary_repository_data(self, recent_repos) -> list[dict]:
-    #     summary_data = []
-    #
-    #     # select_repos = db.session.execute(db.select(Repository)
-    #     #                                   .where(Repository.user_id == self.user_id)
-    #     #                                   .where(Repository.updated_at > since_date)
-    #     #                                   .order_by(Repository.updated_at.desc())
-    #     #                                   .limit(75)).scalars().all()
-    #
-    #     # Only need repo name and latest activity call etag for outgoing
-    #     for item in recent_repos:
-    #         add_repo = {
-    #             "name": item.name,
-    #             "last_activity_etag": item.latest_etag_activity
-    #         }
-    #
-    #         summary_data.append(add_repo)
-    #
-    #     return summary_data
-    #
-    # # Get latest activity shas for all repos for commit call
-    # def get_repository_sha_data(self, recent_repos) -> list[dict]:
-    #     activity_shas = []
-    #
-    #     # select_repos = db.session.execute(db.select(Repository)
-    #     #                                   .where(Repository.user_id == self.user_id)
-    #     #                                   .where(Repository.updated_at > since_date)
-    #     #                                   .order_by(Repository.updated_at.desc())
-    #     #                                   .limit(75)).scalars().all()
-    #
-    #     # Only need repo name and latest sha and commits etag for outgoing to commits
-    #     for item in recent_repos:
-    #         add_repo = {
-    #             "name": item.name,
-    #             "sha": item.latest_sha,
-    #             "etag": item.commits_etag
-    #         }
-    #
-    #         activity_shas.append(add_repo)
-    #
-    #     return activity_shas
+    # Use this call for repos list for later api calls If ALL REPOS call gets 304 Not Modified,
+    # OR to get latest data added to db to give back to next API call
+    # Need to populate after sha for all repos, next call is to get this sha
+    def get_summary_repository_data(self, since_date, limit) -> list[dict]:
+        summary_data = []
+
+        select_repos = db.session.execute(db.select(Repository)
+                                          .where(Repository.user_id == self.user_id)
+                                          .where(Repository.updated_at > since_date)
+                                          .order_by(Repository.updated_at.desc())
+                                          .limit(limit)).scalars().all()
+
+        # Only need repo name and latest activity call etag for outgoing
+        for item in select_repos:
+            add_repo = {
+                "name": item.name,
+                "last_activity_etag": item.latest_etag_activity
+            }
+
+            summary_data.append(add_repo)
+
+        return summary_data
+
+    # Get latest activity shas for all repos for commit call, used after fetch latest shas
+    def get_repository_sha_data(self, since_date, limit) -> list[dict]:
+        activity_shas = []
+
+        select_repos = db.session.execute(db.select(Repository)
+                                          .where(Repository.user_id == self.user_id)
+                                          .where(Repository.updated_at > since_date)
+                                          .order_by(Repository.updated_at.desc())
+                                          .limit(limit)).scalars().all()
+
+        # Only need repo name and latest sha and commits etag for outgoing to commits
+        for item in select_repos:
+            add_repo = {
+                "name": item.name,
+                "sha": item.latest_sha,
+                "etag": item.commits_etag
+            }
+
+            activity_shas.append(add_repo)
+
+        return activity_shas
     #
     # # Get commits json data for all repos for dashboard stats
     # def get_commit_data(self, recent_repos) -> list[dict]:
