@@ -55,7 +55,12 @@ class GetGitHub:
     """
     # TODO: Button to refresh data as async request....want to add a progress bar for call progress
     # Method to refresh API data
+
     def refresh_github_data(self, since: timedelta = timedelta(days=365), per_page=100):
+        data = {
+            "total_progress": 0,
+            "result": "Refreshing..."
+        }
         # Get todays date
         today = date.today()
         # Calculate since date, default 1 year prior
@@ -63,14 +68,23 @@ class GetGitHub:
 
         # fetch recent repos, update db
         self.fetch_recent_repos_(since_date=since_date, per_page=per_page)
+        data["total_progress"] += 20
+        data["result"] = "Fetching latest activity.."
+        yield data
         # New call to db via Datamanager to get recent repos after fetch
         repo_list = self.data_manager.get_summary_repository_data(since_date=since_date, limit=per_page)
         # fetch latest activity shas with updated repo_list
         self.fetch_latest_activity_sha(repo_list=repo_list)
+        data["total_progress"] += 40
+        data["result"] = "Fetching Commits.."
+        yield data
         # New call to db via DataManager to get recent shas after fetch
         repo_shas = self.data_manager.get_repository_sha_data(since_date=since_date, limit=per_page)
         # fetch latest commits with updated activity shas
         self.fetch_commits_from_sha(repo_shas=repo_shas, per_page=per_page)
+        data["total_progress"] += 40
+        data["result"] = "All Done!.."
+        yield data
         # Once all are fetched, get all data
         self.get_github_data()
 
@@ -156,6 +170,7 @@ class GetGitHub:
     # STEP 1: Make API call to endpoint for list of repos for authenticated user updated in the last year,
     # conditional header for if none match etag
     def fetch_recent_repos_(self, since_date, per_page):
+        yield {'result': 'Fetching Recent Repos...'}
         print(f"Calling Recent Repos....")
         # call with no etag to start to populate...
         # etag = None
@@ -227,6 +242,7 @@ class GetGitHub:
 
         # Check for data
         if repo_list:
+            total = len(repo_list)
             # Loop through each repo in recent repo data
             for repo in repo_list:
                 # Repo Name

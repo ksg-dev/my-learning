@@ -285,8 +285,9 @@ tasks = {}
 
 @app.route('/start_task', methods=["POST"])
 def start_task():
+    github = GetGitHub(user=current_user.name, user_id=current_user.id)
     task_id = str(random.randint(1000, 9999))
-    task_thread = TaskThread(task_id)
+    task_thread = TaskThread(task_id, gh=github)
     tasks[task_id] = task_thread
     task_thread.start()
     return jsonify({'task_id': task_id})
