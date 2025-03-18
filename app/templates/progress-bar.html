@@ -12,26 +12,46 @@
 					<span class="sr-only">0% Complete</span>
 				</div>
 				  </div>
-				  <button onclick="startTask()">Start Task</button>
+				  <button id="start-button">Start Task</button>
+		  		<div id="result"></div>
 
 				  <script>
 
-					  function startTask() {
-						  fetch('/start_task')
-						  	.then(() => {
-								  updateProgress();
-						  });
-					  }
+					  const startButton = document.getElementById('start-button');
+					  const progressBar = document.getElementById('progress-bar');
+					  const resultDiv = document.getElementById('result');
+					  const SCRIPT_ROOT = {{ request.script_root|tojson }}
 
-					  function updateProgress() {
-						  fetch('/progress')
-						  .then(response => response.json())
-						  .then(data => {
-							  document.getElementById('progress-bar').style.width = data.progress + '%';
-							  document.getElementById('progress-bar').setAttribute('aria-valuenow', data.progress);
-							  document.getElementById('progress-bar').textContent = data.progress + '%';
-							  if (data.progress < 100) {
-								  setTimeout(updateProgress, 500);
+
+
+					  startButton.addEventListener('click', () => {
+						  startButton.disabled = true;
+						  progressBar.style.width = '0%';
+						  progressBar.textContent = '0%';
+						  progressBar.ariavaluenow = '0';
+						  resultDiv.textContent = '';
+
+						  fetch('/start_task', {method: 'POST'})
+						  	.then(response => response.json())
+						  	.then(data => {
+							  const taskId = data.task_id;
+							  checkProgress(taskId);
+						  });
+					  });
+
+					  function checkProgress(taskId) {
+						  fetch(`/get_progress/${taskId}`)
+						  	.then(response => response.json())
+						  	.then(data => {
+							  progressBar.style.width = data.progress + '%';
+							  progressBar.textContent = data.progress + '%';
+							  progressBar.ariavaluenow = data.progress;
+
+							  if (data.result) {
+								  resultDiv.textContent = data.result;
+								  startButton.disabled = false;
+							  } else {
+								  setTimeout(() => checkProgress(taskId), 1000);
 							  }
 						  });
 					  }

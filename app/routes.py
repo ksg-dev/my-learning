@@ -1,5 +1,6 @@
 import datetime
 import json
+import random
 
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_bootstrap import Bootstrap5
@@ -80,26 +81,34 @@ course_statuses = {
 }
 
 
-progress = 0
-progress_lock = threading.Lock()
+# progress = 0
+# progress_lock = threading.Lock()
+#
+# def update_progress(num):
+#     global progress
+#     with progress_lock:
+#         progress += num
+#         print(f"progress: {progress}")
 
-def refresh_github():
-    global progress
-    for i in range(10):
-        time.sleep(1)
-        with progress_lock:
-            progress = (i + 1) * 10
+
+# Test function
+# def refresh_github():
+#     global progress
+#     for i in range(10):
+#         time.sleep(1)
+#         with progress_lock:
+#             progress = (i + 1) * 10
             # yield f"data: {progress}\n\n"
 
-@app.route('/start_task')
-def start_task():
-    threading.Thread(target=refresh_github).start()
-    return jsonify(message="Task Started...")
-
-@app.route('/progress')
-def get_progress():
-    with progress_lock:
-        return jsonify(progress=progress)
+# @app.route('/start_task')
+# def start_task():
+#     threading.Thread(target=refresh_github).start()
+#     return jsonify(message="Task Started...")
+#
+# @app.route('/progress')
+# def get_progress():
+#     with progress_lock:
+#         return jsonify(progress=progress)
 
 
 ##################################### LOGIN/REGISTER PAGES ########################################
@@ -267,6 +276,34 @@ def home():
     }
 
     return render_template('index.html', **context)
+
+################################## TASK THREAD ##############################################
+from app.tasks import TaskThread
+
+tasks = {}
+
+
+@app.route('/start_task', methods=["POST"])
+def start_task():
+    task_id = str(random.randint(1000, 9999))
+    task_thread = TaskThread(task_id)
+    tasks[task_id] = task_thread
+    task_thread.start()
+    return jsonify({'task_id': task_id})
+
+
+@app.route('/get_progress/<task_id>')
+def get_progress(task_id):
+    if task_id not in tasks:
+        return jsonify({'error': 'Task not found'}), 404
+
+    task = tasks[task_id]
+    progress = task.get_progress()
+    result = task.get_result()
+    if result:
+        del tasks[task_id]
+        return jsonify({'progress': progress, 'result': result})
+    return jsonify({'progress': progress})
 
 
 # def home():
