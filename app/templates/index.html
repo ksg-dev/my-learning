@@ -318,7 +318,7 @@
               </div>
             </div><!-- End Reports -->
 
-            <!-- Recent Sales -->
+            <!-- Recent Repos -->
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
 
@@ -343,8 +343,8 @@
                       <tr>
                         <th scope="col">Repository</th>
                         <th scope="col">Projects</th>
-                        <th scope="col">Commits</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Last Pushed</th>
+                        <th scope="col">Last Activity Call</th>
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
@@ -352,9 +352,17 @@
 					{% for repo in my_repos %}
                       <tr>
                         <th scope="row"><a href="#">{{ repo.name }}</a></th>
-                        <td>{{ repo.projects }}</td>
-                        <td>Filler for Events</td>
-                        <td>$64</td>
+                        <td>{% for project in repo.projects %} {{ project.name }} {% endfor %}</td>
+						  {% if repo.pushed_at %}
+                        	<td>{{ repo.pushed_at.strftime("%b %d, %Y | %I:%M %p") }}</td>
+						  {% else %}
+						  	<td></td>
+						  {% endif %}
+						  {% if repo.last_called_activity %}
+                        	<td>{{ repo.last_called_activity.strftime("%b %d, %Y | %I:%M %p") }}</td>
+						  {% else %}
+						  	<td></td>
+						  {% endif %}
                         <td><span class="badge bg-success">Approved</span></td>
                       </tr>
 					{% endfor %}
