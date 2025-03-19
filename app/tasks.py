@@ -25,7 +25,7 @@ class TaskThread(threading.Thread):
                 self.progress = i["total_progress"]
                 self.result = i["result"]
                 print(f"Task {self.task_id}: Progress: {self.progress}  Status: {self.result}")
-            self.result = "Task Completed! You may want to refresh your dashboard."
+            self.result = "Task Completed! Refresh your dashboard?"
 
     # def run(self):
     #     # Simulate long-running task

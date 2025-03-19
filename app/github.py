@@ -214,8 +214,8 @@ class GetGitHub:
                 repo_name = repo["name"]
                 # Latest Activity ETag
 
-                if repo["last_activity_etag"]:
-                    headers["if-none-match"] = repo["last_activity_etag"]
+                # if repo["last_activity_etag"]:
+                #     headers["if-none-match"] = repo["last_activity_etag"]
 
                 # Endpoint to get detailed repo activity
                 activity_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/activity"
@@ -233,15 +233,28 @@ class GetGitHub:
                 if response.status_code == 200:
                     data = response.json()
                     if len(data) > 0:
-                        sha_data = {
-                            "repo": repo_name,
-                            "etag": new_etag,
-                            "date": new_date,
-                            "activity": {
-                                "sha": data[0]["after"],
-                                "timestamp": data[0]["timestamp"]
+                        after_sha = data[0]["after"]
+                        before_sha = data[0]["before"]
+                        if after_sha == "0000000000000000000000000000000000000000":
+                            sha_data = {
+                                "repo": repo_name,
+                                "etag": new_etag,
+                                "date": new_date,
+                                "activity": {
+                                    "sha": before_sha,
+                                    "timestamp": data[0]["timestamp"]
+                                }
                             }
-                        }
+                        else:
+                            sha_data = {
+                                "repo": repo_name,
+                                "etag": new_etag,
+                                "date": new_date,
+                                "activity": {
+                                    "sha": after_sha,
+                                    "timestamp": data[0]["timestamp"]
+                                }
+                            }
 
                         latest_shas.append(sha_data)
 
