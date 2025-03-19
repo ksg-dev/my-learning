@@ -1,27 +1,31 @@
 import threading
 import time
 import random
-from app import app
+from flask_login import current_user
 
 from app.github import GetGitHub
 
 class TaskThread(threading.Thread):
-    def __init__(self, task_id, gh):
+    def __init__(self, task_id, app):
         super().__init__()
         self.task_id = task_id
         self.progress = 0
         self.result = None
-        self.gh = gh
+        self.gh_instance = GetGitHub(user=current_user.name, user_id=current_user.id)
+        self.app = app
 
     #TODO: Working on calling and updating task track here. Operating outside app context, need to fix this
     def run(self):
         total_steps = 3
-        refresh = self.gh.refresh_github_data()
-        for i in refresh:
-            self.progress = i["total_progress"]
-            self.result = i["result"]
-            print(f"Task {self.task_id}: Progress: {self.progress}  Status: {self.result}")
-        self.result = "Task Completed!"
+        with self.app.app_context():
+            instance = self.gh_instance
+
+            refresh = instance.refresh_github_data()
+            for i in refresh:
+                self.progress = i["total_progress"]
+                self.result = i["result"]
+                print(f"Task {self.task_id}: Progress: {self.progress}  Status: {self.result}")
+            self.result = "Task Completed!"
 
     # def run(self):
     #     # Simulate long-running task

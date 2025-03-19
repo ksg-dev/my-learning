@@ -2,7 +2,7 @@ import datetime
 import json
 import random
 
-from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, current_app
 from flask_bootstrap import Bootstrap5
 from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -220,6 +220,10 @@ def faq():
 def contact():
     return render_template("contact.html")
 
+def get_GitHub_instance(user, user_id):
+    gh_instance = GetGitHub(user, user_id)
+    return gh_instance
+
 @app.route('/')
 @app.route('/index')
 @login_required
@@ -285,9 +289,10 @@ tasks = {}
 
 @app.route('/start_task', methods=["POST"])
 def start_task():
-    github = GetGitHub(user=current_user.name, user_id=current_user.id)
+    # github = GetGitHub(user=current_user.name, user_id=current_user.id)
     task_id = str(random.randint(1000, 9999))
-    task_thread = TaskThread(task_id, gh=github)
+    context = current_app._get_current_object()
+    task_thread = TaskThread(task_id, context)
     tasks[task_id] = task_thread
     task_thread.start()
     return jsonify({'task_id': task_id})
@@ -301,10 +306,10 @@ def get_progress(task_id):
     task = tasks[task_id]
     progress = task.get_progress()
     result = task.get_result()
-    if result:
+    if progress > 99:
         del tasks[task_id]
         return jsonify({'progress': progress, 'result': result})
-    return jsonify({'progress': progress})
+    return jsonify({'progress': progress, 'result': result})
 
 
 # def home():

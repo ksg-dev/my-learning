@@ -46,8 +46,9 @@
 							  progressBar.style.width = data.progress + '%';
 							  progressBar.textContent = data.progress + '%';
 							  progressBar.ariavaluenow = data.progress;
+							  resultDiv.textContent = data.result;
 
-							  if (data.result) {
+							  if (data.progress > 99) {
 								  resultDiv.textContent = data.result;
 								  startButton.disabled = false;
 							  } else {
