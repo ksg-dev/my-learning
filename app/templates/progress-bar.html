@@ -1,63 +1,68 @@
- <div class="card">
-	  <div class="card-body">
-		  <h5 class="card-title">Loading Bar</h5>
-			  <div class="progress">
-                <div class="progress-bar"
-					 id="progress-bar"
-					 role="progressbar"
-					 style="width: 0%"
-					 aria-valuenow="0"
-					 aria-valuemin="0"
-					 aria-valuemax="100">
-					<span class="sr-only">0% Complete</span>
-				</div>
-				  </div>
-				  <button id="start-button">Start Task</button>
-		  		<div id="result"></div>
+	<h5 class="card-title">Refresh GitHub Data</h5>
+	<div class="progress mb-3">
+		<div class="progress-bar"
+			 id="progress-bar"
+			 role="progressbar"
+			 style="width: 0%"
+			 aria-valuenow="0"
+			 aria-valuemin="0"
+			 aria-valuemax="100">
+			<span class="sr-only">0% Complete</span>
+		</div>
+	</div>
+	<div class="d-grid gap-2 d-md-flex my-auto justify-content-md-end">
+		<button type="button" id="start-button" class="btn btn-primary btn-sm">Start
+			Task
+		</button>
+		<a href="{{ url_for('home') }}">
+		<button type="button" id="refresh-button" class="btn btn-primary btn-sm">Refresh Dashboard
+		</button>
+			</a>
+	</div>
 
-				  <script>
+	<div id="result"></div>
 
-					  const startButton = document.getElementById('start-button');
-					  const progressBar = document.getElementById('progress-bar');
-					  const resultDiv = document.getElementById('result');
-					  const SCRIPT_ROOT = {{ request.script_root|tojson }}
+	<script>
+
+		const startButton = document.getElementById('start-button');
+		const progressBar = document.getElementById('progress-bar');
+		const resultDiv = document.getElementById('result');
 
 
 
-					  startButton.addEventListener('click', () => {
-						  startButton.disabled = true;
-						  progressBar.style.width = '0%';
-						  progressBar.textContent = '0%';
-						  progressBar.ariavaluenow = '0';
-						  resultDiv.textContent = '';
+		startButton.addEventListener('click', () => {
+			startButton.disabled = true;
+			progressBar.style.width = '0%';
+			progressBar.textContent = '0%';
+			progressBar.ariavaluenow = '0';
+			resultDiv.textContent = '';
 
-						  fetch('/start_task', {method: 'POST'})
-						  	.then(response => response.json())
-						  	.then(data => {
-							  const taskId = data.task_id;
-							  checkProgress(taskId);
-						  });
-					  });
+			fetch('/start_task', {method: 'POST'})
+				.then(response => response.json())
+				.then(data => {
+				const taskId = data.task_id;
+				checkProgress(taskId);
+			});
+		});
 
-					  function checkProgress(taskId) {
-						  fetch(`/get_progress/${taskId}`)
-						  	.then(response => response.json())
-						  	.then(data => {
-							  progressBar.style.width = data.progress + '%';
-							  progressBar.textContent = data.progress + '%';
-							  progressBar.ariavaluenow = data.progress;
-							  resultDiv.textContent = data.result;
+		function checkProgress(taskId) {
+			fetch(`/get_progress/${taskId}`)
+				.then(response => response.json())
+				.then(data => {
+				progressBar.style.width = data.progress + '%';
+				progressBar.textContent = data.progress + '%';
+				progressBar.ariavaluenow = data.progress;
+				resultDiv.textContent = data.result;
 
-							  if (data.progress > 99) {
-								  resultDiv.textContent = data.result;
-								  startButton.disabled = false;
-							  } else {
-								  setTimeout(() => checkProgress(taskId), 1000);
-							  }
-						  });
-					  }
+				if (data.progress > 99) {
+					resultDiv.textContent = data.result;
+					startButton.disabled = false;
+				} else {
+					setTimeout(() => checkProgress(taskId), 1000);
+				}
+			});
+		}
 
-				  </script>
+	</script>
 
-			  </div>
-		  </div>
+
