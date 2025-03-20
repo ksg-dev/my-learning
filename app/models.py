@@ -295,6 +295,7 @@ class Tool(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=True)
+    type: Mapped[str] = mapped_column(String(100), nullable=True)
     url: Mapped[str] = mapped_column(String(250), nullable=True)
     doc_link: Mapped[str] = mapped_column(String(250), nullable=True)
     date_added: Mapped[datetime.date] = mapped_column(Date, nullable=False)

@@ -147,6 +147,18 @@ class NewAPIForm(FlaskForm):
 class NewToolForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])
     description = TextAreaField("Description")
+    type = RadioField("Tool/Utility Type",
+                      choices=[
+                          ('essentials', 'Code Essentials'),
+                          ('gamedev', 'Game Development'),
+                          ('code-execution', 'Code Execution'),
+                          ('data-science', 'Data Science'),
+                          ('documentation', 'Documentation'),
+                          ('styling', 'Styling & UI'),
+                          ('auth', 'Authentication'),
+                          ('storage', 'Storage'),
+                          ('other', 'Other'),
+                      ], coerce=str)
     url = StringField("Tool URL", validators=[Optional(), URL()])
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')

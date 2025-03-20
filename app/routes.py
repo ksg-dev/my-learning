@@ -51,7 +51,7 @@ GH_API_URL = "https://api.github.com/"
 GH_USERNAME = os.environ["GITHUB_USERNAME"]
 
 # To show resource categories across pages, pass to index as badge=dict
-# 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
+# 'category or status in db': ['text to appear on badge', 'color of icon', 'badge icon']
 resource_categories = {
     'cheatsheet': ['Cheatsheet', 'lightseagreen', 'bi bi-file-earmark-text'],
     'diagram': ['Diagram', 'blueviolet', 'bi bi-diagram-2'],
@@ -81,6 +81,19 @@ course_statuses = {
     'complete': ['Complete', 'bg-success', 'bi-check-circle']
 }
 
+# To show tool/utility categories across pages, pass to index as badge=dict
+# 'category or status in db': ['text to appear on badge', 'color of icon', 'badge icon']
+tool_categories = {
+    'essentials': ['Code Essentials', 'lightseagreen', 'bi bi-file-earmark-text'],
+    'gamedev': ['Game Development', 'blueviolet', 'bi bi-diagram-2'],
+    'code-execution': ['Code Execution', 'lightseagreen', 'bi bi-file-earmark-text'],
+    'data-science': ['Data Science', 'blueviolet', 'bi bi-diagram-2'],
+    'documentation': ['Documentation', 'cornflowerblue', 'bi bi-info-circle'],
+    'styling': ['Styling & UI', 'orchid', 'bi bi-file-ruled'],
+    'auth': ['Authentication', 'chocolate', 'ri-code-box-fill'],
+    'storage': ['Storage', 'darkslategrey', 'bi bi-collection'],
+    'other': ['Other', 'darkslategrey', 'bi bi-collection']
+}
 
 ##################################### LOGIN/REGISTER PAGES ########################################
 
@@ -282,14 +295,6 @@ def get_progress(task_id):
         return jsonify({'progress': progress, 'result': result})
     return jsonify({'progress': progress, 'result': result})
 
-
-# def home():
-#     if 'dashboard' not in session:
-#         session['dashboard'] = build_dashboard()
-#
-#     return render_template('test_index.html',
-#                            dashboard=session['dashboard'],
-#                         )
 
 ##################################### LANDING PAGES ########################################
 @app.route('/concepts')
