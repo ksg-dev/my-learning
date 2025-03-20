@@ -158,11 +158,12 @@ class NewResourceForm(FlaskForm):
     description = TextAreaField("Description")
     type = RadioField("Resource Type",
                       choices=[
-                            ('other', 'Other'),
+                            ('code', 'Code'),
                             ('cheatsheet', 'Cheatsheet'),
                             ('diagram', 'Diagram'),
                             ('quickref', 'Quick Reference'),
-                            ('template', 'Template')
+                            ('template', 'Template'),
+                            ('other', 'Other'),
                           ], coerce=str)
     resource_url = StringField("Resource URL", validators=[Optional(), URL()])
     concepts = ConceptListField('Concepts')

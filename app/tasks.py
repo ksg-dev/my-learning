@@ -14,7 +14,6 @@ class TaskThread(threading.Thread):
         self.gh_instance = GetGitHub(user=current_user.name, user_id=current_user.id)
         self.app = app
 
-    #TODO: Working on calling and updating task track here. Operating outside app context, need to fix this
     def run(self):
         total_steps = 3
         with self.app.app_context():
@@ -36,6 +35,7 @@ class TaskThread(threading.Thread):
     #         print(f"Task {self.task_id}: Progress: {self.progress}%")
     #     self.result = "Task completed!"
 
+    # Maybe use this function to increment loading bar at some point
     def update_progress(self, amount):
         self.progress += amount
         return self.progress

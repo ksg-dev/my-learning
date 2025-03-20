@@ -53,11 +53,12 @@ GH_USERNAME = os.environ["GITHUB_USERNAME"]
 # To show resource categories across pages, pass to index as badge=dict
 # 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
 resource_categories = {
-    'cheatsheet': ['Cheatsheet', 'bg-warning text-dark', 'bi-file-earmark-text'],
-    'diagram': ['Diagram', 'bg-primary', 'bi-diagram-2'],
-    'quickref': ['Quick Reference', 'bg-info text-dark', 'bi-info-circle'],
-    'template': ['Template', 'bg-success', 'bi-file-ruled'],
-    'other': ['Other', 'bg-secondary', 'bi-collection']
+    'cheatsheet': ['Cheatsheet', 'lightseagreen', 'bi bi-file-earmark-text'],
+    'diagram': ['Diagram', 'blueviolet', 'bi bi-diagram-2'],
+    'quickref': ['Quick Reference', 'cornflowerblue', 'bi bi-info-circle'],
+    'template': ['Template', 'orchid', 'bi bi-file-ruled'],
+    'code': ['Code', 'chocolate', 'ri-code-box-fill'],
+    'other': ['Other', 'darkslategrey', 'bi bi-collection']
 }
 
 # To show concept categories across pages, pass to index as badge=dict
@@ -79,36 +80,6 @@ course_statuses = {
     'in-progress': ['In Progress', 'bg-warning text-dark', 'bi-arrow-repeat'],
     'complete': ['Complete', 'bg-success', 'bi-check-circle']
 }
-
-
-# progress = 0
-# progress_lock = threading.Lock()
-#
-# def update_progress(num):
-#     global progress
-#     with progress_lock:
-#         progress += num
-#         print(f"progress: {progress}")
-
-
-# Test function
-# def refresh_github():
-#     global progress
-#     for i in range(10):
-#         time.sleep(1)
-#         with progress_lock:
-#             progress = (i + 1) * 10
-            # yield f"data: {progress}\n\n"
-
-# @app.route('/start_task')
-# def start_task():
-#     threading.Thread(target=refresh_github).start()
-#     return jsonify(message="Task Started...")
-#
-# @app.route('/progress')
-# def get_progress():
-#     with progress_lock:
-#         return jsonify(progress=progress)
 
 
 ##################################### LOGIN/REGISTER PAGES ########################################
