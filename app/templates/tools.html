@@ -38,15 +38,18 @@
 			  <tr>
 				<th scope="col">Tool</th>
 				<th scope="col">Description</th>
+			  	<th scope="col">Type</th>
 				<th scope="col">Take Me There</th>
 				<th scope="col">Check the Docs</th>
 			  </tr>
 			</thead>
 			<tbody>
 			{% for tool in tools %}
+			{% set ttype = badge[tool.type] %}
 			  <tr>
 			  	<td><a href="{{ url_for('tool_detail', num=tool.id) }}"> {{ tool.name }}</a></td>
 				<td>{{ tool.description }}</td>
+				<td><i class="{{ ttype[2] }}" style="color: {{ttype[1]}}"></i> {{ ttype[0] }}</td>
 				<td><a href="{{ tool.url }}" target="_blank"><i class="bi bi-link-45deg"></i></a></td>
 			    <td><a href="{{ tool.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
 			  </tr>

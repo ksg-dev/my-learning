@@ -399,7 +399,7 @@ def tools_page():
     get_tools = db.session.execute(db.select(Tool).filter_by(user_id=current_user.id)).scalars().all()
     tools = [tool for tool in get_tools]
 
-    return render_template('tools.html', tools=tools)
+    return render_template('tools.html', tools=tools, badge=tool_categories)
 
 
 @app.route('/resources')
@@ -713,6 +713,7 @@ def add_new_tool():
         new_tool = Tool(
             name=form.name.data,
             description=form.description.data,
+            type=form.type.data,
             url=form.url.data,
             doc_link=form.doc_link.data,
             date_added=date.today(),
