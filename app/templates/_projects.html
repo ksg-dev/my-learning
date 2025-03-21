@@ -1,0 +1,26 @@
+<h5 class="card-title">Linked Projects</h5>
+
+<!-- Table with hoverable rows -->
+<table class="table table-hover">
+	<thead>
+	<tr>
+		<th scope="col">#</th>
+		<th scope="col">Project Name</th>
+		<th scope="col">Repo</th>
+		<th scope="col">Concepts</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for project in projects %}
+	<tr>
+		<th scope="row">{{ project.id }}</th>
+		<td><a href="{{ url_for('project_detail', num=project.id) }}">{{ project.name }}</a></td>
+		<td>{{ project.repo.name }}</td>
+		<td>{% for concept in project.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
+				class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span>
+		</a>{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>

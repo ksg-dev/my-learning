@@ -4,115 +4,75 @@
 {% block title %}Library Detail{% endblock %}
 
 {% block content %}
-	<main id="main" class="main">
+<main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>{{ library.name }}</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Knowledge Center</li>
-          <li class="breadcrumb-item"><a href="{{ url_for('libraries_page') }}">Libraries</a> </li>
-		  <li class="breadcrumb-item active">Usage</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+	<div class="pagetitle">
+		<h1>{{ library.name }}</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+				<li class="breadcrumb-item">Knowledge Center</li>
+				<li class="breadcrumb-item"><a href="{{ url_for('libraries_page') }}">Libraries</a></li>
+				<li class="breadcrumb-item active">Usage</li>
+			</ol>
+		</nav>
+	</div><!-- End Page Title -->
 
-<!--		Details-->
-		<div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ library.name }}</h5>
-				<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ library.description }}<i class="ri-double-quotes-r" style="color: dimgrey"></i></p>
-				<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ library.url }}" target="_blank"> Go to Docs</a></p>
-				<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ library.date_added.strftime("%B %d, %Y") }}</p>
-				<p>{% for concept in library.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span></a> {% endfor %}</p>
-				<a href="{{ url_for('update_library', num=library.id) }}">
-		  <button type="button" class="btn btn-primary btn-sm"><i class="ri-edit-fill"></i> Update</button>
+	<!--		Details-->
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">{{ library.name }}</h5>
+			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ library.description }}<i
+					class="ri-double-quotes-r" style="color: dimgrey"></i></p>
+			<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ library.url }}" target="_blank"> Go to
+				Docs</a></p>
+			<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ library.date_added.strftime("%B %d, %Y") }}
+			</p>
+			<p>{% for concept in library.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
+					class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span></a>
+				{% endfor %}</p>
+			<a href="{{ url_for('update_library', num=library.id) }}">
+				<button type="button" class="btn btn-primary btn-sm"><i class="ri-edit-fill"></i> Update</button>
 			</a>
 			<a href="{{ url_for('delete_library', num=library.id) }}">
-		  <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete</button>
+				<button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete
+				</button>
 			</a>
 
-				 </div>
-		  </div><!-- End Details -->
-
-
-<!--	All Projects for Concept Table-->
-	 <div class="card">
-		<div class="card-body">
-		  <h5 class="card-title">Linked Projects</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Project Name</th>
-				<th scope="col">Repo</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for project in projects %}
-			  <tr>
-				<th scope="row">{{ project.id }}</th>
-				<td><a href="{{ url_for('project_detail', num=project.id) }}">{{ project.name }}</a></td>
-				<td>{{ project.repo.name }}</td>
-				<td>{% for concept in project.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span> </a>{% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div><!-- End Details -->
 
 
-<!--	All CodeLinks for Concept Table-->
-	 <div class="card">
+	<!--	All Projects for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">CodeLinks</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">CodeLink</th>
-			    <th scope="col">Project</th>
-				<th scope="col">Link</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for codelink in codelinks %}
-			  <tr>
-				<th scope="row">{{ codelink.id }}</th>
-				<td>{{ codelink.name }}</td>
-			    <td>{{ codelink.project.name }}</td>
-				<td><a href="{{ codelink.link }}" target="_blank"><i class="bi bi-code-slash"></i></a></td>
-				  <td>{% for concept in codelink.concepts %}<a href="{{ url_for('concept_detail', num=concept.id) }}"> <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis">{{ concept.concept_term }} </span></a> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+			{% include '_projects.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
 
 
-<!--	All Resources for Concept Table-->
-	 <div class="card">
+	<!--	All CodeLinks for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  {% include '_resources.html' %}
+			{% include '_codelinks.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
 
 
-	</main> <!-- End #main -->
+	<!--	All Resources for Concept Table-->
+	<div class="card">
+		<div class="card-body">
+			{% include '_resources.html' %}
+		</div>
+	</div>
+	<!-- End Table with hoverable rows -->
+
+
+</main> <!-- End #main -->
 {% endblock %}
 
 
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>

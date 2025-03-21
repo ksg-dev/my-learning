@@ -849,23 +849,6 @@ def project_detail(num):
     for concept in target_project.concepts:
         proj_concepts.append(concept)
 
-    # user = db.get_or_404(User, current_user.id)
-    # print(user.name)
-    # gh = GetGitHub(user.name)
-    # tree = gh.get_tree(target_project.repo.name)
-
-    # Using PyGitHub wrapper
-    # tree = make_tree(username=user.name, repo_name=target_project.repo.name)
-
-    # tree = generate_tree(tree_data, target_project.repo.name)
-    # tree = generate_dict(tree_data)
-    # tree = GetGitHub(user.name).get_tree(user=user, repo=target_project.repo)
-    # print(tree)
-
-    # # Sort descending
-    # sorted_concepts = dict(
-    #     sorted(course_concepts.items(), key=lambda item: item[1], reverse=True))
-
     return render_template('project-detail.html',
                            project=target_project,
                            concepts=proj_concepts,

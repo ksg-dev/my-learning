@@ -1,0 +1,28 @@
+<h5 class="card-title">CodeLinks</h5>
+
+<!-- Table with hoverable rows -->
+<table class="table table-hover">
+	<thead>
+	<tr>
+		<th scope="col">#</th>
+		<th scope="col">CodeLink</th>
+		<th scope="col">Project</th>
+		<th scope="col">Link</th>
+		<th scope="col">Concepts</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for codelink in codelinks %}
+	<tr>
+		<th scope="row">{{ codelink.id }}</th>
+		<td>{{ codelink.name }}</td>
+		<td>{{ codelink.project.name }}</td>
+		<td><a href="{{ codelink.link }}" target="_blank"><i class="bi bi-code-slash"></i></a></td>
+		<td>{% for concept in codelink.concepts %}<a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
+				class="badge rounded-pill bg-primary-subtle text-primary-emphasis">{{ concept.concept_term }} </span></a>
+			{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
