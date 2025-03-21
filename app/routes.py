@@ -585,7 +585,6 @@ def add_new_library():
 
         form_concepts = form.concepts.data
 
-
         # If name in list, fetch and check for category, if none - update
         if new_lib.name.lower() in all_concepts:
             concept_check = db.session.execute(
@@ -603,6 +602,7 @@ def add_new_library():
         else:
             add_asset = Concept(
                 concept_term=new_lib.name,
+                desscription=new_lib.description,
                 category='library',
                 date_added=date.today()
             )
@@ -671,6 +671,7 @@ def add_new_api():
         else:
             add_asset = Concept(
                 concept_term=new_api.name,
+                description=new_api.description,
                 category='api',
                 date_added=date.today()
             )
@@ -739,6 +740,7 @@ def add_new_tool():
         else:
             add_asset = Concept(
                 concept_term=new_tool.name,
+                description=new_tool.description,
                 category='tool',
                 date_added=date.today()
             )

@@ -25,9 +25,9 @@
 				<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ library.description }}<i class="ri-double-quotes-r" style="color: dimgrey"></i></p>
 				<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ library.url }}" target="_blank"> Go to Docs</a></p>
 				<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ library.date_added.strftime("%B %d, %Y") }}</p>
-				<p>{% for concept in library.concepts %} <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span> {% endfor %}</p>
+				<p>{% for concept in library.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span></a> {% endfor %}</p>
 				<a href="{{ url_for('update_library', num=library.id) }}">
-		  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update</button>
+		  <button type="button" class="btn btn-primary btn-sm"><i class="ri-edit-fill"></i> Update</button>
 			</a>
 			<a href="{{ url_for('delete_library', num=library.id) }}">
 		  <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete</button>
@@ -58,7 +58,7 @@
 				<th scope="row">{{ project.id }}</th>
 				<td><a href="{{ url_for('project_detail', num=project.id) }}">{{ project.name }}</a></td>
 				<td>{{ project.repo.name }}</td>
-				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+				<td>{% for concept in project.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span> </a>{% endfor %}</td>
 			  </tr>
 			{% endfor %}
 			</tbody>
@@ -91,7 +91,7 @@
 				<td>{{ codelink.name }}</td>
 			    <td>{{ codelink.project.name }}</td>
 				<td><a href="{{ codelink.link }}" target="_blank"><i class="bi bi-code-slash"></i></a></td>
-				<td>{% for concept in codelink.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
+				  <td>{% for concept in codelink.concepts %}<a href="{{ url_for('concept_detail', num=concept.id) }}"> <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis">{{ concept.concept_term }} </span></a> {% endfor %}</td>
 			  </tr>
 			{% endfor %}
 			</tbody>
@@ -104,31 +104,7 @@
 <!--	All Resources for Concept Table-->
 	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Linked Resources</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Resource</th>
-			    <th scope="col">Type</th>
-				<th scope="col">URL</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for resource in resources %}
-			  <tr>
-				<th scope="row">{{ resource.id }}</th>
-				<td>{{ resource.name }}</td>
-			    <td><span class="badge {{ resource_badge[resource.type][1] }}"><i class="bi {{ resource_badge[resource.type][2] }} me-1"></i> {{ resource_badge[resource.type][0] }}</span></td>
-				<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
-				<td>{% for concept in resource.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+		  {% include '_resources.html' %}
 		</div>
 	 </div>
 		  <!-- End Table with hoverable rows -->

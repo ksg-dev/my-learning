@@ -1,0 +1,29 @@
+<h5 class="card-title">Linked Resources</h5>
+
+<!-- Table with hoverable rows -->
+<table class="table table-hover">
+	<thead>
+	<tr>
+		<th scope="col">#</th>
+		<th scope="col">Resource</th>
+		<th scope="col">Type</th>
+		<th scope="col">URL</th>
+		<th scope="col">Concepts</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for resource in resources %}
+	{% set rtype = resource_badge[resource.type] %}
+	<tr>
+		<th scope="row">{{ resource.id }}</th>
+		<td>{{ resource.name }}</td>
+		<td><i class="{{ rtype[2] }}" style="color: {{rtype[1]}}"></i> {{ rtype[0] }}</td>
+		<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
+		<td>{% for concept in resource.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
+				class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span></a>
+			{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
