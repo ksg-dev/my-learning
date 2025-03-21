@@ -498,7 +498,7 @@ def add_new_project(course_id=None):
         db.session.add(new_proj)
         db.session.commit()
         return redirect(url_for("projects_page"))
-    return render_template('add.html', form=form, object="Project")
+    return render_template('add-project.html', form=form, object="Project")
 
 
 @app.route('/add-codelink', methods=["GET", "POST"])

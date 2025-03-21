@@ -81,48 +81,55 @@ project_params = [
     },
     {
         'col': 4,
+        'name': 'path',
+        'optional': True,
+        'input': 'string, folder-name in repo-name/folder-name for ex: for small-projects/api-exercises, put api-exercises',
+        'unique': False
+    },
+    {
+        'col': 5,
         'name': 'start',
         'optional': True,
         'input': 'date m/dd/YYYY',
         'unique': False
     },
     {
-        'col': 5,
+        'col': 6,
         'name': 'complete',
         'optional': True,
         'input': 'date m/dd/YYYY',
         'unique': False
     },
     {
-        'col': 6,
+        'col': 7,
         'name': 'section',
         'optional': True,
         'input': 'string',
         'unique': False
     },
     {
-        'col': 7,
+        'col': 8,
         'name': 'lecture',
         'optional': True,
         'input': 'string',
         'unique': False
     },
     {
-        'col': 8,
+        'col': 9,
         'name': 'repo',
         'optional': False,
         'input': 'string matching existing repo name',
         'unique': False
     },
     {
-        'col': 9,
+        'col': 10,
         'name': 'concepts',
         'optional': True,
         'input': 'string separated by +, ex: "tkinter+gui+try block+random"',
         'unique': False
     },
     {
-        'col': 10,
+        'col': 11,
         'name': 'course',
         'optional': False,
         'input': 'string matching existing course name',
@@ -223,20 +230,27 @@ tool_params = [
     },
     {
         'col': 3,
+        'name': 'type',
+        'optional': True,
+        'input': 'choose one: essentials, gamedev, code-execution, data-science, documentation, styling, auth, storage, other',
+        'unique': False
+    },
+    {
+        'col': 4,
         'name': 'url',
         'optional': True,
         'input': 'url string',
         'unique': False
     },
     {
-        'col': 4,
+        'col': 5,
         'name': 'doc_link',
         'optional': True,
         'input': 'url string to reference docs',
         'unique': False
     },
     {
-        'col': 5,
+        'col': 6,
         'name': 'concepts',
         'optional': True,
         'input': 'string separated by +, ex: "tkinter+gui+try block+random"',
@@ -263,7 +277,7 @@ resource_params = [
         'col': 3,
         'name': 'type',
         'optional': True,
-        'input': 'choose one: cheatsheet, diagram, quickref, template, other',
+        'input': 'choose one: cheatsheet, diagram, quickref, template, code, other',
         'unique': False
     },
     {

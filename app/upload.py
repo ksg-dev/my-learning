@@ -83,6 +83,7 @@ def upload_projects(filename, user_id):
         'name': str,
         'description': str,
         'assignment_link': str,
+        'path': str,
         'start': str,
         'complete': str,
         'section': str,
@@ -114,6 +115,7 @@ def upload_projects(filename, user_id):
                 name=row.name,
                 description=row.description,
                 assignment_link=row.assignment_link,
+                path=row.path,
                 section=row.section,
                 lecture=row.lecture,
                 repo_id=target_repo.id,
@@ -228,6 +230,7 @@ def upload_libraries(filename, user_id):
         else:
             add_asset = Concept(
                 concept_term=new_library.name,
+                description=new_library.description,
                 category='library',
                 date_added=date.today()
             )
@@ -312,6 +315,7 @@ def upload_apis(filename, user_id):
         else:
             add_asset = Concept(
                 concept_term=new_api.name,
+                description=new_api.description,
                 category='api',
                 date_added=date.today()
             )
@@ -350,6 +354,7 @@ def upload_tools(filename, user_id):
     col_types = {
         'name': str,
         'description': str,
+        'type': str,
         'url': str,
         'doc_link': str,
         'concepts': str,
@@ -364,6 +369,7 @@ def upload_tools(filename, user_id):
         new_tool = Tool(
             name=row.name,
             description=row.description,
+            type=row.type,
             url=row.url,
             doc_link=row.doc_link,
             date_added=date.today(),
@@ -392,6 +398,7 @@ def upload_tools(filename, user_id):
         else:
             add_asset = Concept(
                 concept_term=new_tool.name,
+                description=new_tool.description,
                 category='tool',
                 date_added=date.today()
             )
