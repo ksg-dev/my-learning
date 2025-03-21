@@ -53,12 +53,12 @@ GH_USERNAME = os.environ["GITHUB_USERNAME"]
 # To show resource categories across pages, pass to index as badge=dict
 # 'category or status in db': ['text to appear on badge', 'color of icon', 'badge icon']
 resource_categories = {
-    'cheatsheet': ['Cheatsheet', 'lightseagreen', 'bi bi-file-earmark-text'],
-    'diagram': ['Diagram', 'blueviolet', 'bi bi-diagram-2'],
-    'quickref': ['Quick Reference', 'cornflowerblue', 'bi bi-info-circle'],
-    'template': ['Template', 'orchid', 'bi bi-file-ruled'],
-    'code': ['Code', 'chocolate', 'ri-code-box-fill'],
-    'other': ['Other', 'darkslategrey', 'bi bi-collection']
+    'cheatsheet': ['Cheatsheet', 'darkslateblue', 'ri-spy-fill'],
+    'diagram': ['Diagram', 'blueviolet', 'ri-flow-chart'],
+    'quickref': ['Quick Reference', 'deepskyblue', 'ri-bookmark-fill'],
+    'template': ['Template', 'orchid', 'ri-layout-2-fill'],
+    'code': ['Code', 'darkslategrey', 'ri-terminal-box-fill'],
+    'other': ['Other', 'chocolate', 'ri-attachment-2']
 }
 
 # To show concept categories across pages, pass to index as badge=dict
@@ -196,17 +196,16 @@ def secret_password_reset():
         return redirect(url_for("login"))
     return render_template("secret_password.html", form=form)
 
+
 @app.route('/faq')
 def faq():
     return render_template("faq.html")
+
 
 @app.route('/contact')
 def contact():
     return render_template("contact.html")
 
-def get_GitHub_instance(user, user_id):
-    gh_instance = GetGitHub(user, user_id)
-    return gh_instance
 
 @app.route('/')
 @app.route('/index')
@@ -243,7 +242,6 @@ def home():
 
     labels = [calendar.month_abbr[i] for i in months]
     data = [int(i) for i in values]
-
 
     # Query db for all projects. Convert to python list
     get_projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
@@ -614,9 +612,8 @@ def add_new_library():
             # add asset name to list of referenced concepts
             new_lib.concepts.append(add_asset)
 
-
-
-        if len(form_concepts) > 0:
+        #   Can't use len here, form_concepts populates [''] when field left blank
+        if form_concepts[0] != '':
             for concept_name in form_concepts:
                 concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
@@ -683,7 +680,8 @@ def add_new_api():
             # add asset name to list of referenced concepts
             new_api.concepts.append(add_asset)
 
-        if len(form_concepts) > 0:
+        #   Can't use len here, form_concepts populates [''] when field left blank
+        if form_concepts[0] != '':
             for concept_name in form_concepts:
                 concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
@@ -750,7 +748,8 @@ def add_new_tool():
             # add asset name to list of referenced concepts
             new_tool.concepts.append(add_asset)
 
-        if len(form_concepts) > 0:
+        #   Can't use len here, form_concepts populates [''] when field left blank
+        if form_concepts[0] != '':
             for concept_name in form_concepts:
                 concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
@@ -788,7 +787,8 @@ def add_new_resource():
 
         form_concepts = form.concepts.data
 
-        if len(form_concepts) > 0:
+        #   Can't use len here, form_concepts populates [''] when field left blank
+        if form_concepts[0] != '':
             for concept_name in form_concepts:
                 concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(concept_name)).first()
                 if not concept:
