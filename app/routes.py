@@ -467,6 +467,7 @@ def add_new_project(course_id=None):
             repo_id=form.repo.data,
             description=form.description.data,
             assignment_link=form.assignment_link.data,
+            path=form.path.data,
             course_id=form.course.data,
             start=form.start_date.data,
             complete=form.complete_date.data,
@@ -1003,6 +1004,7 @@ def update_project(num):
         form.name.data = project_to_update.name
         form.description.data = project_to_update.description
         form.assignment_link.data = project_to_update.assignment_link
+        form.path.data = project_to_update.path
         form.section.data = project_to_update.section
         form.lecture.data = project_to_update.lecture
         form.concepts.data = concepts_list
@@ -1012,6 +1014,7 @@ def update_project(num):
             project_to_update.name = form.name.data
             project_to_update.description = form.description.data
             project_to_update.assignment_link = form.assignment_link.data
+            project_to_update.path = form.path.data
             project_to_update.section = form.section.data
             project_to_update.lecture = form.lecture.data
 
@@ -1198,6 +1201,7 @@ def update_tool(num):
     if request.method == "GET":
         form.name.data = update_target.name
         form.description.data = update_target.description
+        form.type.data = update_target.type
         form.url.data = update_target.url
         form.doc_link.data = update_target.doc_link
         form.concepts.data = concepts_list
@@ -1206,6 +1210,7 @@ def update_tool(num):
         if form.validate_on_submit():
             update_target.name = form.name.data
             update_target.description = form.description.data
+            update_target.type = form.type.data
             update_target.url = form.url.data
             update_target.doc_link = form.doc_link.data
 

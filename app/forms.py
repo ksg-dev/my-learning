@@ -94,6 +94,7 @@ class NewProjectForm(FlaskForm):
     repo = SelectField("Project Repository", coerce=int)
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
     assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
+    path = StringField("Repository Path for Project (if nested)")
     start_date = DateField("Start Date", validators=[Optional()])
     complete_date = DateField("Complete Date", validators=[Optional()])
     concepts = ConceptListField('Concepts')
