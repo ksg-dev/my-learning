@@ -4,131 +4,156 @@
 {% block title %}Project Detail{% endblock %}
 
 {% block content %}
-	<main id="main" class="main">
+<main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>{{ project.title }}</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item">Projects</li>
-		  <li class="breadcrumb-item active">{{ project.name }}</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-
-		<div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ project.name }} Details</h5>
-					<p><i class="bi bi-github"></i> {{ project.repo.name }}</p>
-					<p><i class="bi bi-info-circle"></i> {{ project.description }}</p>
-					<p><i class="bi bi-calendar-plus"></i> {{ project.date_added }}</p>
-					<hr>
-					<p><i class="bi bi-book"></i> {{ project.course.name }}</p>
-					<p>Section: {{ project.section }}</p>
-					<p>Lecture: {{ project.lecture }}</p>
-					<p><i class="bi bi-link-45deg"></i> <a href="{{ project.assignment_link }}" target="_blank">Go to Assignment</a> </p>
-					<p><i class="bi bi-hourglass-top"></i> {{ project.start }}</p>
-					<p><i class="bi bi-hourglass-bottom"></i> {{ project.complete }}</p>
-
-
-              <a href="{{ url_for('update_project', num=project.id) }}">
-			  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update Project</button>
-			</a>
-			<a href="{{ url_for('delete_project', num=project.id) }}">
-		  <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete Project</button>
-			</a>
-				 </div>
-		  </div><!-- End Project Details -->
-
-
-		<div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Libraries/APIs Used</h5>
-
-              <!-- Top Concepts List group With Badges -->
-              <ul class="list-group">
-				  {% for concept in concepts %}
-				  {% if concept.category == 'library' or concept.category == 'api' %}
-				  <li class="list-group-item d-flex justify-content-between align-items-center">
-					  {{ concept.concept_term }}
-					  <span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
-                </li>
-				  {% endif %}
-				  {% endfor %}
-              </ul><!-- End Top Concepts List Group -->
-
-            </div>
-          </div>
+	<div class="pagetitle">
+		<h1>{{ project.title }}</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+				<li class="breadcrumb-item">My Learning</li>
+				<li class="breadcrumb-item">Projects</li>
+				<li class="breadcrumb-item active">{{ project.name }}</li>
+			</ol>
+		</nav>
+	</div><!-- End Page Title -->
 
 	<div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Top Concepts</h5>
-
-              <!-- Top Concepts List group With Badges -->
-              <ul class="list-group">
-				  {% for concept in concepts %}
-				  {% if concept.category != 'library' and concept.category != 'api' %}
-				  <li class="list-group-item d-flex justify-content-between align-items-center">
-					  {{ concept.concept_term }}
-					  {% if concept.category %}
-					  <span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
-					  {% endif %}
-                </li>
-					{% endif %}
-				  {% endfor %}
-              </ul><!-- End Top Concepts List Group -->
-
-            </div>
-          </div>
-
-<!--	Project CodeLinks Table-->
-
-	 <div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">{{ project.name }} CodeLinks</h5>
+			<h5 class="card-title">{{ project.name }} Details</h5>
+			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ project.description }} <i
+					class="ri-double-quotes-r" style="color: dimgrey"></i></p>
+			<p><i class="bi bi-github" style="color: dimgrey"></i> {{ project.repo.name }}</p>
+			<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ project.date_added.strftime("%B %d, %Y") }}
+			</p>
+			<hr>
+			<div class="accordion accordion-flush" id="accordionFlushExample">
+				<div class="accordion-item d-grid gap-2 2-md-flex">
+					<h2 class="accordion-header" id="flush-headingOne">
+						<button class="accordion-button collapsed" type="button"
+								data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+								aria-expanded="false" aria-controls="flush-collapseOne">
+							<span><i class="ri-book-2-fill" style="color: dimgrey"></i> {{ project.course.name }}</span>
+						</button>
+					</h2>
+					<div id="flush-collapseOne" class="accordion-collapse collapse"
+						 aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">
+							<p>Section: {{ project.section }}</p>
+							<p>Lecture: {{ project.lecture }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p><i class="ri-attachment-2" style="color: dimgrey"></i> <a href="{{ project.assignment_link }}"
+																		 target="_blank"> Go to Assignment</a></p>
+			<p><i class="bi bi-hourglass-top"></i> {{ project.start }}</p>
+			<p><i class="bi bi-hourglass-bottom"></i> {{ project.complete }}</p>
 
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">CodeLink</th>
-			    <th scope="col">Description</th>
-			    <th scope="col">Link</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for link in codelinks %}
-			  <tr>
-				<th scope="row">{{ link.id }}</th>
-			  	<td>{{ link.name }}</td>
-			    <td>{{ link.description }}</td>
-				  {% if link.link %}
-				<td><a href="{{ link.link }}" target="_blank"><i class="bi bi-code-square"></i></a></td>
-				  {% else %}
-				  <td></td>
-				  {% endif %}
-				<td>{% for concept in link.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
-			<a href="{{ url_for('add_new_codelink') }}">
-		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add CodeLink</button>
+
+			<a href="{{ url_for('update_project', num=project.id) }}">
+				<button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update Project
+				</button>
 			</a>
-			<a href="{{ url_for('import_codelinks') }}">
-		  <button type="button" class="btn btn-dark"><i class="bi bi-folder"></i> Upload CSV</button>
+			<a href="{{ url_for('delete_project', num=project.id) }}">
+				<button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete
+					Project
+				</button>
 			</a>
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div><!-- End Project Details -->
 
-	</main> <!-- End #main -->
+
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">Libraries/APIs Used</h5>
+
+			<!-- Top Concepts List group With Badges -->
+			<ul class="list-group">
+				{% for concept in concepts %}
+				{% if concept.category == 'library' or concept.category == 'api' %}
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					{{ concept.concept_term }}
+					<span class="badge {{ concept_badge[concept.category][1] }}"><i
+							class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
+				</li>
+				{% endif %}
+				{% endfor %}
+			</ul><!-- End Top Concepts List Group -->
+
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">Top Concepts</h5>
+
+			<!-- Top Concepts List group With Badges -->
+			<ul class="list-group">
+				{% for concept in concepts %}
+				{% if concept.category != 'library' and concept.category != 'api' %}
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					{{ concept.concept_term }}
+					{% if concept.category %}
+					<span class="badge {{ concept_badge[concept.category][1] }}"><i
+							class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
+					{% endif %}
+				</li>
+				{% endif %}
+				{% endfor %}
+			</ul><!-- End Top Concepts List Group -->
+
+		</div>
+	</div>
+
+	<!--	Project CodeLinks Table-->
+
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">{{ project.name }} CodeLinks</h5>
+
+			<!-- Table with hoverable rows -->
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">CodeLink</th>
+					<th scope="col">Description</th>
+					<th scope="col">Link</th>
+					<th scope="col">Concepts</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for link in codelinks %}
+				<tr>
+					<th scope="row">{{ link.id }}</th>
+					<td>{{ link.name }}</td>
+					<td>{{ link.description }}</td>
+					{% if link.link %}
+					<td><a href="{{ link.link }}" target="_blank"><i class="bi bi-code-square"></i></a></td>
+					{% else %}
+					<td></td>
+					{% endif %}
+					<td>{% for concept in link.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span>
+						{% endfor %}
+					</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			<a href="{{ url_for('add_new_codelink') }}">
+				<button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add CodeLink</button>
+			</a>
+			<a href="{{ url_for('import_codelinks') }}">
+				<button type="button" class="btn btn-dark"><i class="bi bi-folder"></i> Upload CSV</button>
+			</a>
+		</div>
+	</div>
+	<!-- End Table with hoverable rows -->
+
+</main> <!-- End #main -->
 {% endblock %}
 
 
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
