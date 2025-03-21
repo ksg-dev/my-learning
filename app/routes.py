@@ -84,15 +84,15 @@ course_statuses = {
 # To show tool/utility categories across pages, pass to index as badge=dict
 # 'category or status in db': ['text to appear on badge', 'color of icon', 'badge icon']
 tool_categories = {
-    'essentials': ['Code Essentials', 'lightseagreen', 'bi bi-file-earmark-text'],
-    'gamedev': ['Game Development', 'blueviolet', 'bi bi-diagram-2'],
-    'code-execution': ['Code Execution', 'lightseagreen', 'bi bi-file-earmark-text'],
-    'data-science': ['Data Science', 'blueviolet', 'bi bi-diagram-2'],
-    'documentation': ['Documentation', 'cornflowerblue', 'bi bi-info-circle'],
-    'styling': ['Styling & UI', 'orchid', 'bi bi-file-ruled'],
-    'auth': ['Authentication', 'chocolate', 'ri-code-box-fill'],
-    'storage': ['Storage', 'darkslategrey', 'bi bi-collection'],
-    'other': ['Other', 'darkslategrey', 'bi bi-collection']
+    'essentials': ['Code Essentials', 'green', 'ri-seedling-fill'],
+    'gamedev': ['Game Development', 'goldenrod', 'ri-game-fill'],
+    'code-execution': ['Code Execution', 'lightslategrey', 'ri-terminal-box-fill'],
+    'data-science': ['Data Science', 'firebrick', 'ri-microscope-fill'],
+    'documentation': ['Documentation', 'cornflowerblue', 'ri-quill-pen-fill'],
+    'styling': ['Styling & UI', 'hotpink', 'ri-palette-fill'],
+    'auth': ['Authentication', 'darkviolet', 'ri-shield-keyhole-fill'],
+    'storage': ['Storage', 'coral', 'ri-database-2-fill'],
+    'other': ['Other', 'darkslategrey', 'ri-tools-fill']
 }
 
 ##################################### LOGIN/REGISTER PAGES ########################################
