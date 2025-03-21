@@ -22,10 +22,10 @@
 		<div class="card">
             <div class="card-body">
               <h5 class="card-title">{{ library.name }}</h5>
-				<p><i class="bi bi-info-circle"> {{ library.description }}</i></p>
-				<p><i class="bi bi-link-45deg"></i><a href="{{ library.url }}" target="_blank">Go to Docs</a></p>
-				<p><i class="bi bi-calendar2-plus"> {{ library.date_added }}</i></p>
-				<p>{% for concept in library.concepts %} <span class="badge rounded-pill bg-info"> {{ concept.concept_term }} </span> {% endfor %}</p>
+				<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ library.description }}<i class="ri-double-quotes-r" style="color: dimgrey"></i></p>
+				<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ library.url }}" target="_blank"> Go to Docs</a></p>
+				<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ library.date_added.strftime("%B %d, %Y") }}</p>
+				<p>{% for concept in library.concepts %} <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span> {% endfor %}</p>
 				<a href="{{ url_for('update_library', num=library.id) }}">
 		  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update</button>
 			</a>
