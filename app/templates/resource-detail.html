@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Tool Detail{% endblock %}
+{% block title %}Resource Detail{% endblock %}
 
 {% block content %}
 <main id="main" class="main">
 
 	<div class="pagetitle">
-		<h1>{{ tool.name }}</h1>
+		<h1>{{ resource.name }}</h1>
 		<nav>
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
 				<li class="breadcrumb-item">Knowledge Center</li>
-				<li class="breadcrumb-item"><a href="{{ url_for('tools_page') }}">Tools</a></li>
+				<li class="breadcrumb-item"><a href="{{ url_for('resources_page') }}">Resources</a></li>
 				<li class="breadcrumb-item active">Usage</li>
 			</ol>
 		</nav>
@@ -21,54 +21,26 @@
 	<!--		Details-->
 	<div class="card">
 		<div class="card-body">
-			<h5 class="card-title">{{ tool.name }}</h5>
-			{% set ttype = tool_badge[tool.type] %}
-			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ tool.description }} <i class="ri-double-quotes-r" style="color: dimgrey"> </i></p>
-			<p><i class="{{ ttype[2] }}" style="color: {{ttype[1]}}"></i> {{ ttype[0] }}</p>
-			<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ tool.url }}" target="_blank"> Go There</a></p>
-			<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ tool.doc_link }}" target="_blank"> Go to Docs</a></p>
-			<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ tool.date_added.strftime("%B %d, %Y") }}</p>
-			<p>{% for concept in tool.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
+			<h5 class="card-title">{{ resource.name }}</h5>
+			{% set rtype = resource_badge[resource.type] %}
+			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ resource.description }} <i class="ri-double-quotes-r" style="color: dimgrey"> </i></p>
+			<p><i class="{{ rtype[2] }}" style="color: {{rtype[1]}}"></i> {{ rtype[0] }}</p>
+			<p><i class="ri-attachment-2" style="color: dimgrey"></i><a href="{{ resource.url }}" target="_blank"> Go There </a></p>
+			<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ resource.date_added.strftime("%B %d, %Y") }}</p>
+			<p>{% for concept in resource.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
 					class="badge rounded-pill bg-primary-subtle text-primary-emphasis"> {{ concept.concept_term }} </span></a>
 				{% endfor %}</p>
-			<a href="{{ url_for('update_tool', num=tool.id) }}">
+			<a href="{{ url_for('update_resource', num=resource.id) }}">
 				<button type="button" class="btn btn-primary btn-sm"><i class="ri-edit-fill"></i> Update
 				</button>
 			</a>
-			<a href="{{ url_for('delete_tool', num=tool.id) }}">
+			<a href="{{ url_for('delete_resource', num=resource.id) }}">
 				<button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete
 				</button>
 			</a>
 
 		</div>
 	</div><!-- End Details -->
-
-
-	<!--	All Projects for Concept Table-->
-	<div class="card">
-		<div class="card-body">
-			{% include '_projects.html' %}
-		</div>
-	</div>
-	<!-- End Table with hoverable rows -->
-
-
-	<!--	All CodeLinks for Concept Table-->
-	<div class="card">
-		<div class="card-body">
-			{% include '_codelinks.html' %}
-		</div>
-	</div>
-	<!-- End Table with hoverable rows -->
-
-
-	<!--	All Resources for Concept Table-->
-	<div class="card">
-		<div class="card-body">
-			{% include '_resources.html' %}
-		</div>
-	</div>
-	<!-- End Table with hoverable rows -->
 
 
 </main> <!-- End #main -->

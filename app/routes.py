@@ -938,6 +938,19 @@ def tool_detail(num):
                            tool_badge=tool_categories,
                            concept_badge=concept_categories)
 
+# TODO: Maybe add field to embed code blocks or attachments, not just through link?
+@app.route('/resources/<int:num>')
+@login_required
+def resource_detail(num):
+    target_resource = db.session.execute(db.select(Resource).where(Resource.id == num)).scalar()
+    resource_concept = Concept.query.filter(func.lower(Concept.concept_term) == func.lower(target_resource.name)).first()
+
+    return render_template('resource-detail.html',
+                           resource=target_resource,
+                           resource_badge=resource_categories,
+                           tool_badge=tool_categories,
+                           concept_badge=concept_categories)
+
 
 ##################################### UPDATE PAGES ########################################
 
