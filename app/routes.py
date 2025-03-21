@@ -877,6 +877,7 @@ def concept_detail(num):
                            tools=tools,
                            resources=resources,
                            resource_badge=resource_categories,
+                           tool_badge=tool_categories,
                            concept_badge=concept_categories)
 
 
@@ -934,6 +935,7 @@ def tool_detail(num):
                            codelinks=codelinks,
                            resources=resources,
                            resource_badge=resource_categories,
+                           tool_badge=tool_categories,
                            concept_badge=concept_categories)
 
 

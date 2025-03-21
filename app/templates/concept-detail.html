@@ -4,233 +4,97 @@
 {% block title %}Concept Detail{% endblock %}
 
 {% block content %}
-	<main id="main" class="main">
+<main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>{{ concept.concept_term }}</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item"><a href="{{ url_for('concepts_page') }}">Concepts</a> </li>
-		  <li class="breadcrumb-item active">Usage</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+	<div class="pagetitle">
+		<h1>{{ concept.concept_term }}</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+				<li class="breadcrumb-item">My Learning</li>
+				<li class="breadcrumb-item"><a href="{{ url_for('concepts_page') }}">Concepts</a></li>
+				<li class="breadcrumb-item active">Usage</li>
+			</ol>
+		</nav>
+	</div><!-- End Page Title -->
 
-		<div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ concept.concept_term }}</h5>
-				{% if concept.category %}
-					<p><span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span></p>
-				{% endif %}
-					<p><i class="bi bi-info-circle"> {{ concept.description }}</i></p>
-					<p>Date Added: {{ concept.date_added }}</p>
-				<a href="{{ url_for('update_concept', num=concept.id) }}">
-		  <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Update</button>
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">{{ concept.concept_term }}</h5>
+			{% if concept.category %}
+			<p><span class="badge {{ concept_badge[concept.category][1] }}"><i
+					class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
+			</p>
+			{% endif %}
+			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ concept.description }} <i
+					class="ri-double-quotes-r" style="color: dimgrey"></i></p>
+			<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ concept.date_added.strftime("%B %d, %Y") }}
+			</p>
+			<a href="{{ url_for('update_concept', num=concept.id) }}">
+				<button type="button" class="btn btn-primary btn-sm"><i class="ri-edit-fill"></i> Update
+				</button>
 			</a>
 			<a href="{{ url_for('delete_concept', num=concept.id) }}">
-		  <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete</button>
+				<button type="button" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-triangle"></i> Delete
+				</button>
 			</a>
 
-				 </div>
-		  </div><!-- End Concept Details -->
-
-
-<!--	All Projects for Concept Table-->
-	 <div class="card">
-		<div class="card-body">
-		  <h5 class="card-title">Linked Projects</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Project Name</th>
-				<th scope="col">Repo</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for project in projects %}
-			  <tr>
-				<th scope="row">{{ project.id }}</th>
-				<td><a href="{{ url_for('project_detail', num=project.id) }}">{{ project.name }}</a></td>
-				<td>{{ project.repo.name }}</td>
-				<td>{% for concept in project.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div><!-- End Concept Details -->
 
-<!--	All Libraries for Concept Table-->
-	 <div class="card">
+
+	<!--	All Projects for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Linked Libraries</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Library</th>
-			    <th scope="col">Description</th>
-				<th scope="col">Docs</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for library in libraries %}
-			  <tr>
-				<th scope="row">{{ library.id }}</th>
-				<td><a href="{{ url_for('library_detail', num=library.id) }}">{{ library.name }}</a></td>
-			    <td>{{ library.description }}</td>
-				<td><a href="{{ library.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
-				<td>{% for concept in library.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+			{% include '_projects.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
 
-<!--	All CodeLinks for Concept Table-->
-	 <div class="card">
+	<!--	All Libraries for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">CodeLinks</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">CodeLink</th>
-			    <th scope="col">Project</th>
-				<th scope="col">Link</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for codelink in codelinks %}
-			  <tr>
-				<th scope="row">{{ codelink.id }}</th>
-				<td>{{ codelink.name }}</td>
-			    <td>{{ codelink.project.name }}</td>
-				<td><a href="{{ codelink.link }}" target="_blank"><i class="bi bi-code-slash"></i></a></td>
-				<td>{% for concept in codelink.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+			{% include '_libraries.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
 
-<!--	All APIs for Concept Table-->
-	 <div class="card">
+	<!--	All CodeLinks for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Linked APIs</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">API</th>
-			    <th scope="col">Description</th>
-				<th scope="col">Docs</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for api in apis %}
-			  <tr>
-				<th scope="row">{{ api.id }}</th>
-				<td>{{ api.name }}</td>
-			    <td>{{ api.description }}</td>
-				<td><a href="{{ api.doc_link }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
-				<td>{% for concept in api.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+			{% include '_codelinks.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
 
-<!--	All Tools for Concept Table-->
-	 <div class="card">
+	<!--	All APIs for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Linked Tools & Utilities</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Tool/Utility</th>
-			    <th scope="col">Description</th>
-				<th scope="col">Link</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for tool in tools %}
-			  <tr>
-				<th scope="row">{{ tool.id }}</th>
-				<td>{{ tool.name }}</td>
-			    <td>{{ tool.description }}</td>
-				<td><a href="{{ tool.url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
-				<td>{% for concept in tool.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+			{% include '_apis.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
 
-<!--	All Resources for Concept Table-->
-	 <div class="card">
+	<!--	All Tools for Concept Table-->
+	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Linked Resources</h5>
-
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-			    <th scope="col">#</th>
-				<th scope="col">Resource</th>
-			    <th scope="col">Type</th>
-				<th scope="col">URL</th>
-				<th scope="col">Concepts</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for resource in resources %}
-			  <tr>
-				<th scope="row">{{ resource.id }}</th>
-				<td>{{ resource.name }}</td>
-			    <td><span class="badge {{ resource_badge[resource.type][1] }}"><i class="bi {{ resource_badge[resource.type][2] }} me-1"></i> {{ resource_badge[resource.type][0] }}</span></td>
-				<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
-				<td>{% for concept in resource.concepts %} <span class="badge rounded-pill bg-primary"> {{ concept.concept_term }} </span> {% endfor %}</td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
+			{% include '_tools.html' %}
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</div>
+	<!-- End Table with hoverable rows -->
+
+	<!--	All Resources for Concept Table-->
+	<div class="card">
+		<div class="card-body">
+			{% include '_resources.html' %}
+		</div>
+	</div>
+	<!-- End Table with hoverable rows -->
 
 
-	</main> <!-- End #main -->
+</main> <!-- End #main -->
 {% endblock %}
 
 
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>

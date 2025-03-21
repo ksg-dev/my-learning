@@ -4,7 +4,6 @@
 <table class="table table-hover">
 	<thead>
 	<tr>
-		<th scope="col">#</th>
 		<th scope="col">Resource</th>
 		<th scope="col">Type</th>
 		<th scope="col">URL</th>
@@ -15,8 +14,7 @@
 	{% for resource in resources %}
 	{% set rtype = resource_badge[resource.type] %}
 	<tr>
-		<th scope="row">{{ resource.id }}</th>
-		<td>{{ resource.name }}</td>
+		<th scope="row">{{ resource.name }}</th>
 		<td><i class="{{ rtype[2] }}" style="color: {{rtype[1]}}"></i> {{ rtype[0] }}</td>
 		<td><a href="{{ resource.resource_url }}" target="_blank"><i class="bi bi-file-earmark-text"></i></a></td>
 		<td>{% for concept in resource.concepts %} <a href="{{ url_for('concept_detail', num=concept.id) }}"> <span
