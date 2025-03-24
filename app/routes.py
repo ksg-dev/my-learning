@@ -835,7 +835,7 @@ def course_detail(num):
 
     return render_template('course-detail.html',
                            course=target_course,
-                           all_projects=all_projects,
+                           projects=all_projects,
                            top_concepts=sorted_concepts,
                            course_badge=course_statuses)
 
