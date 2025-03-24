@@ -24,14 +24,11 @@
 		  <h5 class="card-title">Create Project</h5>
 
 		  <!-- Table with hoverable rows -->
-			<form method="POST">
+			<form method="POST" action="" novalidate>
 				{{ form.csrf_token() }}
-				{{ render_field(form.name) }}
-				{{ render_field(form.course) }}
-				{{ render_field(form.repo, id_="addon") }}
-				{{ render_field(form.path, aria-describedby_="addon") }}
-
-
+				{% for field in form %}
+					{{ render_field(field) }} {% if field.flags.required %}*{% endif %}
+				{% endfor %}
 			</form>
 
 		</div>

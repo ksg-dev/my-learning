@@ -77,8 +77,8 @@ class LoginForm(FlaskForm):
 # CREATE FORMS
 
 class NewCourseForm(FlaskForm):
-    name = StringField("Course Name", validators=[InputRequired()])
-    platform = StringField("Platform")
+    name = StringField("Course Name*", validators=[InputRequired()])
+    platform = StringField("Platform", render_kw={'placeholder': 'Udemy, freeCodeAcademy, Udacity, etc.'})
     url = StringField("Course URL", validators=[Optional(), URL()])
     instructor = StringField("Instructor")
     start_date = DateField("Start Date", validators=[Optional()])
@@ -89,30 +89,32 @@ class NewCourseForm(FlaskForm):
 
 
 class NewProjectForm(FlaskForm):
-    name = StringField("Project Name", validators=[InputRequired()])
+    name = StringField("Project Name*", validators=[InputRequired()])
     course = SelectField('Course', coerce=str)
     repo = SelectField("Project Repository", coerce=int)
+    path = StringField("Repository Path",
+                       description="Path to project folder if nested, / if only project in repo",
+                       default="/")
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
     assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
-    path = StringField("Repository Path for Project (if nested)")
     start_date = DateField("Start Date", validators=[Optional()])
     complete_date = DateField("Complete Date", validators=[Optional()])
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
     submit = SubmitField("Submit")
 
 
 class NewCodeLinkForm(FlaskForm):
-    name = StringField("CodeLink Name", validators=[InputRequired()])
-    link = StringField("CodeLink URL", validators=[InputRequired(), URL()])
+    name = StringField("CodeLink Name*", validators=[InputRequired()])
+    link = StringField("CodeLink URL*", validators=[InputRequired(), URL()])
     project = SelectField('Project', coerce=int)
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     submit = SubmitField("Submit")
 
 
 class NewConceptForm(FlaskForm):
-    concept_term = StringField("Concept or Term", validators=[InputRequired()])
+    concept_term = StringField("Concept or Term*", validators=[InputRequired()])
     category = RadioField("Category",
                            choices=[
                                ('library', 'Library'),
@@ -128,25 +130,25 @@ class NewConceptForm(FlaskForm):
 
 
 class NewLibraryForm(FlaskForm):
-    name = StringField("Library Name", validators=[InputRequired()])
+    name = StringField("Library Name*", validators=[InputRequired()])
     description = TextAreaField("Description")
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     submit = SubmitField("Submit")
 
 
 class NewAPIForm(FlaskForm):
-    name = StringField("Name", validators=[InputRequired()])
+    name = StringField("Name*", validators=[InputRequired()])
     description = TextAreaField("Description")
     url = StringField("API URL", validators=[Optional(), URL()])
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
     requires_login = BooleanField("Requires Login?")
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     submit = SubmitField("Submit")
 
 
 class NewToolForm(FlaskForm):
-    name = StringField("Name", validators=[InputRequired()])
+    name = StringField("Name*", validators=[InputRequired()])
     description = TextAreaField("Description")
     type = RadioField("Tool/Utility Type",
                       choices=[
@@ -162,12 +164,12 @@ class NewToolForm(FlaskForm):
                       ], coerce=str)
     url = StringField("Tool URL", validators=[Optional(), URL()])
     doc_link = StringField("Docs URL", validators=[Optional(), URL()])
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     submit = SubmitField("Submit")
 
 
 class NewResourceForm(FlaskForm):
-    name = StringField("Resource Name", validators=[InputRequired()])
+    name = StringField("Resource Name*", validators=[InputRequired()])
     description = TextAreaField("Description")
     type = RadioField("Resource Type",
                       choices=[
@@ -179,7 +181,7 @@ class NewResourceForm(FlaskForm):
                             ('other', 'Other'),
                           ], coerce=str)
     resource_url = StringField("Resource URL", validators=[Optional(), URL()])
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     submit = SubmitField("Submit")
 
 
@@ -192,7 +194,7 @@ class UpdateProjectForm(FlaskForm):
     complete_date = DateField("Complete Date", validators=[Optional()])
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")
-    concepts = ConceptListField('Concepts')
+    concepts = ConceptListField('Concepts', description="Separated by commas")
     submit = SubmitField("Submit")
 
 
