@@ -126,6 +126,50 @@ class DataManager:
             activity_shas.append(add_repo)
 
         return activity_shas
+
+    def get_project_path_data(self, limit):
+        project_paths = []
+
+        print("Updating project path data.....projects without path")
+        # For projects with no path, refresh start, last_updated, commits count, etag with repo data?
+        no_path_projects = db.session.execute(db.select(Project)
+                                              .where(Project.user_id == self.user_id)
+                                              .where(Project.path is None)
+                                              .limit(limit)).scalars().all()
+
+        for item in no_path_projects:
+            print(f"Updating {item.name}...")
+            if not item.start:
+                item.start = item.repo.created_at
+            item.last_updated = item.repo.updated_at
+            item.path_etag = item.repo.commits_etag
+
+            if item.repo.commits_data:
+                item.path_commits = len(item.repo.commits_data)
+
+            db.session.commit()
+
+        print("Getting projects w path data...")
+        # For projects with path, get data needed for api call
+        path_projects = db.session.execute(db.select(Project)
+                                           .where(Project.user_id == self.user_id)
+                                           .where(Project.path is not None)
+                                           .limit(limit)).scalars().all()
+
+        for project in path_projects:
+            # Need repo, path, proj, path_etag for commits call
+            add_repo_path = {
+                "name": project.repo.name,
+                "path": project.path,
+                "etag": project.path_etag,
+                "project": project.name
+            }
+
+            project_paths.append(add_repo_path)
+
+        return project_paths
+
+
     #
     # # Get commits json data for all repos for dashboard stats
     # def get_commit_data(self, recent_repos) -> list[dict]:
@@ -235,7 +279,9 @@ class DataManager:
 
     def update_project_path_data(self, data: list[dict]):
         if data:
+            print(f"Updating path data...")
             for project in data:
+
                 # Data from 200
                 project_name = project["project"]
                 path_etag = project["path_etag"]
@@ -248,6 +294,9 @@ class DataManager:
                 target_project.path_etag = path_etag
                 target_project.start = datetime.fromisoformat(first_timestamp)
                 target_project.last_updated = datetime.fromisoformat(latest_timestamp)
+                target_project.path_commits = commits_count
+
+                db.session.commit()
 
 
 

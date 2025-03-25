@@ -94,7 +94,7 @@ class NewProjectForm(FlaskForm):
     repo = SelectField("Project Repository", coerce=int)
     path = StringField("Repository Path",
                        description="Path to project folder if nested, / if only project in repo",
-                       default="/")
+                       render_kw={'placeholder': '/'})
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
     assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
     start_date = DateField("Start Date", validators=[Optional()])

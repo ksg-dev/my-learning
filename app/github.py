@@ -23,9 +23,10 @@ class GetGitHub:
         self.user_id = user_id
         self.data_manager = DataManager(self._user, self.user_id)
         self.recent_repos = self.get_github_data()
+        self.project_paths = self.get_project_path_data()
 
 
-    # TODO: Button to refresh data as async request....want to add a progress bar for call progress
+    # Button to refresh data as async request....want to add a progress bar for call progress
     # Method to refresh API data
     def refresh_github_data(self, since: timedelta = timedelta(days=365), per_page=100):
         data = {
@@ -39,25 +40,34 @@ class GetGitHub:
 
         # fetch recent repos, update db
         self.fetch_recent_repos_(since_date=since_date, per_page=per_page)
-        data["total_progress"] += 20
+        data["total_progress"] += 25
         data["result"] = "Fetching latest activity.."
         yield data
         # New call to db via Datamanager to get recent repos after fetch
         repo_list = self.data_manager.get_summary_repository_data(since_date=since_date, limit=per_page)
         # fetch latest activity shas with updated repo_list
         self.fetch_latest_activity_sha(repo_list=repo_list)
-        data["total_progress"] += 40
+        data["total_progress"] += 25
         data["result"] = "Fetching Commits.."
         yield data
         # New call to db via DataManager to get recent shas after fetch
         repo_shas = self.data_manager.get_repository_sha_data(since_date=since_date, limit=per_page)
         # fetch latest commits with updated activity shas
-        self.fetch_commits_from_sha(repo_shas=repo_shas, per_page=per_page)
-        data["total_progress"] += 40
-        data["result"] = "All Done!.."
+        self.fetch_commits_from_sha(repo_dict=repo_shas, per_page=per_page)
+        data["total_progress"] += 25
+        data["result"] = "Fetching Project Path Data..."
         yield data
         # Once all are fetched, get all data
         self.get_github_data()
+
+        # Fetch commits for project path data
+        self.fetch_commits_from_sha(repo_dict=self.project_paths, per_page=per_page, path_check=True)
+        data["total_progress"] += 25
+        data["result"] = "All Done!.."
+        yield data
+
+        # Refresh path data with any updates
+        self.get_project_path_data()
 
     def get_github_data(self, since: timedelta = timedelta(days=365), per_page=100):
         # Get todays date
@@ -69,6 +79,12 @@ class GetGitHub:
         repo_data = self.data_manager.get_recent_repos_data(since_date=since_date, limit=per_page)
 
         return repo_data
+
+    # Refresh project without path with repo data, fetch all project path data
+    def get_project_path_data(self, limit=100):
+        path_data = self.data_manager.get_project_path_data(limit=limit)
+
+        return path_data
 
     # Cleaning commit data for charting and dashboard
     def clean_commit_data(self):
@@ -214,8 +230,8 @@ class GetGitHub:
                 repo_name = repo["name"]
                 # Latest Activity ETag
 
-                # if repo["last_activity_etag"]:
-                #     headers["if-none-match"] = repo["last_activity_etag"]
+                if repo["last_activity_etag"]:
+                    headers["if-none-match"] = repo["last_activity_etag"]
 
                 # Endpoint to get detailed repo activity
                 activity_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/activity"
@@ -364,7 +380,7 @@ class GetGitHub:
                     response = requests.get(url=commits_url, headers=headers, params=params)
                     response.raise_for_status()
 
-                    print(f"commits call for {repo_name} returned: {response.status_code}")
+                    print(f"commits call for {repo_name} {path} returned: {response.status_code}")
 
                     # If successful 200, get relevant data and update project data in db
                     if response.status_code == 200:
@@ -392,7 +408,7 @@ class GetGitHub:
                         continue
 
                 # Call to update path commit data w Data Manager
-                self.data_manager.update_commit_data(data=commits_data)
+                self.data_manager.update_project_path_data(data=commits_data)
 
     def get_repo_languages(self):
         all_langs = []
