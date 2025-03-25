@@ -280,7 +280,8 @@ class GetGitHub:
 
     #  STEP 3: Take AFTER sha from step 2, make call to commits for repo endpoint,
     #  with "sha" query param set to AFTER sha, per_page=100.
-    def fetch_commits_from_sha(self, repo_shas, per_page):
+    def fetch_commits_from_sha(self, repo_dict: list[dict], per_page, path_check=False):
+        """If path_check false, repo_dict is repo_shas, else is dict w project paths"""
         commits_data = []
 
         headers = {
@@ -290,50 +291,108 @@ class GetGitHub:
         }
 
         # Check for data
-        if repo_shas:
-            # Loop through each repo/sha in latest shas
-            for repo in repo_shas:
-                # Get repo name
-                repo_name = repo["name"]
-                latest_sha = repo["sha"]
+        if repo_dict:
+            # Add path check param so can use same function to update project w path
+            if path_check is False:
+                # Loop through each repo/sha in latest shas
+                for repo in repo_dict:
+                    # Get repo name
+                    repo_name = repo["name"]
+                    latest_sha = repo["sha"]
 
-                # E-Tag for commit data currently in db, in any
-                if repo["etag"]:
-                    headers["if-none-match"] = repo["etag"]
+                    # E-Tag for commit data currently in db, in any
+                    if repo["etag"]:
+                        headers["if-none-match"] = repo["etag"]
 
-                # Pass latest sha as param so doesn't just use default branch
-                # Setting per page to 10 for testing
-                params = {
-                    "per_page": per_page,
-                    "sha": latest_sha
-                }
-
-                # Endpoint to get commits w sha to start listing from
-                commits_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/commits"
-
-                response = requests.get(url=commits_url, headers=headers, params=params)
-                response.raise_for_status()
-
-                print(f"commits call for {repo_name} returned: {response.status_code}")
-
-                # If successful 200, get json data, update db
-                if response.status_code == 200:
-                    data = response.json()
-                    new_etag = response.headers["etag"]
-
-                    new_commits = {
-                        "repo": repo_name,
-                        "commits_etag": new_etag,
-                        "com_data": data
+                    # Pass latest sha as param so doesn't just use default branch
+                    # Setting per page to 10 for testing
+                    params = {
+                        "per_page": per_page,
+                        "sha": latest_sha
                     }
 
-                    commits_data.append(new_commits)
-                # No need to store anything if 304, so else continue loop
-                else:
-                    continue
+                    # Endpoint to get commits w sha to start listing from
+                    commits_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/commits"
 
-            # Call to update commit data w Data Manager
-            self.data_manager.update_commit_data(data=commits_data)
+                    response = requests.get(url=commits_url, headers=headers, params=params)
+                    response.raise_for_status()
+
+                    print(f"commits call for {repo_name} returned: {response.status_code}")
+
+                    # If successful 200, get json data, update db
+                    if response.status_code == 200:
+                        data = response.json()
+                        new_etag = response.headers["etag"]
+
+                        new_commits = {
+                            "repo": repo_name,
+                            "commits_etag": new_etag,
+                            "com_data": data
+                        }
+
+                        commits_data.append(new_commits)
+                    # No need to store anything if 304, so else continue loop
+                    else:
+                        continue
+
+                # Call to update commit data w Data Manager
+                self.data_manager.update_commit_data(data=commits_data)
+
+            # path_check is True...want to update Projects
+            else:
+                # Loop through each repo/path in from Projects
+                for repo in repo_dict:
+                    # Get repo name, path, project
+                    repo_name = repo["name"]
+                    path = repo["path"]
+                    project = repo["project"]
+
+                    # E-Tag for commit data currently in db, in any
+                    if repo["etag"]:
+                        headers["if-none-match"] = repo["etag"]
+
+                    # Pass path as param to get activity for specific folder only
+                    # Setting per page to 10 for testing
+                    params = {
+                        "per_page": per_page,
+                        "path": path
+                    }
+
+                    # Endpoint to get commits w sha to start listing from
+                    commits_url = f"{GH_API_URL}/repos/{self._user}/{repo_name}/commits"
+
+                    response = requests.get(url=commits_url, headers=headers, params=params)
+                    response.raise_for_status()
+
+                    print(f"commits call for {repo_name} returned: {response.status_code}")
+
+                    # If successful 200, get relevant data and update project data in db
+                    if response.status_code == 200:
+                        data = response.json()
+                        new_etag = response.headers["etag"]
+                        if len(data) > 0:
+                            first_commit = data[-1]["commit"]["author"]["date"]
+                            latest_commit = data[0]["commit"]["author"]["date"]
+                            commits_count = len(data)
+
+                            path_commits = {
+                                "project": project,
+                                "repo": repo_name,
+                                "path_etag": new_etag,
+                                "com_data": {
+                                    "first_commit": first_commit,
+                                    "latest_commit": latest_commit,
+                                    "commits_count": commits_count
+                                }
+                            }
+
+                            commits_data.append(path_commits)
+                    # No need to store anything if 304, so else continue loop
+                    else:
+                        continue
+
+                # Call to update path commit data w Data Manager
+                self.data_manager.update_commit_data(data=commits_data)
 
     def get_repo_languages(self):
         all_langs = []

@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 import json
 
 from app import db
-from app.models import User, Repository
+from app.models import User, Repository, Project
 
 
 load_dotenv()
@@ -231,6 +231,23 @@ class DataManager:
                 target_repo.commits_data = data
 
                 db.session.commit()
+
+
+    def update_project_path_data(self, data: list[dict]):
+        if data:
+            for project in data:
+                # Data from 200
+                project_name = project["project"]
+                path_etag = project["path_etag"]
+                first_timestamp = project["com_data"]["first_commit"].strip("Z")
+                latest_timestamp = project["com_data"]["latest_commit"].strip("Z")
+                commits_count = project["com_data"]["commits_count"]
+
+                target_project = db.session.execute(db.select(Project).where(Project.name == project_name)).scalar()
+
+                target_project.path_etag = path_etag
+                target_project.start = datetime.fromisoformat(first_timestamp)
+                target_project.last_updated = datetime.fromisoformat(latest_timestamp)
 
 
 

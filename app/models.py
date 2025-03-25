@@ -188,6 +188,8 @@ class Project(db.Model):
     last_updated: Mapped[datetime.date] = mapped_column(Date, nullable=True)
     # Store etag for commits w path param
     path_etag: Mapped[str] = mapped_column(String(250), nullable=True)
+    # Store commits count for path
+    path_commits: Mapped[int] = mapped_column(Integer, nullable=True)
 
 
     # Link to Repos
