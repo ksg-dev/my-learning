@@ -51,7 +51,7 @@
 			</div>
 
 			<p><i class="bi bi-hourglass-top"></i> {{ project.start }}</p>
-			<p><i class="bi bi-hourglass-bottom"></i> {{ project.complete }}</p>
+			<p><i class="bi bi-hourglass-bottom"></i> {{ project.last_updated }}</p>
 
 
 			<a href="{{ url_for('update_project', num=project.id) }}">

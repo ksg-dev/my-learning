@@ -85,7 +85,7 @@ def upload_projects(filename, user_id):
         'assignment_link': str,
         'path': str,
         'start': str,
-        'complete': str,
+        'last_updated': str,
         'section': str,
         'lecture': str,
         'repo': str,
@@ -150,8 +150,8 @@ def upload_projects(filename, user_id):
 
             if row.start:
                 new_project.start=pd.to_datetime(row.start)
-            if row.complete:
-                new_project.complete=pd.to_datetime(row.complete)
+            if row.last_updated:
+                new_project.last_updated=pd.to_datetime(row.last_updated)
 
             db.session.add(new_project)
 

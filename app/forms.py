@@ -98,7 +98,7 @@ class NewProjectForm(FlaskForm):
     description = TextAreaField("Project Description/Parameters", validators=[Optional()])
     assignment_link = StringField("Link to Assignment", validators=[Optional(), URL()])
     start_date = DateField("Start Date", validators=[Optional()])
-    complete_date = DateField("Complete Date", validators=[Optional()])
+    last_updated = DateField("Last Updated or Complete Date", validators=[Optional()])
     concepts = ConceptListField('Concepts', description="Separated by commas")
     section = StringField("Course Section")
     lecture = StringField("Course Lecture or Lesson")

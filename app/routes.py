@@ -470,7 +470,7 @@ def add_new_project(course_id=None):
             path=form.path.data,
             course_id=form.course.data,
             start=form.start_date.data,
-            complete=form.complete_date.data,
+            last_updated=form.last_updated_date.data,
             section=form.section.data,
             lecture=form.lecture.data,
             date_added=date.today(),
@@ -1047,8 +1047,8 @@ def update_project(num):
 
             if form.start_date.data:
                 project_to_update.start = form.start_date.data
-            if form.complete_date.data:
-                project_to_update.complete = form.complete_date.data
+            if form.last_updated.data:
+                project_to_update.last_updated = form.last_updated.data
 
             db.session.commit()
 

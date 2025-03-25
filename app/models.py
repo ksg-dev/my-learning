@@ -182,8 +182,12 @@ class Project(db.Model):
     description: Mapped[str] = mapped_column(Text, nullable=True)
     assignment_link: Mapped[str] = mapped_column(String(250), nullable=True)
     path: Mapped[str] = mapped_column(String(100), nullable=True)
+    # Get Start date from commits w path as param - earliest date
     start: Mapped[datetime.date] = mapped_column(Date, nullable=True)
-    complete: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    # Get last updated from commits w path as param - latest date
+    last_updated: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    # Store etag for commits w path param
+    path_etag: Mapped[str] = mapped_column(String(250), nullable=True)
 
 
     # Link to Repos
