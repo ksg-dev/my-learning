@@ -12,7 +12,7 @@
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
 				<li class="breadcrumb-item">My Learning</li>
-				<li class="breadcrumb-item">Projects</li>
+				<li class="breadcrumb-item"><a href="{{ url_for('projects_page') }}">Projects</a></li>
 				<li class="breadcrumb-item active">{{ project.name }}</li>
 			</ol>
 		</nav>
@@ -23,7 +23,7 @@
 			<h5 class="card-title">{{ project.name }} Details</h5>
 			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ project.description }} <i
 					class="ri-double-quotes-r" style="color: dimgrey"></i></p>
-			<p><i class="bi bi-github" style="color: dimgrey"></i> {{ project.repo.name }}</p>
+			<p><i class="bi bi-github" style="color: dimgrey"></i> {{ project.repo.name }}{% if project.path %}/{{ project.path }}{% endif %}</p>
 			<p><i class="ri-add-circle-fill" style="color: dimgrey"></i> {{ project.date_added.strftime("%B %d, %Y") }}
 			</p>
 			<hr>
@@ -50,8 +50,8 @@
 				</div>
 			</div>
 
-			<p><i class="bi bi-hourglass-top"></i> {{ project.start }}</p>
-			<p><i class="bi bi-hourglass-bottom"></i> {{ project.last_updated }}</p>
+			<p><i class="bi bi-hourglass-top"></i> {{ project.start.strftime("%B %d, %Y") }}</p>
+			<p><i class="bi bi-hourglass-bottom"></i> {{ project.last_updated.strftime("%B %d, %Y") }}</p>
 
 
 			<a href="{{ url_for('update_project', num=project.id) }}">
