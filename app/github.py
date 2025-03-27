@@ -93,16 +93,29 @@ class GetGitHub:
             "repo": [],
             "timestamps": []
         }
+        test_commits_data = {
+            "repo": [],
+            "timestamps":[]
+        }
 
         for repo in repo_data:
             commit_data = repo["data"]
             if commit_data:
                 for i in commit_data:
+
                     date_str = i["commit"]["author"]["date"].strip("Z")
+                    # removing date formatting for json testing
                     timestamp = datetime.fromisoformat(date_str)
 
                     clean_commits_data["repo"].append(repo["name"])
                     clean_commits_data["timestamps"].append(timestamp)
+
+                    test_commits_data["repo"].append(repo["name"])
+                    test_commits_data["timestamps"].append(date_str)
+
+        # dump to json for testing
+        with open("clean_commits.json", "a") as file:
+            json.dump(test_commits_data, file)
 
         return clean_commits_data
 

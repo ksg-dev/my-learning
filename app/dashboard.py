@@ -105,15 +105,15 @@ class Dashboard:
         complete_min = complete["complete"].min()
         complete_max = complete["complete"].max()
 
-        # Add column for days it took to complete
-        complete["days_to_complete"] = complete["complete"] - complete["start"]
+        # # Add column for days it took to complete
+        # complete["days_to_complete"] = complete["complete"] - complete["start"]
+        #
+        # # PER COURSE Average content hr complete per day (content hr / days)
+        # complete["avg_daily_content"] = complete["days_to_complete"] / complete["content_hours"]
+        # # print(content)
 
-        # PER COURSE Average content hr complete per day (content hr / days)
-        complete["avg_daily_content"] = complete["days_to_complete"] / complete["content_hours"]
-        # print(content)
-
-        # Overall Average content covered daily
-        avg_daily = complete['avg_daily_content'].mean()
+        # # Overall Average content covered daily
+        # avg_daily = complete['avg_daily_content'].mean()
 
         # print(complete)
         # print(complete.info())
@@ -124,7 +124,7 @@ class Dashboard:
                     "hours": all_courses_hr,
                     "start-min": start_min,
                     "start-max": start_max,
-                    "avg-daily-content": avg_daily,
+                    # "avg-daily-content": avg_daily,
                 },
                 "not-started": {
                     "count": not_started_count,
@@ -154,7 +154,7 @@ class Dashboard:
             "start-max": start_max,
             "complete-min": complete_min,
             "complete-max": complete_max,
-            "avg-daily-content": avg_daily
+            # "avg-daily-content": avg_daily
         }
 
         # print(course_stats)
@@ -211,20 +211,43 @@ class Dashboard:
     # Take commit data and convert to pd df to get commit count on all branches
     def get_commit_chart_data(self, commit_data):
         df = pd.DataFrame(commit_data)
+        # print(f"df: {df}")
         df["timestamps"] = pd.to_datetime(df["timestamps"])
-        # Add column for months
-        df["month"] = df.timestamps.dt.month
-        # Get value counts for each month - returns series w month number as index
-        monthly = df.month.value_counts()
-        # Get today, and last 11 mo, convert to month number only for xaxis
-        today = date.today().month
-        month_ends = pd.date_range(end=date.today(), freq="ME", periods=11)
-        month_index = month_ends.month
-        # Reindex monthly value counts w last 11 months
-        by_month = monthly.reindex(month_index).fillna(0)
+        dated = df.set_index('timestamps')
+        by_month = dated.resample("ME").count()
         # print(by_month)
+        today = datetime.today()
+        year_ago = today - timedelta(days=365)
+        last_year = by_month[by_month.index > year_ago]
 
-        return by_month
+        months = last_year.index.strftime('%m/%d/%Y').tolist()
+        print(f"MONTHS: {months}")
+        values = last_year.repo.tolist()
+        fmt_data = []
+        for mo, val in zip(months, values):
+            new = {
+                'x': mo,
+                'y': val
+            }
+            fmt_data.append(new)
+
+        return fmt_data
+
+
+        # PREVIOUS CODE
+        # # Add column for months
+        # df["month"] = df.timestamps.dt.month
+        # # Get value counts for each month - returns series w month number as index
+        # monthly = df.month.value_counts()
+        # # Get today, and last 11 mo, convert to month number only for xaxis
+        # today = date.today().month
+        # month_ends = pd.date_range(end=date.today(), freq="ME", periods=11)
+        # month_index = month_ends.month
+        # # Reindex monthly value counts w last 11 months
+        # by_month = monthly.reindex(month_index).fillna(0)
+        # # print(by_month)
+        #
+        # return by_month
 
     def get_lang_chart(self, lang_data):
         totals = {}

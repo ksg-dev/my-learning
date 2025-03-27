@@ -306,19 +306,12 @@ Dashboard - myRise
 
 								<script>
 
-
 									document.addEventListener("DOMContentLoaded", () => {
 										new ApexCharts(document.querySelector("#reportsChart"), {
 											series: [{
 												name: 'Commits',
-												data: {{ data|tojson }},
-											}, {
-												name: 'Placeholder',
-												data: [11, 32, 45, 32, 34, 52, 41]
-											}, {
-												name: 'Another Placeholder',
-												data: [15, 11, 32, 18, 9, 24, 11]
-											}],
+												data: {{ sample_data|tojson }},
+												}],
 											chart: {
 												height: 350,
 												type: 'area',
@@ -347,7 +340,7 @@ Dashboard - myRise
 												width: 2
 											},
 											xaxis: {
-												categories: {{ labels|tojson }}
+												type: 'datetime'
 											},
 											tooltip: {
 												x: {
@@ -356,8 +349,8 @@ Dashboard - myRise
 											}
 										}).render();
 									});
+
 								</script>
-								<!-- End Line Chart -->
 
 							</div>
 

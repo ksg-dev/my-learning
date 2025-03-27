@@ -234,14 +234,91 @@ def home():
 
     # Get commit stats for two charts
     commits = github.clean_commit_data()
+
     get_chart_data = dashboard.get_commit_chart_data(commits)
     get_commit_stats = dashboard.get_commit_stats(commits)
 
-    months = get_chart_data.index.tolist()
-    values = get_chart_data.values.tolist()
+    # months = get_chart_data.index.tolist()
+    # months = get_chart_data.index.strftime('%d/%m/%Y').tolist()
+    # print(f"MONTHS: {months}")
+    # values = get_chart_data.repo.tolist()
+    # values = get_chart_data.values.tolist()
+    # print(f"VALUES: {values}")
 
-    labels = [calendar.month_abbr[i] for i in months]
-    data = [int(i) for i in values]
+    # fmt_data = []
+
+
+    # labels = [calendar.month_abbr[i] for i in months]
+    # print(f"LABELS: {labels}")
+    # data = [int(i) for i in values]
+    # print(f"DATA: {data}")
+
+    sample_data = [
+        {
+            'x': '05/06/2014',
+            'y': 54
+        },
+        {
+            'x': '05/08/2014',
+            'y': 36
+        },
+        {
+            'x': '05/10/2014',
+            'y': 65
+        },
+        {
+            'x': '05/12/2014',
+            'y': 43
+        },
+        {
+            'x': '05/14/2014',
+            'y': 62
+        },
+    ]
+
+    sample2 = [
+        {
+            'name': 'my-learning',
+            'data': [
+                ['03/31/2025', 11],
+                ['02/28/2025', 5],
+                ['01/31/2025', 17],
+                ['12/31/2024', 9],
+                ['11/30/2024', 3]
+            ]
+        },
+        {
+            'name': 'small-projects',
+            'data': [
+                ['03/31/2025', 4],
+                ['02/28/2025', 15],
+                ['01/31/2025', 8],
+                ['12/31/2024', 3],
+                ['11/30/2024', 17]
+            ]
+        },
+        {
+            'name': 'voc-tool',
+            'data': [
+                ['07/31/2024', 5],
+                ['08/31/2024', 16],
+                ['09/30/2024', 1],
+                ['12/31/2024', 9],
+                ['11/30/2024', 3]
+            ]
+        },
+        {
+            'name': 'dashboard',
+            'data': [
+                ['07/31/2024', 2],
+                ['08/31/2024', 15],
+                ['09/30/2024', 4],
+                ['10/31/2024', 1],
+                ['11/30/2024', 13]
+            ]
+        },
+
+    ]
 
     # Query db for all projects. Convert to python list
     get_projects = db.session.execute(db.select(Project).where(Project.user_id == current_user.id)).scalars().all()
@@ -249,8 +326,9 @@ def home():
     proj_count = len(projects)
 
     context = {
-        "labels": labels,
-        "data": data,
+        # "months": months,
+        # "data": values,
+        "sample_data": get_chart_data,
         "lang_data": language_chart_data,
         "my_stats": get_commit_stats,
         "now": now,

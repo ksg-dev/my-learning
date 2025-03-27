@@ -26,32 +26,32 @@ class DataManager:
         self.etag = self.get_user_etag()
 
     def get_user_etag(self):
-        print(f"Getting user etag....")
+        # print(f"Getting user etag....")
         # user = db.session.execute(db.select(User).where(User.id) == self.user_id).scalar()
         user = db.get_or_404(User, self.user_id)
-        print(f"Got user: {user}")
+        # print(f"Got user: {user}")
         if user:
             last_repos_call = user.last_called_repos
             etag = user.latest_etag_repos
-            print(f"user etag: {etag}")
+            # print(f"user etag: {etag}")
 
         if etag:
-            print(f"get_etag_returned: {etag}")
+            # print(f"get_etag_returned: {etag}")
             self.etag = etag
             return etag
 
     def set_user_etag(self, etag, timestamp):
-        print(f"Setting user etag...")
+        # print(f"Setting user etag...")
         # user = db.session.execute(db.select(User).where(User.id) == self.user_id).scalar()
         user = db.get_or_404(User, self.user_id)
-        print(f"Got user: {user}")
+        # print(f"Got user: {user}")
         if user:
             print(f"new timestamp: {timestamp}")
             print(f"new-etag: {etag}")
             user.last_called_repos = timestamp
             user.latest_etag_repos = etag
 
-            print("Successfully changed etag data:")
+            # print("Successfully changed etag data:")
             # print(f"new timestamp: {timestamp}")
             # print(f"new-etag: {etag}")
 
@@ -130,7 +130,7 @@ class DataManager:
     def get_project_path_data(self, limit):
         project_paths = []
 
-        print("Updating project path data.....projects without path")
+        # print("Updating project path data.....projects without path")
         # For projects with no path, refresh start, last_updated, commits count, etag with repo data?
         no_path_projects = db.session.execute(db.select(Project)
                                               .where(Project.user_id == self.user_id)
@@ -138,7 +138,7 @@ class DataManager:
                                               .limit(limit)).scalars().all()
 
         for item in no_path_projects:
-            print(f"Updating {item.name}...")
+            # print(f"Updating {item.name}...")
             if not item.start:
                 item.start = item.repo.created_at
             item.last_updated = item.repo.updated_at
@@ -149,7 +149,7 @@ class DataManager:
 
             db.session.commit()
 
-        print("Getting projects w path data...")
+        # print("Getting projects w path data...")
         # For projects with path, get data needed for api call
         path_projects = db.session.execute(db.select(Project)
                                            .where(Project.user_id == self.user_id)
@@ -242,7 +242,7 @@ class DataManager:
                 new_etag = repo["etag"]
                 new_timestamp = repo["date"]
 
-                print(f"updating details for: {repo_name}")
+                # print(f"updating details for: {repo_name}")
 
                 target_repo = db.session.execute(db.select(Repository).where(Repository.name == repo_name)).scalar()
 
@@ -267,7 +267,7 @@ class DataManager:
                 commits_etag = repo["commits_etag"]
                 data = repo["com_data"]
 
-                print(f"updating commits for: {repo_name}")
+                # print(f"updating commits for: {repo_name}")
 
                 target_repo = db.session.execute(db.select(Repository).where(Repository.name == repo_name)).scalar()
 
@@ -279,7 +279,7 @@ class DataManager:
 
     def update_project_path_data(self, data: list[dict]):
         if data:
-            print(f"Updating path data...")
+            # print(f"Updating path data...")
             for project in data:
 
                 # Data from 200
