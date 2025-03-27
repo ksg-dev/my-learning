@@ -221,7 +221,7 @@ class Dashboard:
         last_year = by_month[by_month.index > year_ago]
 
         months = last_year.index.strftime('%m/%d/%Y').tolist()
-        print(f"MONTHS: {months}")
+        # print(f"MONTHS: {months}")
         values = last_year.repo.tolist()
         fmt_data = []
         for mo, val in zip(months, values):

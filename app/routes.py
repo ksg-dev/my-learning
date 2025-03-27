@@ -245,9 +245,6 @@ def home():
     # values = get_chart_data.values.tolist()
     # print(f"VALUES: {values}")
 
-    # fmt_data = []
-
-
     # labels = [calendar.month_abbr[i] for i in months]
     # print(f"LABELS: {labels}")
     # data = [int(i) for i in values]
@@ -328,7 +325,7 @@ def home():
     context = {
         # "months": months,
         # "data": values,
-        "sample_data": get_chart_data,
+        "data": get_chart_data,
         "lang_data": language_chart_data,
         "my_stats": get_commit_stats,
         "now": now,

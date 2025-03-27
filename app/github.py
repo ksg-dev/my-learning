@@ -93,10 +93,10 @@ class GetGitHub:
             "repo": [],
             "timestamps": []
         }
-        test_commits_data = {
-            "repo": [],
-            "timestamps":[]
-        }
+        # test_commits_data = {
+        #     "repo": [],
+        #     "timestamps":[]
+        # }
 
         for repo in repo_data:
             commit_data = repo["data"]
@@ -110,12 +110,12 @@ class GetGitHub:
                     clean_commits_data["repo"].append(repo["name"])
                     clean_commits_data["timestamps"].append(timestamp)
 
-                    test_commits_data["repo"].append(repo["name"])
-                    test_commits_data["timestamps"].append(date_str)
-
-        # dump to json for testing
-        with open("clean_commits.json", "a") as file:
-            json.dump(test_commits_data, file)
+        #             test_commits_data["repo"].append(repo["name"])
+        #             test_commits_data["timestamps"].append(date_str)
+        #
+        # # dump to json for testing
+        # with open("clean_commits.json", "a") as file:
+        #     json.dump(test_commits_data, file)
 
         return clean_commits_data
 

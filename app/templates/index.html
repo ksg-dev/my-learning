@@ -310,7 +310,7 @@ Dashboard - myRise
 										new ApexCharts(document.querySelector("#reportsChart"), {
 											series: [{
 												name: 'Commits',
-												data: {{ sample_data|tojson }},
+												data: {{ data|tojson }},
 												}],
 											chart: {
 												height: 350,
