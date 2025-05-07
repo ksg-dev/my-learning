@@ -123,6 +123,7 @@ class NewConceptForm(FlaskForm):
                                ('resource', 'Resource'),
                                ('topic', 'Topic'),
                                ('function', 'Function'),
+                               ('research', 'To Research'),
                                ('other', 'Other'),
                            ], coerce=str)
     description = TextAreaField("Description")
@@ -160,6 +161,8 @@ class NewToolForm(FlaskForm):
                           ('styling', 'Styling & UI'),
                           ('auth', 'Authentication'),
                           ('storage', 'Storage'),
+                          ('hosting', 'Hosting & Deployment'),
+                          ('planning', 'Planning & Architecture'),
                           ('other', 'Other'),
                       ], coerce=str)
     url = StringField("Tool URL", validators=[Optional(), URL()])

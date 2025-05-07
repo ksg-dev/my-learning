@@ -70,6 +70,7 @@ concept_categories = {
     'resource': ['Resource', 'bg-success', 'bi-bookshelf'],
     'topic': ['Topic', 'bg-danger', 'bi-hash'],
     'function': ['Function', 'bg-dark', 'bi-code'],
+    'research': ['To Research', 'bg-dark', 'bi-code'],
     'other': ['Other', 'bg-secondary', 'bi-collection']
 }
 
@@ -92,6 +93,8 @@ tool_categories = {
     'styling': ['Styling & UI', 'hotpink', 'ri-palette-fill'],
     'auth': ['Authentication', 'darkviolet', 'ri-shield-keyhole-fill'],
     'storage': ['Storage', 'coral', 'ri-database-2-fill'],
+    'hosting': ['Hosting & Deployment', 'dodgerblue', 'ri-earth-fill'],
+    'planning': ['Planning & Architecture', 'darkcyan', 'ri-compasses-2-fill'],
     'other': ['Other', 'darkslategrey', 'ri-tools-fill']
 }
 
