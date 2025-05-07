@@ -37,9 +37,9 @@
 		<div class="row">
 			<!--			Left-side col-->
 			<div class="col-lg-12">
-				<div class="row">
+				<div class="row row-cols-1 row-cols-md-2">
 				<!--		Concepts to Research Card-->
-					<div class="col-xxl-6 col-md-8">
+					<div class="col">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">Concepts to Research</h5>
@@ -73,20 +73,20 @@
 <!--		End Concepts to Research Card-->
 
 <!--					Quick Add Form Card-->
-					<div class="col-xxl-6 col-md-8">
+					<div class="col">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">Quick Add Concept to Research</h5>
 								<form method="POST" class="row">
 									{{ form.csrf_token }}
-									<div class="col">
+									<div class="input-group mb-3">
 										<div class="form-floating">{{ form.concept_term(class="form-control") }} {{
 											form.concept_term.label }}
 										</div>
+										<button type="submit" class="btn btn-outline-secondary">Add</button>
 									</div>
-									<div class="col">
-										<button type="submit" class="btn btn-primary">Add</button>
-									</div>
+<!--									<div class="col">-->
+<!--									</div>-->
 
 								</form>
 							</div>
@@ -165,6 +165,7 @@
 		</div>
 	</div>
 	<!--		End Flagged Concepts-->
+
 
 </main><!-- End #main -->
 {% endblock %}
