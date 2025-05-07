@@ -17,14 +17,25 @@
       </nav>
     </div><!-- End Page Title -->
 
-<!--		Page Description Alert-->
-	<div class="alert alert-info  alert-dismissible fade show" role="alert">
-		<h4 class="alert-heading">Tools at Your Fingertips</h4>
-		<p>Track and organize various Tools & Utilities and their function, so your bookmark bar can take a back seat.</p>
- 		<p class="mb-0"></p>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	  </div>
-<!--		End Page Description Alert-->
+<!--	Page Description collapse-->
+
+	<div class="col">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">
+					<a href="#collapseTip" data-bs-toggle="collapse" role="button"
+					   aria-expanded="false" aria-controls="collapseTip">
+						<i class="ri-lightbulb-fill"></i> Tools at Your Fingertips
+					</a>
+				</h4>
+				<div class="collapse" id="collapseTip">
+					<p>Track and organize various Tools & Utilities and their function, so your bookmark bar can take a back seat.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--	End Page Description Toggle-->
 
 <!--	All Tools Table-->
 
@@ -33,7 +44,7 @@
 		  <h5 class="card-title">My Tools</h5>
 
 		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
+		  <table class="table table-hover datatable">
 			<thead>
 			  <tr>
 				<th scope="col">Tool</th>

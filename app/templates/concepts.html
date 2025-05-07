@@ -17,76 +17,92 @@
 		</nav>
 	</div><!-- End Page Title -->
 
-	<!--		Page Description Alert-->
-	<div class="alert alert-info  alert-dismissible fade show" role="alert">
-		<h4 class="alert-heading">Tie Your Learning Together with Concepts</h4>
-		<p>Track concepts, topics, keywords and more using your Concepts.</p>
-		<hr>
-		<p class="mb-0">Use Concepts like tags to make finding things easy.
-			All packages, libraries, tools, and APIs are automatically created as a Concept, so you can easily find
-			connected Learning.</p>
-		<br>
-		<p class="mb-0">Concepts can also be used to note keywords or concepts you come across that you want to look
-			into later.</p>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<!--	Page Description collapse-->
+
+	<div class="col">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">
+					<a href="#collapseTip" data-bs-toggle="collapse" role="button"
+					   aria-expanded="false" aria-controls="collapseTip">
+						<i class="ri-lightbulb-fill"></i> Tie Your Learning Together with Concepts
+					</a>
+				</h4>
+				<div class="collapse" id="collapseTip">
+
+						<p>Track concepts, topics, keywords and more using your Concepts.</p>
+						<hr>
+						<p class="mb-0">Use Concepts like tags to make finding things easy.
+							All packages, libraries, tools, and APIs are automatically created as a Concept, so you can
+							easily find
+							connected Learning.</p>
+						<br>
+						<p class="mb-0">Concepts can also be used to note keywords or concepts you come across that you
+							want to look
+							into later.</p>
+
+				</div>
+			</div>
+		</div>
 	</div>
-	<!--		End Page Description Alert-->
+
+<!--	End Page Description Toggle-->
 
 	<!--		Quick Add Concepts to Research Row-->
 	<section class="section">
 		<div class="row">
 			<!--			Left-side col-->
 			<div class="col-lg-12">
-<!--				<div class="row row-cols-1 row-cols-md-2">-->
+				<!--				<div class="row row-cols-1 row-cols-md-2">-->
 				<!--		Concepts to Research Card-->
-					<div class="col">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Concepts to Research</h5>
-								<form method="POST" class="row">
-									{{ form.csrf_token }}
-									<div class="input-group mb-3">
-										<div class="form-floating">{{ form.concept_term(class="form-control") }} {{
-											form.concept_term.label }}
-										</div>
-										<button type="submit" class="btn btn-outline-secondary">Add</button>
+				<div class="col">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Concepts to Investigate</h5>
+							<form method="POST" class="row">
+								{{ form.csrf_token }}
+								<div class="input-group mb-3">
+									<div class="form-floating">{{ form.concept_term(class="form-control") }} {{
+										form.concept_term.label }}
 									</div>
+									<button type="submit" class="btn btn-outline-secondary">Add</button>
+								</div>
 
-								</form>
-							</div>
-							<div class="card-body">
-								<!--				Table w hoverable rows-->
+							</form>
+						</div>
+						<div class="card-body">
+							<!--				Table w hoverable rows-->
 
-								<table class="table table-hover datatable">
-									<thead>
-									<tr>
-										<th scope="col">Concept</th>
-										<th scope="col">Added</th>
-										<th scope="col">Edit</th>
-										<th scope="col">Delete</th>
-									</tr>
-									</thead>
-									<tbody>
-									{% for concept in research %}
-									<tr>
-										<td><a href="{{ url_for('concept_detail', num=concept.id) }}">{{
-											concept.concept_term }}</a></td>
-										<td>{{ concept.date_added.strftime("%B %d, %Y") }}</td>
-										<td><a href="{{ url_for('update_concept', num=concept.id) }}"><i
-												class="ri-edit-fill"></i></a></td>
-										<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i
-												class="bi bi-trash"></i></a></td>
-									</tr>
-									{% endfor %}
-									</tbody>
-								</table>
-							</div>
+							<table class="table table-hover datatable">
+								<thead>
+								<tr>
+									<th scope="col">Concept</th>
+									<th scope="col">Added</th>
+									<th scope="col">Edit</th>
+									<th scope="col">Delete</th>
+								</tr>
+								</thead>
+								<tbody>
+								{% for concept in research %}
+								<tr>
+									<td><a href="{{ url_for('concept_detail', num=concept.id) }}">{{
+										concept.concept_term }}</a></td>
+									<td>{{ concept.date_added.strftime("%B %d, %Y") }}</td>
+									<td><a href="{{ url_for('update_concept', num=concept.id) }}"><i
+											class="ri-edit-fill"></i></a></td>
+									<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i
+											class="bi bi-trash"></i></a></td>
+								</tr>
+								{% endfor %}
+								</tbody>
+							</table>
 						</div>
 					</div>
-<!--		End Concepts to Research Card-->
 				</div>
+				<!--		End Concepts to Research Card-->
 			</div>
-<!--		</div>-->
+		</div>
+		<!--		</div>-->
 	</section>
 
 
@@ -139,8 +155,6 @@
 		</div>
 	</div>
 	<!-- End Table with hoverable rows -->
-
-
 
 
 </main><!-- End #main -->

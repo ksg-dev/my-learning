@@ -87,7 +87,7 @@ course_statuses = {
 tool_categories = {
     'essentials': ['Code Essentials', 'green', 'ri-seedling-fill'],
     'gamedev': ['Game Development', 'goldenrod', 'ri-game-fill'],
-    'code-execution': ['Code Execution', 'lightslategrey', 'ri-terminal-box-fill'],
+    'code-execution': ['Code Execution', 'darkslategrey', 'ri-terminal-box-fill'],
     'data-science': ['Data Science', 'firebrick', 'ri-microscope-fill'],
     'documentation': ['Documentation', 'cornflowerblue', 'ri-quill-pen-fill'],
     'styling': ['Styling & UI', 'hotpink', 'ri-palette-fill'],
@@ -95,7 +95,7 @@ tool_categories = {
     'storage': ['Storage', 'coral', 'ri-database-2-fill'],
     'hosting': ['Hosting & Deployment', 'dodgerblue', 'ri-earth-fill'],
     'planning': ['Planning & Architecture', 'darkcyan', 'ri-compasses-2-fill'],
-    'other': ['Other', 'darkslategrey', 'ri-tools-fill']
+    'other': ['Other', 'dimgrey', 'ri-tools-fill']
 }
 
 ##################################### LOGIN/REGISTER PAGES ########################################
