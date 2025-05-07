@@ -22,9 +22,8 @@
 		<div class="card-body">
 			<h5 class="card-title">{{ concept.concept_term }}</h5>
 			{% if concept.category %}
-			<p><span class="badge {{ concept_badge[concept.category][1] }}"><i
-					class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
-			</p>
+			{% set ttype = concept_badge[concept.category] %}
+			<p><i class="{{ ttype[2] }}" style="color: {{ttype[1]}}"></i> {{ ttype[0] }}</p>
 			{% endif %}
 			<p><i class="ri-double-quotes-l" style="color: dimgrey"></i> {{ concept.description }} <i
 					class="ri-double-quotes-r" style="color: dimgrey"></i></p>

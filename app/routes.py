@@ -62,16 +62,16 @@ resource_categories = {
 }
 
 # To show concept categories across pages, pass to index as badge=dict
-# 'category or status in db': ['text to appear on badge', 'badge class-starting bg', 'badge icon-starting bi']
+# 'category or status in db': ['text to appear on badge', 'color of icon', 'badge icon']
 concept_categories = {
-    'library': ['Library', 'bg-warning text-dark', 'bi-box'],
-    'api': ['API', 'bg-primary', 'bi-outlet'],
-    'tool': ['Tool', 'bg-info text-dark', 'bi-tools'],
-    'resource': ['Resource', 'bg-success', 'bi-bookshelf'],
-    'topic': ['Topic', 'bg-danger', 'bi-hash'],
-    'function': ['Function', 'bg-dark', 'bi-code'],
-    'research': ['To Research', 'bg-dark', 'bi-code'],
-    'other': ['Other', 'bg-secondary', 'bi-collection']
+    'library': ['Library', 'orangered', 'bi-box-fill'],
+    'api': ['API', 'darkcyan', 'ri-key-fill'],
+    'tool': ['Tool', 'darkslategrey', 'bi-tools'],
+    'resource': ['Resource', 'maroon', 'bx bx-plus-medical'],
+    'topic': ['Topic', 'mediumslateblue', 'ri-discuss-fill'],
+    'function': ['Function', 'fuchsia', 'bx bx-code-curly'],
+    'research': ['Investigate', 'olivedrab', 'ri-spy-fill'],
+    'other': ['Other', 'orange', 'ri-draft-fill']
 }
 
 # course statuses, pass to index as badge=dict
@@ -407,7 +407,7 @@ def concepts_page():
         else:
             print(f"Form Error: {form.errors}")
 
-    return render_template('concepts.html', concepts=concepts, concept_badge=concept_categories, research=research_list, form=form)
+    return render_template('concepts.html', concepts=concepts, badge=concept_categories, research=research_list, form=form)
 
 
 @app.route('/courses')
