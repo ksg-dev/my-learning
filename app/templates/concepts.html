@@ -74,6 +74,7 @@
 					<div class="card-body">
 						<h5 class="card-title">Quick Add Concept to Research</h5>
 						<form method="POST" class="row g-3">
+							{{ form.csrf_token }}
 							<div class="col">
 								<div class="form-floating mb-3">{{ form.concept_term(class="form-control") }} {{ form.concept_term.label }}</div>
 

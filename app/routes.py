@@ -30,7 +30,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from app import app, db
 from app.models import User, Course, Project, CodeLink, Concept, Library, API, Tool, Resource, Event, Repository
 from app.forms import (RegisterForm, LoginForm,
-                       NewCourseForm, NewProjectForm, NewCodeLinkForm, NewConceptForm,
+                       NewCourseForm, NewProjectForm, NewCodeLinkForm, NewConceptForm, QuickAddConcept,
                        NewAPIForm, NewLibraryForm, NewToolForm, NewResourceForm,
                        DeleteForm, UploadForm, UpdateProjectForm, PasswordReset)
 from app.github import GetGitHub
@@ -384,20 +384,28 @@ def concepts_page():
     concepts = [concept for concept in get_concepts]
     research_list = [concept for concept in get_research]
 
-    form = NewConceptForm()
+    form = QuickAddConcept()
 
     if request.method == "POST":
         if form.validate_on_submit():
-            new_concept = Concept(
-                concept_term=form.concept_term.data,
-                category='research',
-                description=form.description.data,
-                date_added=date.today()
-            )
+            # check if concept in db already
+            term = form.concept_term.data
+            if term.lower() not in concepts:
 
-            db.session.add(new_concept)
-            db.session.commit()
-            return redirect(url_for("concepts_page"))
+                new_concept = Concept(
+                    concept_term=form.concept_term.data,
+                    category='research',
+                    date_added=date.today()
+                )
+
+                db.session.add(new_concept)
+                db.session.commit()
+
+                return redirect(url_for("concepts_page"))
+            else:
+                flash("Concept or term already exists")
+        else:
+            print(f"Form Error: {form.errors}")
 
     return render_template('concepts.html', concepts=concepts, concept_badge=concept_categories, research=research_list, form=form)
 
