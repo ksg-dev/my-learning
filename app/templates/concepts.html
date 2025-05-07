@@ -57,7 +57,7 @@
 							<div class="card-body">
 								<!--				Table w hoverable rows-->
 
-								<table class="table table-hover">
+								<table class="table table-hover datatable">
 									<thead>
 									<tr>
 										<th scope="col">Concept</th>
@@ -93,10 +93,10 @@
 	<!--	All Concepts Table-->
 	<div class="card">
 		<div class="card-body">
-			<h5 class="card-title">My Concepts</h5>
+			<h5 class="card-title">All Concepts</h5>
 
 			<!-- Table with hoverable rows -->
-			<table class="table table-hover">
+			<table class="table table-hover datatable">
 				<thead>
 				<tr>
 					<th scope="col">Concept</th>
@@ -139,23 +139,7 @@
 	</div>
 	<!-- End Table with hoverable rows -->
 
-	<!--	Flagged Concepts List Group-->
-	<div class="card">
-		<div class="card-body">
-			<h5 class="card-title">Flagged Concepts</h5>
 
-			<!-- List group With Icons -->
-			<ul class="list-group">
-				{% for concept in concepts %}
-				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{
-					concept.concept_term }}
-				</li>
-				{% endfor %}
-			</ul><!-- End List group With Icons -->
-
-		</div>
-	</div>
-	<!--		End Flagged Concepts-->
 
 
 </main><!-- End #main -->
