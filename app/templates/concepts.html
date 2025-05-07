@@ -37,13 +37,26 @@
 		<div class="row">
 			<!--			Left-side col-->
 			<div class="col-lg-12">
-				<div class="row row-cols-1 row-cols-md-2">
+<!--				<div class="row row-cols-1 row-cols-md-2">-->
 				<!--		Concepts to Research Card-->
 					<div class="col">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">Concepts to Research</h5>
+								<form method="POST" class="row">
+									{{ form.csrf_token }}
+									<div class="input-group mb-3">
+										<div class="form-floating">{{ form.concept_term(class="form-control") }} {{
+											form.concept_term.label }}
+										</div>
+										<button type="submit" class="btn btn-outline-secondary">Add</button>
+									</div>
+
+								</form>
+							</div>
+							<div class="card-body">
 								<!--				Table w hoverable rows-->
+
 								<table class="table table-hover">
 									<thead>
 									<tr>
@@ -71,31 +84,9 @@
 						</div>
 					</div>
 <!--		End Concepts to Research Card-->
-
-<!--					Quick Add Form Card-->
-					<div class="col">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Quick Add Concept to Research</h5>
-								<form method="POST" class="row">
-									{{ form.csrf_token }}
-									<div class="input-group mb-3">
-										<div class="form-floating">{{ form.concept_term(class="form-control") }} {{
-											form.concept_term.label }}
-										</div>
-										<button type="submit" class="btn btn-outline-secondary">Add</button>
-									</div>
-<!--									<div class="col">-->
-<!--									</div>-->
-
-								</form>
-							</div>
-						</div>
-					</div>
-	<!--				End Quick Add Form Card-->
 				</div>
 			</div>
-		</div>
+<!--		</div>-->
 	</section>
 
 
