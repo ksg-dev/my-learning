@@ -35,62 +35,66 @@
 	<!--		Quick Add Concepts to Research Row-->
 	<section class="section">
 		<div class="row">
-			<div class="col-lg-6">
+			<!--			Left-side col-->
+			<div class="col-lg-12">
+				<div class="row">
 				<!--		Concepts to Research Card-->
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Concepts to Research</h5>
-						<!--				Table w hoverable rows-->
-						<table class="table table-hover">
-							<thead>
-							<tr>
-								<th scope="col">Concept</th>
-								<th scope="col">Added</th>
-								<th scope="col">Edit</th>
-								<th scope="col">Delete</th>
-							</tr>
-							</thead>
-							<tbody>
-								{% for concept in research %}
-								<tr>
-									<td><a href="{{ url_for('concept_detail', num=concept.id) }}">{{ concept.concept_term }}</a></td>
-									<td>{{ concept.date_added.strftime("%B %d, %Y") }}</td>
-									<td><a href="{{ url_for('update_concept', num=concept.id) }}"><i class="ri-edit-fill"></i></a></td>
-									<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i class="bi bi-trash"></i></a></td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+					<div class="col-xxl-6 col-md-8">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">Concepts to Research</h5>
+								<!--				Table w hoverable rows-->
+								<table class="table table-hover">
+									<thead>
+									<tr>
+										<th scope="col">Concept</th>
+										<th scope="col">Added</th>
+										<th scope="col">Edit</th>
+										<th scope="col">Delete</th>
+									</tr>
+									</thead>
+									<tbody>
+									{% for concept in research %}
+									<tr>
+										<td><a href="{{ url_for('concept_detail', num=concept.id) }}">{{
+											concept.concept_term }}</a></td>
+										<td>{{ concept.date_added.strftime("%B %d, %Y") }}</td>
+										<td><a href="{{ url_for('update_concept', num=concept.id) }}"><i
+												class="ri-edit-fill"></i></a></td>
+										<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i
+												class="bi bi-trash"></i></a></td>
+									</tr>
+									{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-				</div>
+<!--		End Concepts to Research Card-->
 
-				<!--		End Concepts to Research Card-->
+<!--					Quick Add Form Card-->
+					<div class="col-xxl-6 col-md-8">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">Quick Add Concept to Research</h5>
+								<form method="POST" class="row">
+									{{ form.csrf_token }}
+									<div class="col">
+										<div class="form-floating">{{ form.concept_term(class="form-control") }} {{
+											form.concept_term.label }}
+										</div>
+									</div>
+									<div class="col">
+										<button type="submit" class="btn btn-primary">Add</button>
+									</div>
 
-
-			</div>
-			<div class="col-lg-6">
-				<!--					Quick Add Form Card-->
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Quick Add Concept to Research</h5>
-						<form method="POST" class="row g-3">
-							{{ form.csrf_token }}
-							<div class="col">
-								<div class="form-floating mb-3">{{ form.concept_term(class="form-control") }} {{ form.concept_term.label }}</div>
-
-
-
-
+								</form>
 							</div>
-							<div class="col-12">
-								<button type="submit" class="btn btn-primary">Add</button>
-							</div>
-
-						</form>
+						</div>
+					</div>
+	<!--				End Quick Add Form Card-->
 				</div>
-				<!--				End Quick Add Form Card-->
 			</div>
-
 		</div>
 	</section>
 
