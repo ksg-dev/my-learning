@@ -373,14 +373,33 @@ def get_progress(task_id):
 
 
 ##################################### LANDING PAGES ########################################
-@app.route('/concepts')
+@app.route('/concepts', methods=["GET", "POST"])
 @login_required
 def concepts_page():
     # Get concepts
     get_concepts = db.session.execute(db.select(Concept).order_by(func.lower(Concept.concept_term))).scalars().all()
+    get_research = db.session.execute(db.select(Concept)
+                                      .where(Concept.category == "research")
+                                      .order_by(Concept.date_added.desc())).scalars().all()
     concepts = [concept for concept in get_concepts]
+    research_list = [concept for concept in get_research]
 
-    return render_template('concepts.html', concepts=concepts, concept_badge=concept_categories)
+    form = NewConceptForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            new_concept = Concept(
+                concept_term=form.concept_term.data,
+                category='research',
+                description=form.description.data,
+                date_added=date.today()
+            )
+
+            db.session.add(new_concept)
+            db.session.commit()
+            return redirect(url_for("concepts_page"))
+
+    return render_template('concepts.html', concepts=concepts, concept_badge=concept_categories, research=research_list, form=form)
 
 
 @app.route('/courses')

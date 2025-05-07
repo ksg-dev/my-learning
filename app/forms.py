@@ -130,6 +130,11 @@ class NewConceptForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+class QuickAddConcept(FlaskForm):
+    concept_term = StringField("Concept or Term*", validators=[InputRequired()])
+    submit = SubmitField("Submit")
+
+
 class NewLibraryForm(FlaskForm):
     name = StringField("Library Name*", validators=[InputRequired()])
     description = TextAreaField("Description")

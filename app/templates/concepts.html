@@ -4,99 +4,167 @@
 {% block title %}Concepts{% endblock %}
 
 {% block content %}
-	<main id="main" class="main">
+<main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Concepts</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">My Learning</li>
-          <li class="breadcrumb-item active">Concepts</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+	<div class="pagetitle">
+		<h1>Concepts</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+				<li class="breadcrumb-item">My Learning</li>
+				<li class="breadcrumb-item active">Concepts</li>
+			</ol>
+		</nav>
+	</div><!-- End Page Title -->
 
-<!--		Page Description Alert-->
+	<!--		Page Description Alert-->
 	<div class="alert alert-info  alert-dismissible fade show" role="alert">
 		<h4 class="alert-heading">Tie Your Learning Together with Concepts</h4>
 		<p>Track concepts, topics, keywords and more using your Concepts.</p>
 		<hr>
- 		<p class="mb-0">Use Concepts like tags to make finding things easy.
-			All packages, libraries, tools, and APIs are automatically created as a Concept, so you can easily find connected Learning.</p>
+		<p class="mb-0">Use Concepts like tags to make finding things easy.
+			All packages, libraries, tools, and APIs are automatically created as a Concept, so you can easily find
+			connected Learning.</p>
 		<br>
-		<p class="mb-0">Concepts can also be used to note keywords or concepts you come across that you want to look into later.</p>
+		<p class="mb-0">Concepts can also be used to note keywords or concepts you come across that you want to look
+			into later.</p>
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	  </div>
-<!--		End Page Description Alert-->
+	</div>
+	<!--		End Page Description Alert-->
 
-		<!--	All Concepts Table-->
-	 <div class="card">
-		<div class="card-body">
-		  <h5 class="card-title">My Concepts</h5>
+	<!--		Quick Add Concepts to Research Row-->
+	<section class="section">
+		<div class="row">
+			<div class="col-lg-6">
+				<!--		Concepts to Research Card-->
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Concepts to Research</h5>
+						<!--				Table w hoverable rows-->
+						<table class="table table-hover">
+							<thead>
+							<tr>
+								<th scope="col">Concept</th>
+								<th scope="col">Added</th>
+								<th scope="col">Edit</th>
+								<th scope="col">Delete</th>
+							</tr>
+							</thead>
+							<tbody>
+								{% for concept in research %}
+								<tr>
+									<td><a href="{{ url_for('concept_detail', num=concept.id) }}">{{ concept.concept_term }}</a></td>
+									<td>{{ concept.date_added.strftime("%B %d, %Y") }}</td>
+									<td><a href="{{ url_for('update_concept', num=concept.id) }}"><i class="ri-edit-fill"></i></a></td>
+									<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i class="bi bi-trash"></i></a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
 
-		  <!-- Table with hoverable rows -->
-		  <table class="table table-hover">
-			<thead>
-			  <tr>
-				<th scope="col">Concept</th>
-				<th scope="col">Category</th>
-			    <th scope="col">Projects</th>
-			    <th scope="col">CodeLinks</th>
-			    <th scope="col">Libraries</th>
-			    <th scope="col">APIs</th>
-			    <th scope="col">Tools</th>
-			    <th scope="col">Resources</th>
-				<th scope="col">Delete</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for concept in concepts %}
-			  <tr>
-				<td><a href="{{ url_for('concept_detail', num=concept.id ) }}">{{ concept.concept_term }}</a></td>
-				{% if concept.category %}
-				  <td><span class="badge {{ concept_badge[concept.category][1] }}"><i class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span></td>
-				{% else %}
-				  <td></td>
-			    {% endif %}
-			    <td>{{ concept.projects|length }}</td>
-			    <td>{{ concept.codelinks|length }}</td>
-			    <td>{{ concept.libraries|length }}</td>
-				<td>{{ concept.apis|length }}</td>
-			    <td>{{ concept.tools|length }}</td>
-			    <td>{{ concept.resources|length }}</td>
-				<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i class="bi bi-trash"></i></a></td>
-			  </tr>
-			{% endfor %}
-			</tbody>
-		  </table>
-			<a href="{{ url_for('add_new_concept') }}">
-		  <button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Concept</button>
-			</a>
+				<!--		End Concepts to Research Card-->
+
+
+			</div>
+			<div class="col-lg-6">
+				<!--					Quick Add Form Card-->
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Quick Add Concept to Research</h5>
+						<form method="POST" class="row g-3">
+							<div class="col">
+								<div class="form-floating mb-3">{{ form.concept_term(class="form-control") }} {{ form.concept_term.label }}</div>
+
+
+
+
+							</div>
+							<div class="col-12">
+								<button type="submit" class="btn btn-primary">Add</button>
+							</div>
+
+						</form>
+				</div>
+				<!--				End Quick Add Form Card-->
+			</div>
+
 		</div>
-	 </div>
-		  <!-- End Table with hoverable rows -->
+	</section>
 
-		<!--	Flagged Concepts List Group-->
+
+	<!--	All Concepts Table-->
 	<div class="card">
 		<div class="card-body">
-		  <h5 class="card-title">Flagged Concepts</h5>
+			<h5 class="card-title">My Concepts</h5>
 
-		  <!-- List group With Icons -->
-		  <ul class="list-group">
-			  {% for concept in concepts %}
-				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{ concept.concept_term }}</li>
-			  {% endfor %}
-		  </ul><!-- End List group With Icons -->
+			<!-- Table with hoverable rows -->
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th scope="col">Concept</th>
+					<th scope="col">Category</th>
+					<th scope="col">Projects</th>
+					<th scope="col">CodeLinks</th>
+					<th scope="col">Libraries</th>
+					<th scope="col">APIs</th>
+					<th scope="col">Tools</th>
+					<th scope="col">Resources</th>
+					<th scope="col">Delete</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for concept in concepts %}
+				<tr>
+					<td><a href="{{ url_for('concept_detail', num=concept.id ) }}">{{ concept.concept_term }}</a></td>
+					{% if concept.category %}
+					<td><span class="badge {{ concept_badge[concept.category][1] }}"><i
+							class="bi {{ concept_badge[concept.category][2] }} me-1"></i> {{ concept_badge[concept.category][0] }}</span>
+					</td>
+					{% else %}
+					<td></td>
+					{% endif %}
+					<td>{{ concept.projects|length }}</td>
+					<td>{{ concept.codelinks|length }}</td>
+					<td>{{ concept.libraries|length }}</td>
+					<td>{{ concept.apis|length }}</td>
+					<td>{{ concept.tools|length }}</td>
+					<td>{{ concept.resources|length }}</td>
+					<td><a href="{{ url_for('delete_concept', num=concept.id) }}"><i class="bi bi-trash"></i></a></td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			<a href="{{ url_for('add_new_concept') }}">
+				<button type="button" class="btn btn-primary"><i class="bi bi-clipboard-plus"></i> Add Concept</button>
+			</a>
+		</div>
+	</div>
+	<!-- End Table with hoverable rows -->
+
+	<!--	Flagged Concepts List Group-->
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">Flagged Concepts</h5>
+
+			<!-- List group With Icons -->
+			<ul class="list-group">
+				{% for concept in concepts %}
+				<li class="list-group-item"><i class="bi bi-exclamation-octagon me-1 text-warning"></i>{{
+					concept.concept_term }}
+				</li>
+				{% endfor %}
+			</ul><!-- End List group With Icons -->
 
 		</div>
-	  </div>
-<!--		End Flagged Concepts-->
+	</div>
+	<!--		End Flagged Concepts-->
 
-  </main><!-- End #main -->
+</main><!-- End #main -->
 {% endblock %}
 
 
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
 
