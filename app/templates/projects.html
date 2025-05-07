@@ -42,19 +42,29 @@
 		</nav>
 	</div><!-- End Page Title -->
 
-	<!--		Page Description Alert-->
-	<div class="alert alert-info  alert-dismissible fade show" role="alert">
-		<h4 class="alert-heading">Organize Your Hard Work with Projects</h4>
-		<p>Track projects you've completed and what repo holds them.</p>
-		<hr>
-		<p class="mb-0">Tag your projects with Concepts, so you can easily reference examples you've already worked
-			through.</p>
-		<br>
-		<p class="mb-0">Include Course section and lecture or assignment, that way if you forgot how or why you did
-			something, you can easily find the place you learned it.</p>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<!--	Page Description collapse-->
+
+	<div class="col">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">
+					<a href="#collapseTip" data-bs-toggle="collapse" role="button"
+					   aria-expanded="false" aria-controls="collapseTip">
+						<i class="ri-lightbulb-fill"></i> Organize Your Hard Work with Projects
+					</a>
+				</h4>
+				<div class="collapse" id="collapseTip">
+					<p>Track projects you've completed and what repo holds them.</p>
+					<hr>
+					<p class="mb-0">Tag your projects with Concepts, so you can easily reference examples you've already worked through.</p>
+					<br>
+					<p class="mb-0">Include Course section and lecture or assignment, that way if you forgot how or why you did something, you can easily find the place you learned it.</p>
+				</div>
+			</div>
+		</div>
 	</div>
-	<!--		End Page Description Alert-->
+
+<!--	End Page Description Toggle-->
 
 	<!--	All Projects Table-->
 
@@ -63,7 +73,7 @@
 			<h5 class="card-title">My Projects</h5>
 
 			<!-- Table with hoverable rows -->
-			<table class="table table-hover">
+			<table class="table table-hover datatable">
 				<thead>
 				<tr>
 					<th scope="col">#</th>
