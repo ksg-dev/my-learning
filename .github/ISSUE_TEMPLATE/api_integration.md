@@ -1,6 +1,6 @@
 ---
-name: API Integration
-about: Propose integration with an external API or service
+name: "API Integration"
+about: "Propose integration with an external API or service"
 title: '[API] '
 labels: api, integration
 assignees: ''
