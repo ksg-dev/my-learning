@@ -1,9 +1,10 @@
 ---
 name: Task
 about: Create a general development task that isn't a feature or bug
-title: '[TASK] '
-labels: ''
-assignees: ''
+title: "[TASK] "
+labels: task
+assignees: ksg-dev
+
 ---
 
 ## Task Description

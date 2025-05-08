@@ -1,9 +1,10 @@
 ---
 name: Model/Database Change
 about: Propose changes to data models or database structure
-title: '[MODEL] '
+title: "[MODEL] "
 labels: model
-assignees: ''
+assignees: ksg-dev
+
 ---
 
 ## Model/Database Change Description

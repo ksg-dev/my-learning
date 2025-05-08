@@ -1,9 +1,10 @@
 ---
 name: Documentation
 about: Suggest improvements or additions to documentation
-title: '[DOCS] '
-labels: docs
-assignees: ''
+title: "[DOCS] "
+labels: documentation
+assignees: ksg-dev
+
 ---
 
 ## Documentation Request

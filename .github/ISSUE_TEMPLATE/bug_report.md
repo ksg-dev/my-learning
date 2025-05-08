@@ -1,9 +1,10 @@
 ---
 name: Bug Report
 about: Report a bug or issue with myRise
-title: '[BUG] '
+title: "[BUG] "
 labels: bug
-assignees: ''
+assignees: ksg-dev
+
 ---
 
 ## Bug Description

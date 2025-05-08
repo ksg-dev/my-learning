@@ -1,9 +1,10 @@
 ---
 name: UI Enhancement
 about: Suggest improvements to the user interface or experience
-title: '[UI] '
-labels: ui, enhancement
-assignees: ''
+title: "[UI] "
+labels: enhancement, ui
+assignees: ksg-dev
+
 ---
 
 ## UI Enhancement Description

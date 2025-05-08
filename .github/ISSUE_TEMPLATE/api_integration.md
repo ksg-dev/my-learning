@@ -1,9 +1,10 @@
 ---
-name: "API Integration"
-about: "Propose integration with an external API or service"
-title: '[API] '
+name: API Integration
+about: Propose integration with an external API or service
+title: "[API] "
 labels: api, integration
-assignees: ''
+assignees: ksg-dev
+
 ---
 
 ## API/Service to Integrate
